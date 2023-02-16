@@ -180,10 +180,10 @@ def delete_cluster_configuration(api):
 
     logging.info("Delete old cluster configuration successfully")
 
-
+# 根据ks-config.json的配置, 确定并执行增加组件需求的指令动作, 并获取结果
 def getResultInfo():
-    # Execute and add the installation task process
     taskProcessList = []
+    # 目前tasks是"执行ks-config.json中的增加组件需求"的指令字典
     tasks = generateTaskLists()
     for taskName, taskObject in tasks.items():
         taskProcess = {}
@@ -200,6 +200,7 @@ def getResultInfo():
     while True:
         for taskProcess in taskProcessList:
             taskName = list(taskProcess.keys())[0]
+            # 执行增加组件需求的指令动作
             result = taskProcess[taskName].rc
             if result is not None and {taskName: result} not in completedTasks:
                 infoGetter.info = "task {} status is {}  ({}/{})".format(
@@ -215,7 +216,7 @@ def getResultInfo():
     logging.info('*' * 50)
     logging.info('Collecting installation results ...')
 
-    # Operation result check
+    # 检查增加组件的结果
     resultState = False
     for taskResult in completedTasks:
         taskName = list(taskResult.keys())[0]
@@ -245,10 +246,8 @@ def getResultInfo():
                 print('*' * 150)
     return resultState
 
-
-# Generate a objects list of components
-
-
+# 生成"执行ks-config.json中的增加组件需求"的指令字典
+# 这里可以明显看出, readyToDisableList被丢弃了, 是没有被执行的！
 def generateTaskLists():
     readyToEnabledList, readyToDisableList = getComponentLists()
     tasksDict = {}
@@ -269,9 +268,7 @@ def generateTaskLists():
 
     return tasksDict
 
-# Generate a list of components to install based on the configuration file
-
-
+# 根据目前的ks-config.json, 确定增加或删除的队列
 def getComponentLists():
     readyToEnabledList = [
         'monitoring',
@@ -319,8 +316,9 @@ def getComponentLists():
 
     return readyToEnabledList, readyToDisableList
 
-
+# ansible遍历执行preinstall.yaml/metrics_server.yaml/common.yaml/ks-core.yaml, 并生成执行日志
 def preInstallTasks():
+    # preInstallTasks是一个有序字典
     preInstallTasks = collections.OrderedDict()
     preInstallTasks['preInstall'] = [
         os.path.join(playbookBasePath, 'preinstall.yaml'),
@@ -338,7 +336,22 @@ def preInstallTasks():
         os.path.join(playbookBasePath, 'ks-core.yaml'),
         os.path.join(privateDataDir, 'ks-core')
     ]
+    # {
+    #     "preInstall": [
+    #         "/kubesphere/playbooks/preinstall.yaml",
+    #         "/kubesphere/results/preinstall"],
+    #     "metrics-server": [
+    #         "/kubesphere/playbooks/metrics_server.yaml",
+    #         "/kubesphere/results/metrics_server"],
+    #     "common": [
+    #         "/kubesphere/playbooks/common.yaml",
+    #         "/kubesphere/results/common"],
+    #     "ks-core": [
+    #         "/kubesphere/playbooks/ks-core.yaml",
+    #         "/kubesphere/results/ks-core"]
+    # }
 
+    # ansible遍历执行preinstall.yaml/metrics_server.yaml/common.yaml/ks-core.yaml, 并生成执行日志
     for task, paths in preInstallTasks.items():
         pretask = ansible_runner.run(
             playbook=paths[0],
@@ -350,7 +363,7 @@ def preInstallTasks():
         if pretask.rc != 0:
             exit()
 
-
+# 执行ks-config.yaml, result-info.yaml, ks-migration.yaml(初次), telemetry.yaml
 def resultInfo(resultState=False, api=None):
     ks_config = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'ks-config.yaml'),
@@ -405,7 +418,7 @@ def resultInfo(resultState=False, api=None):
     if telemeter.rc != 0:
         exit()
 
-
+# 这里获取到ClusterConfiguration对象, 并把它落盘了
 def generateConfig(api):
 
     resource = get_cluster_configuration(api)
@@ -437,7 +450,14 @@ def generateConfig(api):
 
 # Migrate cluster configuration
 
-
+# 如果旧的k8s配置与新的k8s配置相同, 则返回;如果不同, 则更新
+# 更新内容包括：
+#    common中的各项配置
+#    logging中的各项配置
+#    notification配置（未找到）
+#    openpitrix中的各项配置
+#    networkpolicy中的各项配置
+#    ks-install的版本
 def generate_new_cluster_configuration(api):
     global old_cluster_configuration
     upgrade_flag = False
@@ -553,21 +573,27 @@ def generate_new_cluster_configuration(api):
 
 
 def main():
+    # 检测日志目录是否存在
     if not os.path.exists(privateDataDir):
         os.makedirs(privateDataDir)
-
+    # shell-operator的固定语法, 设置了下方else代码执行的时机: 创建或更新名为ks-installer的ClusterConfiguration时
     if len(sys.argv) > 1 and sys.argv[1] == "--config":
         print(ks_hook)
     else:
+        # config可以读入集群信息, 读入后client就可以使用
         config.load_incluster_config()
+        # 构建api对象，此对象拥有调用apiserver接口的方法, ks-installer基本使用它来获取自定义资源的配置信息
         api = client.CustomObjectsApi()
+        # 如果旧的k8s配置与新的k8s配置相同, 则返回;如果不同, 则更新
         generate_new_cluster_configuration(api)
+        # 获取ClusterConfiguration对象, 并把它落盘在/kubesphere/config/ks-config.json文件中
         generateConfig(api)
-        # execute preInstall tasks
+        # ansible遍历执行[preinstall.yaml, metrics_server.yaml, common.yaml, ks-core.yaml], 并生成执行日志
         preInstallTasks()
+        # 根据ks-config.json的配置, 确定并执行增加组件需求的指令动作, 并获取结果
         resultState = getResultInfo()
+        # 执行ks-config.yaml, result-info.yaml, ks-migration.yaml(初次), telemetry.yaml
         resultInfo(resultState, api)
-
 
 if __name__ == '__main__':
     main()
