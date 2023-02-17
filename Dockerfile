@@ -1,4 +1,4 @@
-FROM d3osdev/shell-operator:v1.0.0-beta.5-alpine3.13
+FROM registry-edge.cosmoplat.com/d3osdev/shell-operator:v1.0.0-beta.5-alpine3.13
 
 ENV  ANSIBLE_ROLES_PATH /d3os/installer/roles
 WORKDIR /d3os
