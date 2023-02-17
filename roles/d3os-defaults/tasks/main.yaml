@@ -2,7 +2,7 @@
 - name: d3os | Setting images' namespace override
   set_fact:
     namespace_override: "d3os"
-  when: (local_registry is defined") or (zone is defined and zone == "cn")
+  when: (local_registry is defined) or (zone is defined and zone == "cn")
 
 - name: d3os | Configuring defaults
   debug:
