@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  kubesphere.yaml: |
+  d3os.yaml: |
     authentication:
       authenticateRateLimiterMaxTries: {{ authentication.authenticateRateLimiterMaxTries | default(10) }}
       authenticateRateLimiterDuration: {{ authentication.authenticationRateLimiterDuration | default("10m0s") }}
@@ -19,16 +19,16 @@ data:
 
 {% if (common.openldap is defined and common.openldap.enabled is defined and common.openldap.enabled) or devops.enabled %}
     ldap:
-      host: openldap.kubesphere-system.svc:389
-      managerDN: cn=admin,dc=kubesphere,dc=io
+      host: openldap.d3os-system.svc:389
+      managerDN: cn=admin,dc=d3os,dc=io
       managerPassword: admin
-      userSearchBase: ou=Users,dc=kubesphere,dc=io
-      groupSearchBase: ou=Groups,dc=kubesphere,dc=io
+      userSearchBase: ou=Users,dc=d3os,dc=io
+      groupSearchBase: ou=Groups,dc=d3os,dc=io
 {% endif %}
 
 {% if (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or enableHA %}
     redis:
-      host: redis.kubesphere-system.svc
+      host: redis.d3os-system.svc
       port: 6379
       password: {{ common.redisPasswd | default('""') }}
       db: 0
@@ -36,7 +36,7 @@ data:
 
 {% if OPMigrate is defined and OPMigrate %}
     mysql:
-      host: mysql.kubesphere-system.svc:3306
+      host: mysql.d3os-system.svc:3306
       username: {{ common.mysqlUsername | default("root") }}
       password: {{ common.mysqlPassword | default("password") }}
       maxIdleConnections: 100
@@ -46,7 +46,7 @@ data:
 
 {% if devops.enabled %}
     s3:
-      endpoint: {{ common.s3.endpoint | default('http://minio.kubesphere-system.svc:9000') }}
+      endpoint: {{ common.s3.endpoint | default('http://minio.d3os-system.svc:9000') }}
       region: {{ common.s3.region | default('us-east-1') }}
       disableSSL: {{ common.s3.disableSSL | default(true) }}
       forcePathStyle: {{ common.s3.forcePathStyle | default(true) }}
@@ -70,7 +70,7 @@ data:
 {% endif %}
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:
-      host: http://ks-jenkins.kubesphere-devops-system.svc/
+      host: http://ks-jenkins.d3os-devops-system.svc/
       username: admin
       password: {{ ks_token_str.stdout }}
       maxConnections: 100
@@ -84,13 +84,13 @@ data:
     servicemesh:
       istioPilotHost: http://istiod.istio-system.svc:8080/version
       jaegerQueryHost: http://jaeger-query.istio-system.svc:16686
-      servicemeshPrometheusHost: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
+      servicemeshPrometheusHost: http://prometheus-k8s.d3os-monitoring-system.svc:9090
       kialiQueryHost: http://kiali.istio-system:20001
 {% endif %}
 {% if openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled %}
     openpitrix:
       s3:
-        endpoint: {{ common.s3.endpoint | default('http://minio.kubesphere-system.svc:9000') }}
+        endpoint: {{ common.s3.endpoint | default('http://minio.d3os-system.svc:9000') }}
         region: {{ common.s3.region | default('us-east-1') }}
         disableSSL: {{ common.s3.disableSSL | default(true) }}
         forcePathStyle: {{ common.s3.forcePathStyle | default(true) }}
@@ -102,7 +102,7 @@ data:
     multicluster:
       enable: true
       agentImage: {{ tower_repo }}/{{ tower_image }}:{{ tower_image_tag }}
-      proxyPublishService: tower.kubesphere-system.svc
+      proxyPublishService: tower.d3os-system.svc
 {% if multicluster.proxyPublishAddress is defined and multicluster.proxyPublishAddress != "" %}
       proxyPublishAddress: {{ multicluster.proxyPublishAddress }}
 {% endif %}
@@ -111,7 +111,7 @@ data:
 {% if common.monitoring is defined and common.monitoring.endpoint is defined %}
       endpoint: {{ common.monitoring.endpoint }}
 {% else %}
-      endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
+      endpoint: http://prometheus-operated.d3os-monitoring-system.svc:9090
 {% endif %}
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
@@ -120,7 +120,7 @@ data:
 {% elif common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
       host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
-      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+      host: http://elasticsearch-logging-data.d3os-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
@@ -138,7 +138,7 @@ data:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
       host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
-      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+      host: http://elasticsearch-logging-data.d3os-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
@@ -153,7 +153,7 @@ data:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
       host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
-      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+      host: http://elasticsearch-logging-data.d3os-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
@@ -168,9 +168,9 @@ data:
 {% if common.monitoring is defined and common.monitoring.endpoint is defined %}
       prometheusEndpoint: {{ common.monitoring.endpoint }}
 {% else %}
-      prometheusEndpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
+      prometheusEndpoint: http://prometheus-operated.d3os-monitoring-system.svc:9090
 {% endif %}
-      thanosRulerEndpoint: http://thanos-ruler-operated.kubesphere-monitoring-system.svc:10902
+      thanosRulerEndpoint: http://thanos-ruler-operated.d3os-monitoring-system.svc:10902
       thanosRuleResourceLabels: thanosruler=thanos-ruler,role=thanos-alerting-rules
 {% endif %}
 
@@ -180,5 +180,5 @@ data:
 {% endif %}
 kind: ConfigMap
 metadata:
-  name: kubesphere-config
-  namespace: kubesphere-system
+  name: d3os-config
+  namespace: d3os-system

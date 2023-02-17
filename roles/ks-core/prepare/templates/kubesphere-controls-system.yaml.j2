@@ -1,14 +1,14 @@
 # apiVersion: v1
 # kind: Namespace
 # metadata:
-#   name: kubesphere-controls-system
+#   name: d3os-controls-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: system:kubesphere-router-clusterrole
+  name: system:d3os-router-clusterrole
   annotations:
-    kubernetes.io/created-by: kubesphere.io/ks-router
+    kubernetes.io/created-by: d3os.io/ks-router
 rules:
   - apiGroups:
       - ""
@@ -77,9 +77,9 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: system:kubesphere-router-role
+  name: system:d3os-router-role
   annotations:
-    kubernetes.io/created-by: kubesphere.io/ks-router
+    kubernetes.io/created-by: d3os.io/ks-router
 rules:
   - apiGroups:
       - ""
@@ -119,61 +119,61 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: kubesphere-router-serviceaccount
+  name: d3os-router-serviceaccount
   annotations:
-    kubernetes.io/created-by: kubesphere.io/ks-router
+    kubernetes.io/created-by: d3os.io/ks-router
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: system:nginx-ingress-clusterrole-nisa-binding
   annotations:
-    kubernetes.io/created-by: kubesphere.io/ks-router
+    kubernetes.io/created-by: d3os.io/ks-router
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: system:kubesphere-router-clusterrole
+  name: system:d3os-router-clusterrole
 subjects:
   - kind: ServiceAccount
-    name: kubesphere-router-serviceaccount
-    namespace: kubesphere-controls-system
+    name: d3os-router-serviceaccount
+    namespace: d3os-controls-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: nginx-ingress-role-nisa-binding
   annotations:
-    kubernetes.io/created-by: kubesphere.io/ks-router
+    kubernetes.io/created-by: d3os.io/ks-router
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: system:kubesphere-router-role
+  name: system:d3os-router-role
 subjects:
   - kind: ServiceAccount
-    name: kubesphere-router-serviceaccount
-    namespace: kubesphere-controls-system
+    name: d3os-router-serviceaccount
+    namespace: d3os-controls-system
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: default-http-backend
   labels:
-    app: kubesphere 
-    component: kubesphere-router
+    app: d3os
+    component: d3os-router
     version: express-1.0.alpha
   annotations:
-    kubernetes.io/created-by: kubesphere.io/ks-router
+    kubernetes.io/created-by: d3os.io/ks-router
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kubesphere
-      component: kubesphere-router
+      app: d3os
+      component: d3os-router
   template:
     metadata:
       labels:
-        app: kubesphere
-        component: kubesphere-router
+        app: d3os
+        component: d3os-router
     spec:
       terminationGracePeriodSeconds: 60
       containers:
@@ -204,40 +204,40 @@ kind: Service
 metadata:
   name: default-http-backend
   labels:
-    app: kubesphere
-    component: kubesphere-router
+    app: d3os
+    component: d3os-router
   annotations:
-    kubernetes.io/created-by: kubesphere.io/ks-router
+    kubernetes.io/created-by: d3os.io/ks-router
 spec:
   ports:
   - port: 80
     targetPort: 8080
   selector:
-    app: kubesphere
-    component: kubesphere-router
+    app: d3os
+    component: d3os-router
 
 ---
 # create a seviceaccount for kubectl pod
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: kubesphere-cluster-admin
-  namespace: kubesphere-controls-system
+  name: d3os-cluster-admin
+  namespace: d3os-controls-system
   annotations:
-    kubernetes.io/created-by: kubesphere.io/kubectl
+    kubernetes.io/created-by: d3os.io/kubectl
 ---
-# bind kubesphere-cluster-admin sa to clusterrole cluster-admin
+# bind d3os-cluster-admin sa to clusterrole cluster-admin
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: system:kubesphere-cluster-admin
+  name: system:d3os-cluster-admin
   annotations:
-    kubernetes.io/created-by: kubesphere.io/kubectl
+    kubernetes.io/created-by: d3os.io/kubectl
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-admin
 subjects:
   - kind: ServiceAccount
-    name: kubesphere-cluster-admin
-    namespace: kubesphere-controls-system
+    name: d3os-cluster-admin
+    namespace: d3os-controls-system

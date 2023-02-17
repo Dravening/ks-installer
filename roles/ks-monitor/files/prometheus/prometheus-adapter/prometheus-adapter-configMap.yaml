@@ -95,4 +95,4 @@ data:
 kind: ConfigMap
 metadata:
   name: adapter-config
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system

@@ -1,5 +1,5 @@
 {{- if .Values.ruler.enabled }}
-apiVersion: events.kubesphere.io/v1alpha1
+apiVersion: events.d3os.io/v1alpha1
 kind: Ruler
 metadata:
   name: {{ template "kube-events.ruler.fullname" . }}

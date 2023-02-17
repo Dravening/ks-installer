@@ -3,7 +3,7 @@
 - hosts: localhost
   gather_facts: false
   roles:
-    - kubesphere-defaults
+    - d3os-defaults
     - role: ks-devops
       when:
         - "status.devops is not defined or status.devops.status is not defined or status.devops.status != 'enabled'"

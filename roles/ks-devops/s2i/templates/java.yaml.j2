@@ -1,16 +1,16 @@
-apiVersion: devops.kubesphere.io/v1alpha1
+apiVersion: devops.d3os.io/v1alpha1
 kind: S2iBuilderTemplate
 metadata:
   labels:
     controller-tools.k8s.io: "1.0"
-    builder-type.kubesphere.io/s2i: "s2i"
-    builder-type.kubesphere.io/b2i: "b2i"
-    binary-type.kubesphere.io: "jar"
+    builder-type.d3os.io/s2i: "s2i"
+    builder-type.d3os.io/b2i: "b2i"
+    binary-type.d3os.io: "jar"
   annotations:
     "helm.sh/hook": pre-install
     descriptionCN: "Java 应用的构建器模版。通过该模版可构建出直接运行的应用镜像。"
     descriptionEN: "This is a builder template for Java builds whose result can be run directly without any further application server.It's suited ideally for microservices with a flat classpath (including \"far jars\")."
-    devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-java-container/blob/master/java/images
+    devops.d3os.io/s2i-template-url: https://github.com/d3os/s2i-java-container/blob/master/java/images
   name: java
 spec:
   containerInfo:

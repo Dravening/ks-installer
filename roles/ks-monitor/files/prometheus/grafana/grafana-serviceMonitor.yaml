@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: grafana
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   endpoints:
   - interval: 15s

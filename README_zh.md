@@ -1,8 +1,8 @@
-# 在 Kubernetes 集群在线部署 KubeSphere
+# 在 Kubernetes 集群在线部署 d3os
 
 > [English](README.md) | 中文
 
-KubeSphere 支持在已有 Kubernetes 集群之上部署 [KubeSphere](https://kubesphere.io/)。
+d3os 支持在已有 Kubernetes 集群之上部署 [d3os](https://d3os.io/)。
 
 ## 准备工作
 
@@ -26,7 +26,7 @@ Mem:              16          4          10           0           3           2
 Swap:             0           0           0
 ```
 
-3. KubeSphere 需配合持久化存储使用，执行`kubectl get sc` 查看当前环境中的存储类型 (当使用默认存储类型时，配置文件中可以不填存储相关信息)。
+3. d3os 需配合持久化存储使用，执行`kubectl get sc` 查看当前环境中的存储类型 (当使用默认存储类型时，配置文件中可以不填存储相关信息)。
 
 ```bash
 $ kubectl get sc
@@ -36,26 +36,26 @@ csi-qingcloud (default)   disk.csi.qingcloud.com    54d
 glusterfs                 kubernetes.io/glusterfs   3d4h
 ```
 
-4. CSR signing 功能在 kube-apiserver 中被激活，参考 [RKE installation issue](https://github.com/kubesphere/kubesphere/issues/1925#issuecomment-591698309)。
+4. CSR signing 功能在 kube-apiserver 中被激活，参考 [RKE installation issue](https://github.com/d3os/d3os/issues/1925#issuecomment-591698309)。
 
 如果你的 Kubernetes 环境满足以上的要求，那么可以接着执行下面的步骤了。
 
-## 部署 KubeSphere
+## 部署 d3os
 
 ### 最小化快速部署
 
 ```bash
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.0/kubesphere-installer.yaml
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.0/cluster-configuration.yaml
+kubectl apply -f https://github.com/d3os/ks-installer/releases/download/v3.1.0/d3os-installer.yaml
+kubectl apply -f https://github.com/d3os/ks-installer/releases/download/v3.1.0/cluster-configuration.yaml
 
  # 查看部署进度及日志
- $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+ $ kubectl logs -n d3os-system $(kubectl get pod -n d3os-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-部署完成后可执行如下命令查看控制台的服务端口，使用 `IP:consolePort(default: 30880)` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
+部署完成后可执行如下命令查看控制台的服务端口，使用 `IP:consolePort(default: 30880)` 访问 d3os UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
 
 ```bash
-kubectl get svc/ks-console -n kubesphere-system
+kubectl get svc/ks-console -n d3os-system
 ```
 
 以上为最小化部署，如需开启更多功能，请参考如下步骤配置相关依赖：
@@ -63,7 +63,7 @@ kubectl get svc/ks-console -n kubesphere-system
 ### 安装可插拔功能组件
 
 > 注意：
-> - KubeSphere 支持在安装前或完成后开启可插拔功能组件的安装，各功能组件的介绍请参考 [cluster-configuration.yaml](deploy/cluster-configuration.yaml)；
+> - d3os 支持在安装前或完成后开启可插拔功能组件的安装，各功能组件的介绍请参考 [cluster-configuration.yaml](deploy/cluster-configuration.yaml)；
 > - 在开启可插拔功能组件之前，请确保您的集群可用 CPU 与内存满足其可插拔功能组件所需的 CPU 和内存要求。
 
 1. [可选项] 创建集群 Etcd 的证书 Secret。(仅开启 Etcd 监控需要设置)
@@ -73,8 +73,8 @@ kubectl get svc/ks-console -n kubesphere-system
 - 若 Etcd 已经配置过证书，则参考如下创建（以下命令适用于 Kubeadm 创建的 Kubernetes 集群环境）：
 
 ```bash
-$ kubectl create ns kubesphere-monitoring-system
-$ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
+$ kubectl create ns d3os-monitoring-system
+$ kubectl -n d3os-monitoring-system create secret generic kube-etcd-client-certs  \
 --from-file=etcd-client-ca.crt=/etc/kubernetes/pki/etcd/ca.crt  \
 --from-file=etcd-client.crt=/etc/kubernetes/pki/etcd/healthcheck-client.crt  \
 --from-file=etcd-client.key=/etc/kubernetes/pki/etcd/healthcheck-client.key
@@ -83,22 +83,22 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 - 若 Etcd 没有配置证书，则创建空 Secret：
 
 ```bash
-kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
+kubectl -n d3os-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
 2. 编辑 ClusterConfiguration 开启可插拔的功能组件:
 
 ```bash
-kubectl edit cc ks-installer -n kubesphere-system
+kubectl edit cc ks-installer -n d3os-system
 ```
 
 > 按功能需求编辑配置文件之后，退出等待生效即可，如长时间未生效请使用如下命令查看相关日志:
 
 ```bash
-kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+kubectl logs -n d3os-system $(kubectl get pod -n d3os-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-> 如果你正在启用 KubeEdge ，在运行或重启 ks-installer 之前，需要配置集群外网访问地址advertiseAddress，暴露相应的访问端口，更多内容请参考[Kubeedge 指南](https://kubesphere.io/docs/pluggable-components/kubeedge/)：
+> 如果你正在启用 KubeEdge ，在运行或重启 ks-installer 之前，需要配置集群外网访问地址advertiseAddress，暴露相应的访问端口，更多内容请参考[Kubeedge 指南](https://d3os.io/docs/pluggable-components/kubeedge/)：
 ```yaml
  kubeedge:
     cloudCore:
@@ -113,8 +113,8 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 ```bash
 # 注意: ks-installer会自动迁移cluster-configuration. 请勿自行修改.
 
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.0/kubesphere-installer.yaml
+kubectl apply -f https://github.com/d3os/ks-installer/releases/download/v3.1.0/d3os-installer.yaml
 ```
 
 
-> 注意: 如果当前集群中部署的 KubeSphere 版本是 v2.1.1 或更早的版本，请先升级到 v3.0.0。
+> 注意: 如果当前集群中部署的 d3os 版本是 v2.1.1 或更早的版本，请先升级到 v3.0.0。

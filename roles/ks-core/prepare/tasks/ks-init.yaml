@@ -1,14 +1,14 @@
 ---
-- name: KubeSphere | Checking account init
+- name: d3os | Checking account init
   shell: >
     {{ bin_dir }}/kubectl get users admin
-  register: kubesphere_user_check
-  failed_when: "kubesphere_user_check.stderr and 'NotFound' not in kubesphere_user_check.stderr"
+  register: d3os_user_check
+  failed_when: "d3os_user_check.stderr and 'NotFound' not in d3os_user_check.stderr"
 
-- name: KubeSphere | Initing account
+- name: d3os | Initing account
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/initial-account.yaml
+    {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/ks-init/initial-account.yaml
   when:
-    - kubesphere_user_check.stderr is defined
-    - kubesphere_user_check.stderr.find("NotFound") != -1
+    - d3os_user_check.stderr is defined
+    - d3os_user_check.stderr.find("NotFound") != -1
 

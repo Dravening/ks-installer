@@ -2,7 +2,7 @@
 
 #!/usr/bin/env bash
 
-# Copyright 2018 The KubeSphere Authors.
+# Copyright 2018 The d3os Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 CurrentDIR=$(cd "$(dirname "$0")" || exit;pwd)
-ImagesDirDefault=${CurrentDIR}/kubesphere-images
+ImagesDirDefault=${CurrentDIR}/d3os-images
 save="false"
 registryurl=""
 reposUrl=("quay.azk8s.cn" "gcr.azk8s.cn" "docker.elastic.co" "quay.io" "k8s.gcr.io")

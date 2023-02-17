@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: loginrecords.iam.kubesphere.io
+  name: loginrecords.iam.d3os.io
 spec:
-  group: iam.kubesphere.io
+  group: iam.d3os.io
   names:
     categories:
     - iam

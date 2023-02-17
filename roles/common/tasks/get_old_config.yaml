@@ -1,12 +1,12 @@
 ---
 
-- name: KubeSphere | Checking mysql PersistentVolumeClaim
+- name: d3os | Checking mysql PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system mysql-pvc -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n d3os-system mysql-pvc -o jsonpath='{.status.capacity.storage}'
   register: mysql_db_pvc
   failed_when: false
 
-- name: KubeSphere | Setting mysql db pv size
+- name: d3os | Setting mysql db pv size
   set_fact:
     mysql_db_pv_size: "{{ mysql_db_pvc.stdout }}"
   when:
@@ -14,13 +14,13 @@
     - mysql_db_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Checking redis PersistentVolumeClaim
+- name: d3os | Checking redis PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system redis-pvc -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n d3os-system redis-pvc -o jsonpath='{.status.capacity.storage}'
   register: redis_db_pvc
   failed_when: false
 
-- name: KubeSphere | Setting redis db pv size
+- name: d3os | Setting redis db pv size
   set_fact:
     redis_db_pv_size: "{{ redis_db_pvc.stdout }}"
   when:
@@ -28,13 +28,13 @@
     - redis_db_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Checking minio PersistentVolumeClaim
+- name: d3os | Checking minio PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system minio -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n d3os-system minio -o jsonpath='{.status.capacity.storage}'
   register: minio_storage_pvc
   failed_when: false
 
-- name: KubeSphere | Setting minio pv size
+- name: d3os | Setting minio pv size
   set_fact:
     minio_storage_pv_size: "{{ minio_storage_pvc.stdout }}"
   when:
@@ -42,13 +42,13 @@
     - minio_storage_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Checking openldap PersistentVolumeClaim
+- name: d3os | Checking openldap PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system openldap-pvc-openldap-0 -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n d3os-system openldap-pvc-openldap-0 -o jsonpath='{.status.capacity.storage}'
   register: openldap_db_pvc
   failed_when: false
 
-- name: KubeSphere | Setting openldap pv size
+- name: d3os | Setting openldap pv size
   set_fact:
     openldap_db_pv_size: "{{ openldap_db_pvc.stdout }}"
   when:
@@ -56,13 +56,13 @@
     - openldap_db_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Checking etcd db PersistentVolumeClaim
+- name: d3os | Checking etcd db PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system etcd-pvc -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n d3os-system etcd-pvc -o jsonpath='{.status.capacity.storage}'
   register: etcd_db_pvc
   failed_when: false
 
-- name: KubeSphere | Setting etcd pv size
+- name: d3os | Setting etcd pv size
   set_fact:
     etcd_db_pv_size: "{{ etcd_db_pvc.stdout }}"
   when:
@@ -70,13 +70,13 @@
     - etcd_db_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Checking redis ha PersistentVolumeClaim
+- name: d3os | Checking redis ha PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system data-redis-ha-server-0 -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n d3os-system data-redis-ha-server-0 -o jsonpath='{.status.capacity.storage}'
   register: redis_ha_pvc
   failed_when: false
 
-- name: KubeSphere | Setting redis ha pv size
+- name: d3os | Setting redis ha pv size
   set_fact:
     redis_ha_pv_size: "{{ redis_ha_pvc.stdout }}"
   when:
@@ -84,13 +84,13 @@
     - redis_ha_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Checking es-master PersistentVolumeClaim
+- name: d3os | Checking es-master PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-discovery-0 -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n d3os-logging-system data-elasticsearch-logging-discovery-0 -o jsonpath='{.status.capacity.storage}'
   register: es_master_pvc
   failed_when: false
 
-- name: KubeSphere | Setting es master pv size
+- name: d3os | Setting es master pv size
   set_fact:
     es_master_pv_size: "{{ es_master_pvc.stdout }}"
   when:
@@ -98,13 +98,13 @@
     - es_master_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Checking es data PersistentVolumeClaim
+- name: d3os | Checking es data PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-data-0 -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n d3os-logging-system data-elasticsearch-logging-data-0 -o jsonpath='{.status.capacity.storage}'
   register: es_data_pvc
   failed_when: false
 
-- name: KubeSphere | Setting es data pv size
+- name: d3os | Setting es data pv size
   set_fact:
     es_data_pv_size: "{{ es_data_pvc.stdout }}"
   when:

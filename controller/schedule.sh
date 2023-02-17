@@ -14,7 +14,7 @@ if [[ $1 == "--config" ]] ; then
 }
 EOF
 else
-  ansible-playbook /kubesphere/playbooks/telemetry.yaml -e @/kubesphere/config/ks-config.json
+  ansible-playbook /d3os/playbooks/telemetry.yaml -e @/d3os/config/ks-config.json
   if [[ $? -eq 0 ]]; then
     #statements
     str="successsful!"

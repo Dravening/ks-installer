@@ -7,7 +7,7 @@ common:
   openldapVolumeSize: 2Gi
   redisVolumSize: 2Gi
   monitoring:
-    endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
+    endpoint: http://prometheus-operated.d3os-monitoring-system.svc:9090
   es:
     elasticsearchMasterReplicas: 1
     elasticsearchDataReplicas: 1
@@ -24,7 +24,7 @@ op_minio_secretkey: openpitrixminiosecretkey
 
 
 op_minio_svc: http://openpitrix-minio.openpitrix-system.svc:9000
-ks_minio_svc: http://minio.kubesphere-system.svc:9000
+ks_minio_svc: http://minio.d3os-system.svc:9000
 
 
-ks_redis_svc: redis.kubesphere-system.svc
+ks_redis_svc: redis.d3os-system.svc

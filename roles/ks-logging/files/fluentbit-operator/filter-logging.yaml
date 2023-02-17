@@ -1,11 +1,11 @@
-apiVersion: logging.kubesphere.io/v1alpha2
+apiVersion: logging.d3os.io/v1alpha2
 kind: Filter
 metadata:
   name: kubernetes
-  namespace: kubesphere-logging-system
+  namespace: d3os-logging-system
   labels:
-    logging.kubesphere.io/enabled: "true"
-    logging.kubesphere.io/component: "logging"
+    logging.d3os.io/enabled: "true"
+    logging.d3os.io/component: "logging"
 spec:
   match: kube.*
   filters:

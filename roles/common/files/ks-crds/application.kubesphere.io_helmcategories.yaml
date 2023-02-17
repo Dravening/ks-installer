@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: helmcategories.application.kubesphere.io
+  name: helmcategories.application.d3os.io
 spec:
-  group: application.kubesphere.io
+  group: application.d3os.io
   names:
     kind: HelmCategory
     listKind: HelmCategoryList

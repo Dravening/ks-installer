@@ -2,19 +2,19 @@
 
 - import_tasks: precheck.yaml
 
-- name: KubeSphere | Checking KubeSphere component
+- name: d3os | Checking d3os component
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system
-  register: kubesphere_component_deployment
+    {{ bin_dir }}/kubectl get deploy -n d3os-system
+  register: d3os_component_deployment
 
-- name: KubeSphere | Getting KubeSphere component version
+- name: d3os | Getting d3os component version
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-console -o jsonpath='{.metadata.labels.version}'
+    {{ bin_dir }}/kubectl get deploy -n  d3os-system ks-console -o jsonpath='{.metadata.labels.version}'
   register: console_version
   when:
-    - kubesphere_component_deployment.stdout.find("ks-console") != -1
+    - d3os_component_deployment.stdout.find("ks-console") != -1
 
 - import_tasks: helm-migrate.yaml
   when:
-    - kubesphere_component_deployment.stdout.find("ks-console") != -1
+    - d3os_component_deployment.stdout.find("ks-console") != -1
     - console_version.stdout is version('v3.0.0', '<')

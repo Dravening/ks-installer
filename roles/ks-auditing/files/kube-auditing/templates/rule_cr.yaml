@@ -1,4 +1,4 @@
-apiVersion: auditing.kubesphere.io/v1alpha1
+apiVersion: auditing.d3os.io/v1alpha1
 kind: Rule
 metadata:
   name: archiving-rule
@@ -22,7 +22,7 @@ spec:
       priority: DEBUG
 
 ---
-apiVersion: auditing.kubesphere.io/v1alpha1
+apiVersion: auditing.d3os.io/v1alpha1
 kind: Rule
 metadata:
   name: alerting-rule

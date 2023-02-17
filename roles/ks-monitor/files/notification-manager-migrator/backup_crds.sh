@@ -13,115 +13,115 @@ mkdir -p "$backup_dir"
 
 backup_v1alpha1() {
   # export dingtalk config
-  str=$(kubectl get dingtalkconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $1}')
+  str=$(kubectl get dingtalkconfigs.notification.d3os.io -A | sed -n '1!p' | awk '{print $1}')
   # shellcheck disable=SC2206
   ns=($str)
 
-  str=$(kubectl get dingtalkconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $2}')
+  str=$(kubectl get dingtalkconfigs.notification.d3os.io -A | sed -n '1!p' | awk '{print $2}')
   # shellcheck disable=SC2206
   dingtalkconfigs=($str)
 
   for ((i = 0; i < ${#ns[@]}; i++)); do
-    src=$(kubectl get dingtalkconfigs.notification.kubesphere.io "${dingtalkconfigs[i]}" -n "${ns[i]}" -ojson)
+    src=$(kubectl get dingtalkconfigs.notification.d3os.io "${dingtalkconfigs[i]}" -n "${ns[i]}" -ojson)
     echo "$src" | jq >"${backup_dir}/dingtalkconfig-$(echo "$src" | jq -r '.metadata.namespace')-$(echo "$src" | jq -r '.metadata.name').json"
   done
 
   # export email config
-  str=$(kubectl get emailconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $1}')
+  str=$(kubectl get emailconfigs.notification.d3os.io -A | sed -n '1!p' | awk '{print $1}')
   # shellcheck disable=SC2206
   ns=($str)
 
-  str=$(kubectl get emailconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $2}')
+  str=$(kubectl get emailconfigs.notification.d3os.io -A | sed -n '1!p' | awk '{print $2}')
   # shellcheck disable=SC2206
   emailconfigs=($str)
 
   for ((i = 0; i < ${#ns[@]}; i++)); do
-    src=$(kubectl get emailconfigs.notification.kubesphere.io "${emailconfigs[i]}" -n "${ns[i]}" -ojson)
+    src=$(kubectl get emailconfigs.notification.d3os.io "${emailconfigs[i]}" -n "${ns[i]}" -ojson)
     echo "$src" | jq >"${backup_dir}/emailconfig-$(echo "$src" | jq -r '.metadata.namespace')-$(echo "$src" | jq -r '.metadata.name').json"
   done
 
   # export email receiver
-  str=$(kubectl get emailreceivers.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $1}')
+  str=$(kubectl get emailreceivers.notification.d3os.io -A | sed -n '1!p' | awk '{print $1}')
   # shellcheck disable=SC2206
   ns=($str)
 
-  str=$(kubectl get emailreceivers.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $2}')
+  str=$(kubectl get emailreceivers.notification.d3os.io -A | sed -n '1!p' | awk '{print $2}')
   # shellcheck disable=SC2206
   emailreceivers=($str)
 
   for ((i = 0; i < ${#ns[@]}; i++)); do
-    src=$(kubectl get emailreceivers.notification.kubesphere.io "${emailreceivers[i]}" -n "${ns[i]}" -ojson)
+    src=$(kubectl get emailreceivers.notification.d3os.io "${emailreceivers[i]}" -n "${ns[i]}" -ojson)
     echo "$src" | jq >"${backup_dir}/emailreceiver-$(echo "$src" | jq -r '.metadata.namespace')-$(echo "$src" | jq -r '.metadata.name').json"
   done
 
   # export slack config
-  str=$(kubectl get slackconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $1}')
+  str=$(kubectl get slackconfigs.notification.d3os.io -A | sed -n '1!p' | awk '{print $1}')
   # shellcheck disable=SC2206
   ns=($str)
 
-  str=$(kubectl get slackconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $2}')
+  str=$(kubectl get slackconfigs.notification.d3os.io -A | sed -n '1!p' | awk '{print $2}')
   # shellcheck disable=SC2206
   slackconfigs=($str)
 
   for ((i = 0; i < ${#ns[@]}; i++)); do
-    src=$(kubectl get slackconfigs.notification.kubesphere.io "${slackconfigs[i]}" -n "${ns[i]}" -ojson)
+    src=$(kubectl get slackconfigs.notification.d3os.io "${slackconfigs[i]}" -n "${ns[i]}" -ojson)
     echo "$src" | jq >"${backup_dir}/slackconfig-$(echo "$src" | jq -r '.metadata.namespace')-$(echo "$src" | jq -r '.metadata.name').json"
   done
 
   # export slack receiver
-  str=$(kubectl get slackreceivers.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $1}')
+  str=$(kubectl get slackreceivers.notification.d3os.io -A | sed -n '1!p' | awk '{print $1}')
   # shellcheck disable=SC2206
   ns=($str)
 
-  str=$(kubectl get slackreceivers.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $2}')
+  str=$(kubectl get slackreceivers.notification.d3os.io -A | sed -n '1!p' | awk '{print $2}')
   # shellcheck disable=SC2206
   slackreceivers=($str)
 
   for ((i = 0; i < ${#ns[@]}; i++)); do
-    src=$(kubectl get slackreceivers.notification.kubesphere.io "${slackreceivers[i]}" -n "${ns[i]}" -ojson)
+    src=$(kubectl get slackreceivers.notification.d3os.io "${slackreceivers[i]}" -n "${ns[i]}" -ojson)
     echo "$src" | jq >"${backup_dir}/slackreceiver-$(echo "$src" | jq -r '.metadata.namespace')-$(echo "$src" | jq -r '.metadata.name').json"
 
   done
 
   # export webhook config
-  str=$(kubectl get webhookconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $1}')
+  str=$(kubectl get webhookconfigs.notification.d3os.io -A | sed -n '1!p' | awk '{print $1}')
   # shellcheck disable=SC2206
   ns=($str)
 
-  str=$(kubectl get webhookconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $2}')
+  str=$(kubectl get webhookconfigs.notification.d3os.io -A | sed -n '1!p' | awk '{print $2}')
   # shellcheck disable=SC2206
   webhookconfigs=($str)
 
   for ((i = 0; i < ${#ns[@]}; i++)); do
-    src=$(kubectl get webhookconfigs.notification.kubesphere.io "${webhookconfigs[i]}" -n "${ns[i]}" -ojson)
+    src=$(kubectl get webhookconfigs.notification.d3os.io "${webhookconfigs[i]}" -n "${ns[i]}" -ojson)
     echo "$src" | jq >"${backup_dir}"/webhookconfig-"$(echo "$src" | jq -r '.metadata.namespace')"-"$(echo "$src" | jq -r '.metadata.name')".json
   done
 
   # export wechat config
-  str=$(kubectl get wechatconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $1}')
+  str=$(kubectl get wechatconfigs.notification.d3os.io -A | sed -n '1!p' | awk '{print $1}')
   # shellcheck disable=SC2206
   ns=($str)
 
-  str=$(kubectl get wechatconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $2}')
+  str=$(kubectl get wechatconfigs.notification.d3os.io -A | sed -n '1!p' | awk '{print $2}')
   # shellcheck disable=SC2206
   wechatconfigs=($str)
 
   for ((i = 0; i < ${#ns[@]}; i++)); do
-    src=$(kubectl get wechatconfigs.notification.kubesphere.io "${wechatconfigs[i]}" -n "${ns[i]}" -ojson)
+    src=$(kubectl get wechatconfigs.notification.d3os.io "${wechatconfigs[i]}" -n "${ns[i]}" -ojson)
     echo "$src" | jq >"${backup_dir}/wechatconfig-$(echo "$src" | jq -r '.metadata.namespace')-$(echo "$src" | jq -r '.metadata.name').json"
   done
 
   # export wechat receiver
-  str=$(kubectl get wechatreceivers.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $1}')
+  str=$(kubectl get wechatreceivers.notification.d3os.io -A | sed -n '1!p' | awk '{print $1}')
   # shellcheck disable=SC2206
   ns=($str)
 
-  str=$(kubectl get wechatreceivers.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $2}')
+  str=$(kubectl get wechatreceivers.notification.d3os.io -A | sed -n '1!p' | awk '{print $2}')
   # shellcheck disable=SC2206
   wechatreceivers=($str)
 
   for ((i = 0; i < ${#ns[@]}; i++)); do
-    src=$(kubectl get wechatreceivers.notification.kubesphere.io "${wechatreceivers[i]}" -n "${ns[i]}" -ojson)
+    src=$(kubectl get wechatreceivers.notification.d3os.io "${wechatreceivers[i]}" -n "${ns[i]}" -ojson)
     echo "$src" | jq >"${backup_dir}/wechatreceiver-$(echo "$src" | jq -r '.metadata.namespace')-$(echo "$src" | jq -r '.metadata.name').json"
   done
 }

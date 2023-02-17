@@ -3,24 +3,24 @@
 - name: ks-events | Getting ks-events installation files
   copy:
     src: "kube-events"
-    dest: "{{ kubesphere_dir }}/ks-events/"
+    dest: "{{ d3os_dir }}/ks-events/"
 
 - name: ks-events | Getting ks-events installation files
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+    dest: "{{ d3os_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: ks-events, file: custom-values-events.yaml }
 
 - name: ks-events | Checking ks-events
   shell: >
-    {{ bin_dir }}/helm list -f ks-events -n kubesphere-logging-system
+    {{ bin_dir }}/helm list -f ks-events -n d3os-logging-system
   register: events_check
   failed_when: false
 
 - name: ks-events | Checking ks-events
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-logging-system get rulers.events.kubesphere.io ks-events-ruler -o jsonpath='{.spec.image}'
+    {{ bin_dir }}/kubectl -n d3os-logging-system get rulers.events.d3os.io ks-events-ruler -o jsonpath='{.spec.image}'
   register: events_ruler_check
   when:
     - (events_check.stdout.find("deployed") != -1) and (events_check.stdout.find("0.1.0") != -1)
@@ -29,9 +29,9 @@
 - name: ks-events | Deploying ks-events
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-events
-    {{ kubesphere_dir }}/ks-events/kube-events
-    -f {{ kubesphere_dir }}/ks-events/custom-values-events.yaml
-    -n kubesphere-logging-system
+    {{ d3os_dir }}/ks-events/kube-events
+    -f {{ d3os_dir }}/ks-events/custom-values-events.yaml
+    -n d3os-logging-system
   register: deploy_result
   until: deploy_result is succeeded
   retries: 3
@@ -48,7 +48,7 @@
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
     -p '{"status": {"events": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
-    -n kubesphere-system
+    -n d3os-system
   register: cc_result
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
   until: cc_result is succeeded
@@ -61,7 +61,7 @@
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
     -p '{"status": {"events": {"ruler": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}}'
-    -n kubesphere-system
+    -n d3os-system
   register: cc_result
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
   until: cc_result is succeeded

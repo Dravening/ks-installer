@@ -7,7 +7,7 @@ If you want to upgrade to 1.5.x, you need to upgrade 1.4.x firstly.
 
 # upgrade to 1.4.8 from 1.3.3
 
-Support to ***upgrade to 1.4.8 from istio 1.3.3*** on KubeSphere platform by helm2.
+Support to ***upgrade to 1.4.8 from istio 1.3.3*** on d3os platform by helm2.
 
 [official upgarde notes](https://archive.istio.io/v1.4/news/releases/1.4.x/announcing-1.4/upgrade-notes/)
 
@@ -20,10 +20,10 @@ curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.4.8 sh - && cd istio-1.
 2. Get custom setting files from ks-installer
 
 ```bash
-pod=$(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath={.items[0].metadata.name})
-kubectl -n kubesphere-system exec $pod cat /etc/kubesphere/istio/custom-values-istio-init.yaml > custom-values-istio-init.yaml
-kubectl -n kubesphere-system exec $pod cat /etc/kubesphere/istio/custom-values-istio.yaml > custom-values-istio.yaml
-kubectl -n kubesphere-system exec $pod  sed -i 's/1.3.3/1.4.8/g' /kubesphere/installer/roles/download/defaults
+pod=$(kubectl get pod -n d3os-system -l app=ks-install -o jsonpath={.items[0].metadata.name})
+kubectl -n d3os-system exec $pod cat /etc/d3os/istio/custom-values-istio-init.yaml > custom-values-istio-init.yaml
+kubectl -n d3os-system exec $pod cat /etc/d3os/istio/custom-values-istio.yaml > custom-values-istio.yaml
+kubectl -n d3os-system exec $pod  sed -i 's/1.3.3/1.4.8/g' /d3os/installer/roles/download/defaults
 sed -i 's/tag: .*$/tag: 1.4.8/' custom-values-istio-init.yaml
 sed -i 's/tag: .*$/tag: 1.4.8/' custom-values-istio.yaml
 sed -i 's/image: proxy_init/image: proxyv2/' custom-values-istio.yaml

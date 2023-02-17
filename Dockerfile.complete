@@ -26,30 +26,30 @@ RUN apk --no-cache add jq gcc bash libffi-dev openssl-dev curl unzip musl-dev op
     chmod +x /bin/kubectl && \
     ln -s /bin/kubectl /usr/local/bin/kubectl && \
     ln -s /bin/helm /usr/local/bin/helm && \
-    mkdir -p /hooks/kubesphere /kubesphere/installer/roles /kubesphere/results/env /kubesphere/playbooks /kubesphere/config &&\
-    adduser -D -g kubesphere -u 1002 kubesphere
+    mkdir -p /hooks/d3os /d3os/installer/roles /d3os/results/env /d3os/playbooks /d3os/config &&\
+    adduser -D -g d3os -u 1002 d3os
 
 COPY --from=0 /go/src/github.com/flant/shell-operator/shell-operator /
 
-RUN chown -R kubesphere:kubesphere /shell-operator && \
-    chown -R kubesphere:kubesphere /hooks && \
-    chown -R kubesphere:kubesphere /kubesphere
+RUN chown -R d3os:d3os /shell-operator && \
+    chown -R d3os:d3os /hooks && \
+    chown -R d3os:d3os /d3os
 
-ADD controller/* /hooks/kubesphere/
-RUN chmod +x -R /hooks/kubesphere
+ADD controller/* /hooks/d3os/
+RUN chmod +x -R /hooks/d3os
 
-USER kubesphere
+USER d3os
 
 ENV SHELL_OPERATOR_WORKING_DIR /hooks
-ENV ANSIBLE_ROLES_PATH /kubesphere/installer/roles
+ENV ANSIBLE_ROLES_PATH /d3os/installer/roles
 
-WORKDIR /kubesphere
+WORKDIR /d3os
 
-ADD roles /kubesphere/installer/roles
+ADD roles /d3os/installer/roles
 
-ADD env /kubesphere/results/env
+ADD env /d3os/results/env
 
-ADD playbooks /kubesphere/playbooks
+ADD playbooks /d3os/playbooks
 
 ENTRYPOINT ["/shell-operator"]
 

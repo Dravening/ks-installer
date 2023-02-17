@@ -35,7 +35,7 @@ update_v1alpha1() {
     namespace=$(echo "$src" | jq -r '.metadata.namespace')
     kind=$(echo "$src" | jq -r '.kind')
 
-    resource=$(echo "$src" | jq 'setpath(["apiVersion"]; "notification.kubesphere.io/v2beta1")')
+    resource=$(echo "$src" | jq 'setpath(["apiVersion"]; "notification.d3os.io/v2beta1")')
     name=$(echo "$kind" | awk '{ print tolower($0) }')-$(echo "$resource" | jq -r '.metadata.namespace')-$(echo "$resource" | jq -r '.metadata.name')
     resource=$(echo "$resource" | jq --arg name "$name" 'setpath(["metadata", "name"]; $name)' | jq 'del(.metadata.namespace)')
     resource=$(delete_invalid_info "\"$(echo "$resource" | jq -c)\"")
@@ -251,7 +251,7 @@ update_v2alpha1() {
       continue
     fi
 
-    resource=$(echo "$src" | jq 'setpath(["apiVersion"]; "notification.kubesphere.io/v2beta1")')
+    resource=$(echo "$src" | jq 'setpath(["apiVersion"]; "notification.d3os.io/v2beta1")')
     name=$(echo "$kind" | awk '{ print tolower($0) }')-$(echo "$resource" | jq -r '.metadata.name')
     resource=$(echo "$resource" | jq --arg name "$name" 'setpath(["metadata", "name"]; $name)')
     resource=$(delete_invalid_info "\"$(echo "$resource" | jq -c)\"")
@@ -436,7 +436,7 @@ update_v2alpha1() {
   done
 }
 
-version=$(kubectl get crd notificationmanagers.notification.kubesphere.io -o jsonpath='{.spec.versions[0].name}')
+version=$(kubectl get crd notificationmanagers.notification.d3os.io -o jsonpath='{.spec.versions[0].name}')
 
 if [ "${version}" = "$V1alpha1" ]; then
   update_v1alpha1

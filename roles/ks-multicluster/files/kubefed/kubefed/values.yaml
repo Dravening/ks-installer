@@ -44,7 +44,7 @@ controllermanager:
   controller:
     annotations: {}
     replicaCount: 2
-    repository: kubesphere
+    repository: d3os
     image: kubefed
     tag: v0.7.0
     imagePullPolicy: IfNotPresent
@@ -60,7 +60,7 @@ controllermanager:
         memory: 64Mi
   webhook:
     annotations: {}
-    repository: kubesphere
+    repository: d3os
     image: kubefed
     tag: v0.7.0
     imagePullPolicy: IfNotPresent

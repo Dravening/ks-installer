@@ -4,7 +4,7 @@ metadata:
   labels:
     alertmanager: main
   name: alertmanager-main
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   ports:
   - name: web

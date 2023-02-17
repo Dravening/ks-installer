@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: servicepolicies.servicemesh.kubesphere.io
+  name: servicepolicies.servicemesh.d3os.io
 spec:
-  group: servicemesh.kubesphere.io
+  group: servicemesh.d3os.io
   names:
     kind: ServicePolicy
     listKind: ServicePolicyList

@@ -2,9 +2,9 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: clusterconfigurations.installer.kubesphere.io
+  name: clusterconfigurations.installer.d3os.io
 spec:
-  group: installer.kubesphere.io
+  group: installer.d3os.io
   versions:
   - name: v1alpha1
     served: true
@@ -21,14 +21,14 @@ spec:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: kubesphere-system
+  name: d3os-system
 
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: ks-installer
-  namespace: kubesphere-system
+  namespace: d3os-system
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -79,7 +79,7 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - tenant.kubesphere.io
+  - tenant.d3os.io
   resources:
   - '*'
   verbs:
@@ -91,7 +91,7 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - devops.kubesphere.io
+  - devops.d3os.io
   resources:
   - '*'
   verbs:
@@ -103,7 +103,7 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - logging.kubesphere.io
+  - logging.d3os.io
   resources:
   - '*'
   verbs:
@@ -151,25 +151,25 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - iam.kubesphere.io
+  - iam.d3os.io
   resources:
   - '*'
   verbs:
   - '*'
 - apiGroups:
-  - notification.kubesphere.io
+  - notification.d3os.io
   resources:
   - '*'
   verbs:
   - '*'
 - apiGroups:
-  - auditing.kubesphere.io
+  - auditing.d3os.io
   resources:
   - '*'
   verbs:
   - '*'
 - apiGroups:
-  - events.kubesphere.io
+  - events.d3os.io
   resources:
   - '*'
   verbs:
@@ -181,13 +181,13 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - installer.kubesphere.io
+  - installer.d3os.io
   resources:
   - '*'
   verbs:
   - '*'
 - apiGroups:
-  - storage.kubesphere.io
+  - storage.d3os.io
   resources:
   - '*'
   verbs:
@@ -217,7 +217,7 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - kubeedge.kubesphere.io
+  - kubeedge.d3os.io
   resources:
   - '*'
   verbs:
@@ -237,7 +237,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: ks-installer
-  namespace: kubesphere-system
+  namespace: d3os-system
 roleRef:
   kind: ClusterRole
   name: ks-installer
@@ -248,7 +248,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ks-installer
-  namespace: kubesphere-system
+  namespace: d3os-system
   labels:
     app: ks-install
 spec:

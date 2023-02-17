@@ -3,12 +3,12 @@
 - name: OpenPitrix | Getting OpenPitrix jobs files
   copy:
     src: "openpitrix"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
 
 - name: OpenPitrix | Getting OpenPitrix jobs files
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+    dest: "{{ d3os_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: openpitrix, file: ks-openpitrix-import.yaml }
 
@@ -19,14 +19,14 @@
 
 - name: OpenPitrix | Check openpitrix jobs exists or not
   shell: >
-    {{ bin_dir }}/kubectl get job openpitrix-import-job -n kubesphere-system 2>1 -oNAME | wc -l
+    {{ bin_dir }}/kubectl get job openpitrix-import-job -n d3os-system 2>1 -oNAME | wc -l
   register: openpitrix_job_count
   when:
     - openpitrix_deploy_count.stdout == "0"
 
 - name: OpenPitrix | Delete previous openpitrix jobs
   shell: >
-    {{ bin_dir }}/kubectl delete job openpitrix-import-job -n kubesphere-system
+    {{ bin_dir }}/kubectl delete job openpitrix-import-job -n d3os-system
   when:
     - openpitrix_job_count is defined
     - openpitrix_job_count.stdout is defined and openpitrix_job_count.stdout == "1"
@@ -34,6 +34,6 @@
 
 - name: OpenPitrix | Import App
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/ks-openpitrix-import.yaml
+    {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/openpitrix/ks-openpitrix-import.yaml
   when:
     - openpitrix_deploy_count.stdout == "0"

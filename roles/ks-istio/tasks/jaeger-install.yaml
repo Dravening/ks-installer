@@ -13,8 +13,8 @@
 
 - name: servicemesh | Deploying jaeger-operator
   shell: >
-    {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-operator-2.14.2.tgz
-    -f {{ kubesphere_dir }}/servicemesh/jaeger/custom-values-jaeger.yaml
+    {{ bin_dir }}/helm upgrade --install jaeger-operator {{ d3os_dir }}/servicemesh/jaeger/jaeger-operator-2.14.2.tgz
+    -f {{ d3os_dir }}/servicemesh/jaeger/custom-values-jaeger.yaml
     --namespace istio-system
   when:
     - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
@@ -32,7 +32,7 @@
     - "common.es.basicAuth.username is defined and common.es.basicAuth.username != ''"
 
 - name: servicemesh | Deploying jaeger-cr
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-cr.yaml --namespace istio-system"
+  shell: "{{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/servicemesh/jaeger/jaeger-cr.yaml --namespace istio-system"
   register: jaeger_cr_result
   until: jaeger_cr_result is succeeded
   retries: 5

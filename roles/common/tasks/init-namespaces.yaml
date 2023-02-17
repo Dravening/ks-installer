@@ -1,33 +1,33 @@
 ---
 
-- name: KubeSphere | Checking kube-node-lease namespace
+- name: d3os | Checking kube-node-lease namespace
   shell: >
     {{ bin_dir }}/kubectl get ns | grep 'kube-node-lease' | wc -l
   register: kube_node_lease
   failed_when: false
 
 
-- name: KubeSphere | Getting system namespaces
+- name: d3os | Getting system namespaces
   set_fact:
     systemNamespaces: >-
-      kubesphere-system
-      kubesphere-controls-system
-      kubesphere-monitoring-system
-      kubesphere-monitoring-federated
+      d3os-system
+      d3os-controls-system
+      d3os-monitoring-system
+      d3os-monitoring-federated
       {%- if kube_node_lease is defined and kube_node_lease.stdout != "0" %}
       kube-node-lease
       {%- endif %}
       {%- if (logging.enabled is defined and logging.enabled) or (events.enabled is defined and events.enabled) or (auditing.enabled is defined and auditing.enabled) or (servicemesh.enabled is defined and servicemesh.enabled)%}
-      kubesphere-logging-system
+      d3os-logging-system
       {%- endif %}
       {%- if devops.enabled is defined and devops.enabled %}
-      kubesphere-devops-system
+      d3os-devops-system
       {%- endif %}
       {%- if harbor.enabled is defined and harbor.enabled %}
-      kubesphere-devops-system
+      d3os-devops-system
       {%- endif %}
       {%- if gitlab.enabled is defined and gitlab.enabled %}
-      kubesphere-devops-system
+      d3os-devops-system
       {%- endif %}
       {%- if servicemesh.enabled is defined and servicemesh.enabled %}
       istio-system
@@ -46,7 +46,7 @@
 - debug:
     msg: "{{ systemNamespacesList }}"
 
-- name: KubeSphere | Creating KubeSphere namespace
+- name: d3os | Creating d3os namespace
   command: >
     {{ bin_dir }}/kubectl create namespace {{ item }}
   register: ns_state
@@ -54,15 +54,15 @@
   loop: "{{ systemNamespacesList }}"
 
 
-- name: KubeSphere | Labeling system-workspace
+- name: d3os | Labeling system-workspace
   shell: >
-    {{ bin_dir }}/kubectl label ns {{ item }} kubesphere.io/workspace=system-workspace
+    {{ bin_dir }}/kubectl label ns {{ item }} d3os.io/workspace=system-workspace
   register: label_state
   failed_when: "label_state.stderr and 'already' not in label_state.stderr"
   loop: "{{ ['default', 'kube-public', 'kube-system', systemNamespacesList] | flatten(1) }}"
 
 
-- name: KubeSphere | Creating ImagePullSecrets
+- name: d3os | Creating ImagePullSecrets
   shell: |
     cat <<EOF | kubectl apply -f -
       apiVersion: v1
@@ -76,7 +76,7 @@
     EOF
   loop: "{{ ['default', 'kube-public', 'kube-system', systemNamespacesList] | flatten(1) }}"
 
-- name: KubeSphere | Labeling namespace for network policy
+- name: d3os | Labeling namespace for network policy
   shell: >
-    for ns in `kubectl get ns -o jsonpath="{.items[*].metadata.name}"`; do kubectl label  ns $ns kubesphere.io/namespace=$ns --overwrite; done
+    for ns in `kubectl get ns -o jsonpath="{.items[*].metadata.name}"`; do kubectl label  ns $ns d3os.io/namespace=$ns --overwrite; done
   failed_when: false

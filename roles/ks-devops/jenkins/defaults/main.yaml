@@ -36,18 +36,18 @@ JavaOpts: >
   -XX:+UnlockDiagnosticVMOptions
   -XX:+UnlockExperimentalVMOptions
 
-JenkinsLocationUrl: jenkins.devops.kubesphere.local
+JenkinsLocationUrl: jenkins.devops.d3os.local
 
 EMAIL_SMTP_HOST: mail.example.com
 EMAIL_FROM_ADDR: admin@example.com
-EMAIL_FROM_NAME: KubeSphere
+EMAIL_FROM_NAME: d3os
 EMAIL_USE_SSL: false
 EMAIL_SMTP_PORT: 465
 EMAIL_FROM_PASS: P@ssw0rd
 
 sonar_account_user: ks-devops
 
-harbor_domain: harbor.devops.kubesphere.local
+harbor_domain: harbor.devops.d3os.local
 
 
 sonarqube_enable: true

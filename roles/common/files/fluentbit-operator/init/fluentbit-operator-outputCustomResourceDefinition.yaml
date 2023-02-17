@@ -3,9 +3,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
-  name: outputs.logging.kubesphere.io
+  name: outputs.logging.d3os.io
 spec:
-  group: logging.kubesphere.io
+  group: logging.d3os.io
   names:
     kind: Output
     listKind: OutputList

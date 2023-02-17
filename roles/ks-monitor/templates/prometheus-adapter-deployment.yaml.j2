@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus-adapter
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   replicas: 1
   selector:
@@ -23,7 +23,7 @@ spec:
         - --config=/etc/adapter/config.yaml
         - --logtostderr=true
         - --metrics-relist-interval=1m
-        - --prometheus-url=http://prometheus-k8s.kubesphere-monitoring-system.svc:9090/
+        - --prometheus-url=http://prometheus-k8s.d3os-monitoring-system.svc:9090/
         - --secure-port=6443
         image: {{ prometheus_adapter_repo }}:{{ prometheus_adapter_tag }}
         name: prometheus-adapter

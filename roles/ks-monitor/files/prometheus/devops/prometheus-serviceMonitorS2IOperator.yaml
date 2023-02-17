@@ -3,9 +3,9 @@ kind: ServiceMonitor
 metadata:
   labels:
     k8s-app: s2i-operator
-    app.kubernetes.io/vendor: kubesphere
+    app.kubernetes.io/vendor: d3os
   name: s2i-operator
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   endpoints:
   - honorLabels: true
@@ -19,7 +19,7 @@ spec:
   jobLabel: k8s-app
   namespaceSelector:
     matchNames:
-    - kubesphere-devops-system
+    - d3os-devops-system
   selector:
     matchLabels:
       app: s2i-metrics

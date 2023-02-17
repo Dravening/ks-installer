@@ -1,6 +1,6 @@
 # logsidecar-injector
 
-[logsidecar-injector](https://github.com/kubesphere/logsidecar-injector) a Kubernetes mutating webhook server that adds a sidecar to your pod. This sidecar is just to forward logs from files on volumes to stdout.
+[logsidecar-injector](https://github.com/d3os/logsidecar-injector) a Kubernetes mutating webhook server that adds a sidecar to your pod. This sidecar is just to forward logs from files on volumes to stdout.
  
 ## Prerequisites
 - Kubernetes v1.13+
@@ -8,20 +8,20 @@
 
 ## Installing the Chart
 
-To install the chart with the release name `logsidecar-injector` into the namespace `kubesphere-logging-system`:
+To install the chart with the release name `logsidecar-injector` into the namespace `d3os-logging-system`:
 
 ```console
-helm install logsidecar-injector ./ --namespace kubesphere-logging-system
+helm install logsidecar-injector ./ --namespace d3os-logging-system
 ```
 
 The command deploys logsidecar-injector on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `logsidecar-injector` release in the namespace `kubesphere-logging-system`:
+To uninstall/delete the `logsidecar-injector` release in the namespace `d3os-logging-system`:
 
 ```console
-helm delete -f logsidecar-injector --namespace kubesphere-logging-system
+helm delete -f logsidecar-injector --namespace d3os-logging-system
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -32,7 +32,7 @@ The following tables list the configurable parameters of the logsidecar-injector
 
 | Parameter | Description | Default |
 | ----- | ----------- | ------ |
-| image.repository | Repository for logsidecar-injector | `kubespheredev/log-sidecar-injector` |
+| image.repository | Repository for logsidecar-injector | `d3osdev/log-sidecar-injector` |
 | image.tag | Tag for logsidecar-injector | `1.1` |
 | image.pullPolicy | Pull policy for logsidecar-injector image | `IfNotPresent` |
 | resources | Define resources requests and limits for logsidecar-injector container | `{}` |

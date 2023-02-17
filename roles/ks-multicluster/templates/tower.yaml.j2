@@ -5,7 +5,7 @@ metadata:
     app: tower
     app.kubernetes.io/name: tower
   name: tower
-  namespace: kubesphere-system
+  namespace: d3os-system
 spec:
   replicas: 1
   selector:
@@ -50,7 +50,7 @@ spec:
             limits:
               memory: 256Mi
               cpu: 500m
-      serviceAccountName: kubesphere
+      serviceAccountName: d3os
 
 ---
 
@@ -60,7 +60,7 @@ metadata:
   labels:
     app: tower
   name: tower
-  namespace: kubesphere-system
+  namespace: d3os-system
 spec:
   externalTrafficPolicy: Cluster
   ports:

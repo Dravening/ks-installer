@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: workspacetemplates.tenant.kubesphere.io
+  name: workspacetemplates.tenant.d3os.io
 spec:
-  group: tenant.kubesphere.io
+  group: tenant.d3os.io
   names:
     categories:
     - tenant

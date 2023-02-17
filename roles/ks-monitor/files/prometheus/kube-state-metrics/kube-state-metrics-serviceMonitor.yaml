@@ -4,9 +4,9 @@ metadata:
   labels:
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/version: 1.9.7
-    app.kubernetes.io/vendor: kubesphere
+    app.kubernetes.io/vendor: d3os
   name: kube-state-metrics
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   endpoints:
   - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
@@ -17,7 +17,7 @@ spec:
       regex: (.*)
       replacement: $1
       sourceLabels:
-      - label_kubesphere_io_workspace
+      - label_d3os_io_workspace
       targetLabel: workspace
     port: https-main
     relabelings:

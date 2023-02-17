@@ -16,7 +16,7 @@ function wait_status_ok(){
 }
 
 yum install -y vim openssl socat conntrack ipset wget
-curl -sfL https://get-kk.kubesphere.io | VERSION=v1.1.0 sh -
+curl -sfL https://get-kk.d3os.io | VERSION=v1.1.0 sh -
 chmod +x kk
 echo "yes" | ./kk create cluster --with-kubernetes v1.20.4
 
@@ -24,12 +24,12 @@ kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml
 wait_status_ok
 kubectl patch storageclass openebs-hostpath -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/deploy/kubesphere-installer.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/deploy/cluster-configuration.yaml
+kubectl apply -f https://raw.githubusercontent.com/d3os/ks-installer/master/deploy/d3os-installer.yaml
+kubectl apply -f https://raw.githubusercontent.com/d3os/ks-installer/master/deploy/cluster-configuration.yaml
 
-kubectl -n kubesphere-system get cc ks-installer -o yaml | sed "s/false/true/g" | kubectl replace -n kubesphere-system cc -f -
+kubectl -n d3os-system get cc ks-installer -o yaml | sed "s/false/true/g" | kubectl replace -n d3os-system cc -f -
 
-kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"monitoring":false}}}'
-kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"tlsEnable":false}}}'
+kubectl -n d3os-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"monitoring":false}}}'
+kubectl -n d3os-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"tlsEnable":false}}}'
 
-kubectl -n kubesphere-system rollout restart deploy ks-installer
+kubectl -n d3os-system rollout restart deploy ks-installer

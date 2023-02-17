@@ -3,13 +3,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: minio
-  namespace: kubesphere-system
+  namespace: d3os-system
   labels:
-    app: kubesphere
+    app: d3os
     tier: minio
 spec:
   selector:
-    app: kubesphere
+    app: d3os
     tier: minio
   ports:
   - name: tcp
@@ -23,9 +23,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: minio-pvc
-  namespace: kubesphere-system
+  namespace: d3os-system
   labels:
-    app: kubesphere
+    app: d3os
     tier: minio
 spec:
   accessModes:
@@ -46,21 +46,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: minio
-  namespace: kubesphere-system
+  namespace: d3os-system
   labels:
-    app: kubesphere
+    app: d3os
     tier: minio
 spec:
   selector:
     matchLabels:
-      app: kubesphere
+      app: d3os
       tier: minio
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: kubesphere
+        app: d3os
         tier: minio
     spec:
       containers:

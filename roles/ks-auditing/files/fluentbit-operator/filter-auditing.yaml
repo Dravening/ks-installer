@@ -1,11 +1,11 @@
-apiVersion: logging.kubesphere.io/v1alpha2
+apiVersion: logging.d3os.io/v1alpha2
 kind: Filter
 metadata:
   labels:
-    logging.kubesphere.io/enabled: 'true'
-    logging.kubesphere.io/component: "auditing"
+    logging.d3os.io/enabled: 'true'
+    logging.d3os.io/component: "auditing"
   name: filter-auditing
-  namespace: kubesphere-logging-system
+  namespace: d3os-logging-system
 spec:
   filters:
     - parser:

@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
-  name: rulers.events.kubesphere.io
+  name: rulers.events.d3os.io
 spec:
-  group: events.kubesphere.io
+  group: events.d3os.io
   names:
     kind: Ruler
     listKind: RulerList

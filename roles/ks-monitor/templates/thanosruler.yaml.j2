@@ -2,9 +2,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: ThanosRuler
 metadata:
   labels:
-    thanos-ruler: kubesphere
-  name: kubesphere
-  namespace: kubesphere-monitoring-system
+    thanos-ruler: d3os
+  name: d3os
+  namespace: d3os-monitoring-system
 spec:
   affinity:
     podAntiAffinity:
@@ -15,19 +15,19 @@ spec:
             - key: thanos-ruler
               operator: In
               values:
-              - kubesphere
+              - d3os
           namespaces:
-          - kubesphere-monitoring-system
+          - d3os-monitoring-system
           topologyKey: kubernetes.io/hostname
         weight: 100
   alertmanagersUrl:
-  - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093
+  - dnssrv+http://alertmanager-operated.d3os-monitoring-system.svc:9093
   image: {{ thanos_repo }}:{{ thanos_tag }}
   queryEndpoints:
 {% if common.monitoring is defined and common.monitoring.endpoint is defined %}
   - {{ common.monitoring.endpoint }}
 {% else %}
-  - prometheus-operated.kubesphere-monitoring-system.svc:9090
+  - prometheus-operated.d3os-monitoring-system.svc:9090
 {% endif %}
 {% if nodeNum is defined and nodeNum < 3 %}
   replicas: {{ alerting.thanosruler.replicas | default(1) }}

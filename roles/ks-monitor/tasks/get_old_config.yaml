@@ -1,7 +1,7 @@
 ---
 - name: Monitoring | Checking Prometheus PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-monitoring-system prometheus-k8s-db-prometheus-k8s-0 -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n d3os-monitoring-system prometheus-k8s-db-prometheus-k8s-0 -o jsonpath='{.status.capacity.storage}'
   register: prometheus_pvc
   failed_when: false
 
@@ -15,7 +15,7 @@
 
 - name: Monitoring | Checking Prometheus retention days
   shell: >
-    {{ bin_dir }}/kubectl get prometheuses.monitoring.coreos.com -n kubesphere-monitoring-system k8s -o jsonpath='{.spec.retention}'
+    {{ bin_dir }}/kubectl get prometheuses.monitoring.coreos.com -n d3os-monitoring-system k8s -o jsonpath='{.spec.retention}'
   register: prometheus_retention
   failed_when: false
 
@@ -29,7 +29,7 @@
 
 - name: Monitoring | Checking Prometheus node selector
   shell: |
-    {{ bin_dir }}/kubectl get prometheuses.monitoring.coreos.com -n kubesphere-monitoring-system k8s -o go-template --template="{{ '{{' }}range \$key, \$value := .spec.nodeSelector{{ '}}' }}    {{ '{{' }}\$key{{ '}}' }}: {{ '{{' }}\$value{{ '}}' }}
+    {{ bin_dir }}/kubectl get prometheuses.monitoring.coreos.com -n d3os-monitoring-system k8s -o go-template --template="{{ '{{' }}range \$key, \$value := .spec.nodeSelector{{ '}}' }}    {{ '{{' }}\$key{{ '}}' }}: {{ '{{' }}\$value{{ '}}' }}
     {{ '{{' }}end{{ '}}' }}"
   register: prometheus_node_selector
   failed_when: false

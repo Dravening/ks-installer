@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: pipelines.devops.kubesphere.io
+  name: pipelines.devops.d3os.io
 spec:
-  group: devops.kubesphere.io
+  group: devops.d3os.io
   names:
     kind: Pipeline
     listKind: PipelineList

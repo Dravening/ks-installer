@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2018 The KubeSphere Authors.
+# Copyright 2018 The d3os Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ passwd="Harbor12345"
 version="v2" #support v1 or v2
 
 harbor_projects=(library
-    kubesphere
+    d3os
     calico
     coredns
     csiplugin

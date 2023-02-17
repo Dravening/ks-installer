@@ -1,6 +1,6 @@
 ---
 - name: Monitoring | Initing prometheus-operator
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/init --force"
+  shell: "{{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/prometheus/init --force"
   register: init_result
   failed_when: "init_result.stderr and 'Warning' not in init_result.stderr and 'spec.clusterIP' not in init_result.stderr"
   until: init_result is succeeded

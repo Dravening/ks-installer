@@ -4,7 +4,7 @@ metadata:
   labels:
     prometheus: k8s
   name: prometheus-k8s
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   ports:
   - name: web

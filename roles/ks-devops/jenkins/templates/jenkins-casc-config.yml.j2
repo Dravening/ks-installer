@@ -14,17 +14,17 @@ data:
             name: "kubernetes"
             serverUrl: "https://kubernetes.default"
             skipTlsVerify: true
-            namespace: "kubesphere-devops-system"
+            namespace: "d3os-devops-system"
             credentialsId: "k8s-service-account"
-            jenkinsUrl: "http://ks-jenkins.kubesphere-devops-system:80"
-            jenkinsTunnel: "ks-jenkins-agent.kubesphere-devops-system:50000"
+            jenkinsUrl: "http://ks-jenkins.d3os-devops-system:80"
+            jenkinsTunnel: "ks-jenkins-agent.d3os-devops-system:50000"
             containerCapStr: "100"
             connectTimeout: "60"
             readTimeout: "60"
             maxRequestsPerHostStr: "32"
             templates:
               - name: "base"
-                namespace: "kubesphere-devops-system"
+                namespace: "d3os-devops-system"
                 label: "base"
                 nodeUsageMode: "NORMAL"
                 idleMinutes: 0
@@ -57,7 +57,7 @@ data:
                     mountPath: "/root/.sonar/cache"
                 yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"base\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
               - name: "nodejs"
-                namespace: "kubesphere-devops-system"
+                namespace: "d3os-devops-system"
                 label: "nodejs"
                 nodeUsageMode: "EXCLUSIVE"
                 idleMinutes: 0
@@ -96,7 +96,7 @@ data:
                     mountPath: "/root/.sonar/cache"
                 yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"nodejs\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
               - name: "maven"
-                namespace: "kubesphere-devops-system"
+                namespace: "d3os-devops-system"
                 label: "maven"
                 nodeUsageMode: "EXCLUSIVE"
                 idleMinutes: 0
@@ -132,7 +132,7 @@ data:
                     mountPath: "/root/.sonar/cache"
                 yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"maven\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n    volumeMounts:\r\n    - name: config-volume\r\n      mountPath: /opt/apache-maven-3.5.3/conf/settings.xml\r\n      subPath: settings.xml\r\n  volumes:\r\n    - name: config-volume\r\n      configMap:\r\n        name: ks-devops-agent\r\n        items:\r\n        - key: MavenSetting\r\n          path: settings.xml\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
               - name: "go"
-                namespace: "kubesphere-devops-system"
+                namespace: "d3os-devops-system"
                 label: "go"
                 nodeUsageMode: "EXCLUSIVE"
                 idleMinutes: 0
@@ -173,26 +173,26 @@ data:
           - displayNameAttributeName: "uid"
             mailAddressAttributeName: "mail"
             inhibitInferRootDN: false
-            managerDN: "cn=admin,dc=kubesphere,dc=io"
+            managerDN: "cn=admin,dc=d3os,dc=io"
             managerPasswordSecret: "admin"
-            rootDN: "dc=kubesphere,dc=io"
+            rootDN: "dc=d3os,dc=io"
             userSearchBase: "ou=Users"
             userSearch: "(&(objectClass=inetOrgPerson)(|(uid={0})(mail={0})))"
             groupSearchBase: "ou=Groups"
             groupSearchFilter: "(&(objectClass=posixGroup)(cn={0}))"
-            server: "ldap://openldap.kubesphere-system.svc:389"
+            server: "ldap://openldap.d3os-system.svc:389"
           disableMailAddressResolver: false
           disableRolePrefixing: true
 
     unclassified:
       location:
         url: "http://{{ JenkinsLocationUrl }}:30180/"
-      kubespheretokenauthglobalconfiguration:
+      d3ostokenauthglobalconfiguration:
         cacheConfiguration:
           size: 20
           ttl: 300
         enabled: true
-        server: "http://ks-apiserver.kubesphere-system.svc/"
+        server: "http://ks-apiserver.d3os-system.svc/"
       gitLabServers:
         servers:
         - name: "https://gitlab.com"

@@ -2,12 +2,12 @@
 - name: S2I | Getting s2i installation files
   copy:
     src: "s2i"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
 
 - name: S2I | Creating manifests
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/s2i/{{ item.file }}"
+    dest: "{{ d3os_dir }}/s2i/{{ item.file }}"
   with_items:
     - { name: java, file: java.yaml }
     - { name: nodejs, file: nodejs.yaml }
@@ -18,13 +18,13 @@
 
 - name: S2I | Deleting S2I ValidatingWebhook
   shell: >
-    {{ bin_dir }}/kubectl delete statefulsets.apps -n kubesphere-devops-system s2ioperator &&
+    {{ bin_dir }}/kubectl delete statefulsets.apps -n d3os-devops-system s2ioperator &&
     {{ bin_dir }}/kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io validating-webhook-configuration
   register: validatin_status
   failed_when: "validatin_status.stderr and 'NotFound' not in validatin_status.stderr"
 
 - name: S2I | Deploying S2I template&&operator
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/s2i/{{ item }}"
+  shell: "{{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/s2i/{{ item }}"
   loop:
     - java.yaml
     - nodejs.yaml

@@ -1,15 +1,15 @@
-apiVersion: logging.kubesphere.io/v1alpha2
+apiVersion: logging.d3os.io/v1alpha2
 kind: Input
 metadata:
   name: tail-events
-  namespace: kubesphere-logging-system
+  namespace: d3os-logging-system
   labels:
-    logging.kubesphere.io/enabled: "true"
-    logging.kubesphere.io/component: "events"
+    logging.d3os.io/enabled: "true"
+    logging.d3os.io/component: "events"
 spec:
   tail:
     tag: kube_events
-    path: /var/log/containers/*_kubesphere-logging-system_events-exporter*.log
+    path: /var/log/containers/*_d3os-logging-system_events-exporter*.log
     parser: docker
     refreshIntervalSeconds: 10
     memBufLimit: 5MB

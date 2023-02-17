@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: provisionercapabilities.storage.kubesphere.io
+  name: provisionercapabilities.storage.d3os.io
 spec:
-  group: storage.kubesphere.io
+  group: storage.d3os.io
   names:
     kind: ProvisionerCapability
     listKind: ProvisionerCapabilityList

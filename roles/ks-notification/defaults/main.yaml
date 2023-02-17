@@ -2,19 +2,19 @@
 
 EMAIL_SMTP_HOST: mail.example.com
 EMAIL_FROM_ADDR: admin@example.com
-EMAIL_FROM_NAME: KubeSphere
+EMAIL_FROM_NAME: d3os
 EMAIL_USE_SSL: false
 EMAIL_SMTP_PORT: 25
 EMAIL_FROM_PASS: P@ssw0rd
 
 
-dbHost: mysql.kubesphere-system.svc
+dbHost: mysql.d3os-system.svc
 dbPort: 3306
 
-etcdHost: etcd.kubesphere-system.svc
+etcdHost: etcd.d3os-system.svc
 etcdPort: 2379
 etcdEndpoint: "{{ etcdHost }}:{{ etcdPort }}"
 
-redisHost: redis.kubesphere-system.svc
+redisHost: redis.d3os-system.svc
 redisPort: 6379
 redisEndpoint: "{{ redisHost }}:{{ redisPort }}"

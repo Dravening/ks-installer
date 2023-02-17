@@ -3,13 +3,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mysql
-  namespace: kubesphere-system
+  namespace: d3os-system
   labels:
-    app: kubesphere
+    app: d3os
     tier: db
 spec:
   selector:
-    app: kubesphere
+    app: d3os
     tier: db
   ports:
   - name: tcp
@@ -22,9 +22,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pvc
-  namespace: kubesphere-system
+  namespace: d3os-system
   labels:
-    app: kubesphere
+    app: d3os
     tier: db
 spec:
   accessModes:
@@ -46,21 +46,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
-  namespace: kubesphere-system
+  namespace: d3os-system
   labels:
-    app: kubesphere
+    app: d3os
     tier: db
 spec:
   selector:
     matchLabels:
-      app: kubesphere
+      app: d3os
       tier: db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: kubesphere
+        app: d3os
         tier: db
     spec:
       initContainers:
@@ -106,7 +106,7 @@ spec:
               key: password.txt
               name: mysql-pass
         - name: MYSQL_DATABASE
-          value: kubesphere
+          value: d3os
         - name: MYSQL_ROOT_HOST
           value: "%"
         ports:

@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: helmreleases.application.kubesphere.io
+  name: helmreleases.application.d3os.io
 spec:
-  group: application.kubesphere.io
+  group: application.d3os.io
   names:
     kind: HelmRelease
     listKind: HelmReleaseList
@@ -22,13 +22,13 @@ spec:
     - jsonPath: .spec.name
       name: Release Name
       type: string
-    - jsonPath: .metadata.labels.kubesphere\.io/workspace
+    - jsonPath: .metadata.labels.d3os\.io/workspace
       name: Workspace
       type: string
-    - jsonPath: .metadata.labels.kubesphere\.io/cluster
+    - jsonPath: .metadata.labels.d3os\.io/cluster
       name: Cluster
       type: string
-    - jsonPath: .metadata.labels.kubesphere\.io/namespace
+    - jsonPath: .metadata.labels.d3os\.io/namespace
       name: Namespace
       type: string
     - jsonPath: .status.state

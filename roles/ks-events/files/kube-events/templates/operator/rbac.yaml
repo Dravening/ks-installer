@@ -93,7 +93,7 @@ rules:
       - update
       - watch
   - apiGroups:
-      - events.kubesphere.io
+      - events.d3os.io
     resources:
       - exporters
     verbs:
@@ -105,7 +105,7 @@ rules:
       - update
       - watch
   - apiGroups:
-      - events.kubesphere.io
+      - events.d3os.io
     resources:
       - exporters/status
     verbs:
@@ -113,7 +113,7 @@ rules:
       - patch
       - update
   - apiGroups:
-      - events.kubesphere.io
+      - events.d3os.io
     resources:
       - rulers
     verbs:
@@ -125,7 +125,7 @@ rules:
       - update
       - watch
   - apiGroups:
-      - events.kubesphere.io
+      - events.d3os.io
     resources:
       - rulers/status
     verbs:
@@ -133,7 +133,7 @@ rules:
       - patch
       - update
   - apiGroups:
-      - events.kubesphere.io
+      - events.d3os.io
     resources:
       - rules
     verbs:
@@ -145,7 +145,7 @@ rules:
       - update
       - watch
   - apiGroups:
-      - events.kubesphere.io
+      - events.d3os.io
     resources:
       - rules/status
     verbs:

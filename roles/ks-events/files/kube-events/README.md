@@ -1,6 +1,6 @@
 # kube-events
 
-[kube-events](https://github.com/kubesphere/kube-events) is an integration for Kubernetes Event exporting, filtering and alerting.
+[kube-events](https://github.com/d3os/kube-events) is an integration for Kubernetes Event exporting, filtering and alerting.
  
 
 ## Introduction
@@ -13,10 +13,10 @@ This chart includes multiple components and is suitable for a variety of use-cas
 
 ## Installing the Chart
 
-To install the chart with the release name `kube-events` into the namespace `kubesphere-logging-system`:
+To install the chart with the release name `kube-events` into the namespace `d3os-logging-system`:
 
 ```console
-helm install kube-events ./ --namespace kubesphere-logging-system
+helm install kube-events ./ --namespace d3os-logging-system
 ```
 
 The command deploys kube-events on the Kubernetes cluster with the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -25,10 +25,10 @@ The default installation includes kube-events-operator, kube-events-exporter, ku
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `kube-events` release in the namespace `kubesphere-logging-system`:
+To uninstall/delete the `kube-events` release in the namespace `d3os-logging-system`:
 
 ```console
-helm delete kube-events --namespace kubesphere-logging-system
+helm delete kube-events --namespace d3os-logging-system
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -36,9 +36,9 @@ The command removes all the Kubernetes components associated with the chart and 
 CRDs created by this chart are not removed and should be manually cleaned up:
 
 ```console
-kubectl delete crd rulers.events.kubesphere.io
-kubectl delete crd exporters.events.kubesphere.io
-kubectl delete crd rules.events.kubesphere.io
+kubectl delete crd rulers.events.d3os.io
+kubectl delete crd exporters.events.d3os.io
+kubectl delete crd rules.events.d3os.io
 ```
 
 ## Configuration
@@ -55,7 +55,7 @@ The following tables list the configurable parameters of the kube-events chart a
 | Parameter | Description | Default |
 | ----- | ----------- | ------ |
 | operator.enabled | Deploy kube-events-operator. Only one of these should be deployed into the cluster | `true` |
-| operator.image.repository | Repository for kube-events-operator image | `kubespheredev/kube-events-operator` |
+| operator.image.repository | Repository for kube-events-operator image | `d3osdev/kube-events-operator` |
 | operator.image.tag | Tag for kube-events-operator image | `v0.1.0` |
 | operator.image.pullPolicy | Pull policy for kube-events-operator image | `IfNotPresent` |
 | operator.configReloader.image | Image for config reloader | `jimmidyson/configmap-reload:v0.3.0` |
@@ -67,7 +67,7 @@ The following tables list the configurable parameters of the kube-events chart a
 | Parameter | Description | Default |
 | ----- | ----------- | ------ |
 | exporter.enabled | Deploy kube-events-exporter | `true` |
-| exporter.image.repository | Repository for kube-events-operator image | `kubespheredev/kube-events-exporter` |
+| exporter.image.repository | Repository for kube-events-operator image | `d3osdev/kube-events-exporter` |
 | exporter.image.tag | Tag for kube-events-exporter image | `v0.1.0` |
 | exporter.image.pullPolicy | Pull policy for kube-events-exporter image | `IfNotPresent` |
 | exporter.resources | Define resources requests and limits for single Pods | `{}` |
@@ -78,12 +78,12 @@ The following tables list the configurable parameters of the kube-events chart a
 | Parameter | Description | Default |
 | ----- | ----------- | ------ |
 | ruler.enabled | Deploy kube-events-ruler | `true` |
-| ruler.image.repository | Repository for kube-events-ruler image | `kubespheredev/kube-events-ruler` |
+| ruler.image.repository | Repository for kube-events-ruler image | `d3osdev/kube-events-ruler` |
 | ruler.image.tag | Tag for kube-events-ruler image | `v0.1.0` |
 | ruler.image.pullPolicy | Pull policy for kube-events-ruler image | `IfNotPresent` |
 | ruler.resources | Define resources requests and limits for single Pods | `{}` |
 | ruler.ruleNamespaceSelector | Namespaces to be selected for Rules discovery. If nil, select all namespaces | `{}` |
 | ruler.ruleSelector | A selector to select which Rules to use for ruler | `{}` |
-| ruler.sinks.alertmanager.namespace | Namespace of alertmanager service | `kubesphere-monitoring-system` |
+| ruler.sinks.alertmanager.namespace | Namespace of alertmanager service | `d3os-monitoring-system` |
 | ruler.sinks.alertmanager.name | Name of alertmanager service | `alertmanager-main` |
 | ruler.sinks.webhooks | List of webhook sinks for events notification or alerting | `[]` |

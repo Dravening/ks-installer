@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: helmrepos.application.kubesphere.io
+  name: helmrepos.application.d3os.io
 spec:
-  group: application.kubesphere.io
+  group: application.d3os.io
   names:
     kind: HelmRepo
     listKind: HelmRepoList
@@ -22,7 +22,7 @@ spec:
     - jsonPath: .spec.name
       name: name
       type: string
-    - jsonPath: .metadata.labels.kubesphere\.io/workspace
+    - jsonPath: .metadata.labels.d3os\.io/workspace
       name: Workspace
       type: string
     - jsonPath: .spec.url

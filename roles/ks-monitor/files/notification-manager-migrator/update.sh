@@ -10,13 +10,13 @@ fi
 
 notification_namespace=$2
 if [ "$notification_namespace" = "" ]; then
-  notification_namespace="kubesphere-monitoring-system"
+  notification_namespace="d3os-monitoring-system"
 fi
 
 mkdir -p $backup_dir
 mkdir -p $output_dir
 
-version=$(kubectl get crd notificationmanagers.notification.kubesphere.io -o jsonpath='{.spec.versions[0].name}')
+version=$(kubectl get crd notificationmanagers.notification.d3os.io -o jsonpath='{.spec.versions[0].name}')
 
 ./backup_crds.sh "$version" $notification_name $notification_namespace $backup_dir
 ./update_crds.sh "$version" $notification_namespace $backup_dir $output_dir

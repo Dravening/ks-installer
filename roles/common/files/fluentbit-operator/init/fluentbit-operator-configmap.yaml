@@ -23,4 +23,4 @@ metadata:
     app.kubernetes.io/component: operator
     app.kubernetes.io/name: fluent-bit-lua
   name: fluent-bit-lua
-  namespace: kubesphere-logging-system
+  namespace: d3os-logging-system

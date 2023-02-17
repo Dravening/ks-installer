@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: ipamhandles.network.kubesphere.io
+  name: ipamhandles.network.d3os.io
 spec:
-  group: network.kubesphere.io
+  group: network.d3os.io
   names:
     kind: IPAMHandle
     listKind: IPAMHandleList

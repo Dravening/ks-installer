@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: storageclasscapabilities.storage.kubesphere.io
+  name: storageclasscapabilities.storage.d3os.io
 spec:
-  group: storage.kubesphere.io
+  group: storage.d3os.io
   names:
     kind: StorageClassCapability
     listKind: StorageClassCapabilityList

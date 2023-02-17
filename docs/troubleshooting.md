@@ -2,9 +2,9 @@
 If you cannot get enough log to track down your issues, please follow below steps:
 
 Step1, go into the Pod of ks-installer via kubectl:
-`kubectl -n kubesphere-system exec -it $(kubectl -n kubesphere-system get pod -o name | grep ks-installer) bash`
+`kubectl -n d3os-system exec -it $(kubectl -n d3os-system get pod -o name | grep ks-installer) bash`
 
-Step2, change directory to `/kubesphere/results`. For example, you can find all details about DevOps:
+Step2, change directory to `/d3os/results`. For example, you can find all details about DevOps:
 
 ```shell script
 bash-5.0$ ls -ahl

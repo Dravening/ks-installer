@@ -55,7 +55,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - kubeedge.kubesphere.io
+  - kubeedge.d3os.io
   resources:
   - iptables
   verbs:
@@ -67,7 +67,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - kubeedge.kubesphere.io
+  - kubeedge.d3os.io
   resources:
   - iptables/status
   verbs:
@@ -75,7 +75,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - kubeedge.kubesphere.io
+  - kubeedge.d3os.io
   resources:
   - iptablesrules
   verbs:

@@ -27,7 +27,7 @@ resource "qingcloud_instance" "init"{
   os_disk_size = "100"
 }
 
-resource "null_resource" "install_kubesphere" {
+resource "null_resource" "install_d3os" {
   provisioner "file" {
     destination = "./install.sh"
     source      = "./install.sh"

@@ -9,12 +9,12 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      logging.kubesphere.io/logsidecar-injector: {{ template "logsidecar-injector.deploy.fullname" . }}
+      logging.d3os.io/logsidecar-injector: {{ template "logsidecar-injector.deploy.fullname" . }}
 {{ include "logsidecar-injector.labels" . | indent 6 }}
   template:
     metadata:
       labels:
-        logging.kubesphere.io/logsidecar-injector: {{ template "logsidecar-injector.deploy.fullname" . }}
+        logging.d3os.io/logsidecar-injector: {{ template "logsidecar-injector.deploy.fullname" . }}
 {{ include "logsidecar-injector.labels" . | indent 8 }}
     spec:
       volumes:

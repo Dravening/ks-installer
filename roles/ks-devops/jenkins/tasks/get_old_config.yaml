@@ -2,7 +2,7 @@
 
 - name: ks-devops | Getting Jenkins config
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system ks-jenkins -o json | jq '.spec.template.spec.containers[0].env'
+    {{ bin_dir }}/kubectl get deploy -n d3os-devops-system ks-jenkins -o json | jq '.spec.template.spec.containers[0].env'
   register: envs
   failed_when: false
 
@@ -50,7 +50,7 @@
 
 - name: ks-devops | Checking Jenkins PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-devops-system ks-jenkins -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n d3os-devops-system ks-jenkins -o jsonpath='{.status.capacity.storage}'
   register: jenkins_pvc
   failed_when: false
 

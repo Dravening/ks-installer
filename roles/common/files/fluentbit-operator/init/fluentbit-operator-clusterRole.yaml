@@ -4,7 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: fluentbit-operator
-  name: kubesphere:operator:fluentbit-operator
+  name: d3os:operator:fluentbit-operator
 rules:
   - apiGroups:
       - apps
@@ -50,7 +50,7 @@ rules:
       - update
       - watch
   - apiGroups:
-      - logging.kubesphere.io
+      - logging.d3os.io
     resources:
       - filters
       - fluentbitconfigs
@@ -67,7 +67,7 @@ rules:
       - update
       - watch
   - apiGroups:
-      - logging.kubesphere.io
+      - logging.d3os.io
     resources:
       - filters
       - inputs
@@ -75,7 +75,7 @@ rules:
     verbs:
       - list
   - apiGroups:
-      - logging.kubesphere.io
+      - logging.d3os.io
     resources:
       - fluentbitconfigs
     verbs:

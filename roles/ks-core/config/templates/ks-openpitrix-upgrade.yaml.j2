@@ -7,7 +7,7 @@ metadata:
     component: openpitrix-upgrade-job
     version: v3.1.0
   name: openpitrix-upgrade-job
-  namespace: kubesphere-system
+  namespace: d3os-system
 spec:
   backoffLimit: 100
   template:
@@ -17,7 +17,7 @@ spec:
         component: openpitrix-upgrade-job
         version: v3.1.0
     spec:
-      serviceAccountName: kubesphere
+      serviceAccountName: d3os
       restartPolicy: OnFailure
       containers:
         - name: upgrade
@@ -28,9 +28,9 @@ spec:
           image: {{ openpitrix_job_repo }}:{{ openpitrix_job_tag }}
           imagePullPolicy: IfNotPresent
           volumeMounts:
-            - mountPath: /etc/kubesphere
-              name: kubesphere-config
+            - mountPath: /etc/d3os
+              name: d3os-config
       volumes:
-        - name: kubesphere-config
+        - name: d3os-config
           configMap:
-            name: kubesphere-config
+            name: d3os-config

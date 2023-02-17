@@ -2,10 +2,10 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    app.kubernetes.io/vendor: kubesphere
+    app.kubernetes.io/vendor: d3os
     k8s-app: kube-controller-manager
   name: kube-controller-manager
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   endpoints:
   - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

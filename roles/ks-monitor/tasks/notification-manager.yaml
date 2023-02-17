@@ -3,35 +3,35 @@
 - name: notification-manager | Getting notification-manager installation files
   copy:
     src: "notification-manager"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
 
 - name: notification-manager | Getting federated files
   copy:
     src: "federated"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
 
 - name: notification-manager | Getting migrator files
   copy:
     src: "notification-manager-migrator"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
 
 - name: notification-manager | Getting notification-manager installation files
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+    dest: "{{ d3os_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: notification-manager, file: custom-values-notification.yaml }
 
 
 - name: notification-manager | Checking notification-manager
   shell: >
-    {{ bin_dir }}/helm list -f notification-manager -n kubesphere-monitoring-system
+    {{ bin_dir }}/helm list -f notification-manager -n d3os-monitoring-system
   register: notification_check
   failed_when: notification_check.rc != 0
 
-- name: KubeSphere | Backuping old notification-manager crd
+- name: d3os | Backuping old notification-manager crd
   shell: >
-    cd {{ kubesphere_dir }}/notification-manager-migrator &&
+    cd {{ d3os_dir }}/notification-manager-migrator &&
     chmod +x * &&
     bash update.sh &&
     cd -
@@ -46,18 +46,18 @@
 
 - name: notification-manager | Uninstalling old notification-manager
   shell: >
-    {{ bin_dir }}/helm del notification-manager -n kubesphere-monitoring-system &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd notificationmanagers.notification.kubesphere.io &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd dingtalkconfigs.notification.kubesphere.io &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd dingtalkreceivers.notification.kubesphere.io &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd emailconfigs.notification.kubesphere.io &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd emailreceivers.notification.kubesphere.io &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd slackconfigs.notification.kubesphere.io &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd slackreceivers.notification.kubesphere.io &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd webhookconfigs.notification.kubesphere.io &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd webhookreceivers.notification.kubesphere.io &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd wechatconfigs.notification.kubesphere.io &&
-    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd wechatreceivers.notification.kubesphere.io
+    {{ bin_dir }}/helm del notification-manager -n d3os-monitoring-system &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd notificationmanagers.notification.d3os.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd dingtalkconfigs.notification.d3os.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd dingtalkreceivers.notification.d3os.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd emailconfigs.notification.d3os.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd emailreceivers.notification.d3os.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd slackconfigs.notification.d3os.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd slackreceivers.notification.d3os.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd webhookconfigs.notification.d3os.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd webhookreceivers.notification.d3os.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd wechatconfigs.notification.d3os.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd wechatreceivers.notification.d3os.io
   register: nm_uninstall
   when:
     - notification_check.rc == 0
@@ -67,9 +67,9 @@
 - name: notification-manager | Deploying notification-manager
   shell: >
     {{ bin_dir }}/helm upgrade --install notification-manager
-    {{ kubesphere_dir }}/notification-manager
-    -f {{ kubesphere_dir }}/notification-manager/custom-values-notification.yaml
-    -n kubesphere-monitoring-system
+    {{ d3os_dir }}/notification-manager
+    -f {{ d3os_dir }}/notification-manager/custom-values-notification.yaml
+    -n d3os-monitoring-system
     --force
   register: deploy_result
   until: deploy_result is succeeded
@@ -81,7 +81,7 @@
 
 - name: notification-manager | Deploying notification-manager crds
   shell: >
-     cd {{ kubesphere_dir }}/notification-manager-migrator &&
+     cd {{ d3os_dir }}/notification-manager-migrator &&
      chmod +x * &&
      bash deploy.sh &&
      cd -
@@ -98,7 +98,7 @@
   failed_when: false
 
 - name: notification-manager | Deploying federatednamespace crd
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/federated/federatednamespaces.yaml"
+  shell: "{{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/federated/federatednamespaces.yaml"
   register: fed_crd_result
   failed_when: "fed_crd_result.stderr and 'Warning' not in fed_crd_result.stderr and 'spec.clusterIP' not in fed_crd_result.stderr"
   until: fed_crd_result is succeeded
@@ -110,12 +110,12 @@
 
 - name: notification-manager | Checking federated namespace deployed
   shell: >
-    {{ bin_dir }}/kubectl get federatednamespaces.types.kubefed.io -n kubesphere-monitoring-federated kubesphere-monitoring-federated -o jsonpath='{.metadata.name}'
+    {{ bin_dir }}/kubectl get federatednamespaces.types.kubefed.io -n d3os-monitoring-federated d3os-monitoring-federated -o jsonpath='{.metadata.name}'
   register: namespace_deployed
   failed_when: false
 
 - name: notification-manager | Deploying federated namespace
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/federated/kubesphere-monitoring-federated.yaml"
+  shell: "{{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/federated/d3os-monitoring-federated.yaml"
   register: fed_ns_result
   failed_when: "fed_ns_result.stderr and 'Warning' not in fed_ns_result.stderr and 'spec.clusterIP' not in fed_ns_result.stderr"
   until: fed_ns_result is succeeded
@@ -123,4 +123,4 @@
   delay: 3
   when:
     - multicluster is defined and multicluster.clusterRole == 'host'
-    - namespace_deployed.rc != 0 or namespace_deployed.stdout.find("kubesphere-monitoring-federated") == -1
+    - namespace_deployed.rc != 0 or namespace_deployed.stdout.find("d3os-monitoring-federated") == -1

@@ -17,8 +17,8 @@ service:
 
 ldap:
   replication: false
-  organisation: kubesphere
-  domain: kubesphere.io
+  organisation: d3os
+  domain: d3os.io
   adminPassword: admin
 
 resources: {}

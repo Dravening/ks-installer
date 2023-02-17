@@ -6,16 +6,16 @@ set -o pipefail
 
 function check_installer_ok(){
     echo "waiting for ks-installer pod ready"
-    kubectl -n kubesphere-system wait --timeout=180s --for=condition=Ready $(kubectl -n kubesphere-system get pod -l app=ks-install -oname)
-    echo "waiting for KubeSphere ready"
+    kubectl -n d3os-system wait --timeout=180s --for=condition=Ready $(kubectl -n d3os-system get pod -l app=ks-install -oname)
+    echo "waiting for d3os ready"
     while IFS= read -r line; do
         echo $line
-        if [[ $line =~ "Welcome to KubeSphere" ]]
+        if [[ $line =~ "Welcome to d3os" ]]
             then
                 return
         fi
-    done < <(timeout 1200 kubectl logs -n kubesphere-system deploy/ks-installer -f)
-    echo "ks-install not output 'Welcome to KubeSphere'"
+    done < <(timeout 1200 kubectl logs -n d3os-system deploy/ks-installer -f)
+    echo "ks-install not output 'Welcome to d3os'"
     exit 1
 }
 

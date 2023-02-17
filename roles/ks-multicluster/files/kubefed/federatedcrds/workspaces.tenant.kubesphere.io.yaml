@@ -1,7 +1,7 @@
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
-  name: workspaces.tenant.kubesphere.io
+  name: workspaces.tenant.d3os.io
 spec:
   federatedType:
     group: types.kubefed.io
@@ -11,7 +11,7 @@ spec:
     version: v1beta1
   propagation: Enabled
   targetType:
-    group: tenant.kubesphere.io
+    group: tenant.d3os.io
     kind: Workspace
     pluralName: workspaces
     scope: Cluster

@@ -1,14 +1,14 @@
 ---
 
-- name: KubeSphere | Waiting for ks-console
-  shell: "{{ bin_dir }}/kubectl get pod -n kubesphere-system -o wide | grep ks-console | awk '{print $3}'"
+- name: d3os | Waiting for ks-console
+  shell: "{{ bin_dir }}/kubectl get pod -n d3os-system -o wide | grep ks-console | awk '{print $3}'"
   register: result
   until: result.stdout.find("Running") != -1
   retries: 30
   delay: 30
 
-- name: KubeSphere | Waiting for ks-apiserver
-  shell: "{{ bin_dir }}/kubectl get pod -n kubesphere-system -o wide | grep ks-apiserver | awk '{print $3}'"
+- name: d3os | Waiting for ks-apiserver
+  shell: "{{ bin_dir }}/kubectl get pod -n d3os-system -o wide | grep ks-apiserver | awk '{print $3}'"
   register: result
   until: result.stdout.find("Running") != -1
   retries: 30
@@ -22,7 +22,7 @@
 
 - name: Get ks version
   shell: >
-     {{ bin_dir }}/kubectl get svc -n kubesphere-system ks-console -o=jsonpath='{.spec.selector.version}'
+     {{ bin_dir }}/kubectl get svc -n d3os-system ks-console -o=jsonpath='{.spec.selector.version}'
   register: ks
   ignore_errors: true
 
@@ -40,7 +40,7 @@
 
 - name: Get module
   shell: >
-    {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o json | jq '.status' | jq 'keys' | grep -v "clusterId" | jq 'join("-")'
+    {{ bin_dir }}/kubectl get cc -n d3os-system ks-installer -o json | jq '.status' | jq 'keys' | grep -v "clusterId" | jq 'join("-")'
   register: mod
   ignore_errors: true
 
@@ -50,10 +50,10 @@
   register: kubetime
   ignore_errors: true
 
-- name: Get kubesphere-system time
+- name: Get d3os-system time
   shell: >
-     {{ bin_dir }}/kubectl get ns | grep kubesphere-system | awk '{print $3}'
-  register: kubespheretime
+     {{ bin_dir }}/kubectl get ns | grep d3os-system | awk '{print $3}'
+  register: d3ostime
   ignore_errors: true
 
 - name: yes/no HA
@@ -70,11 +70,11 @@
 
 - name: Get clusterId by cc of ks-installer
   shell: >
-     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o=jsonpath='{.status.clusterId}'
+     {{ bin_dir }}/kubectl get cc ks-installer -n d3os-system -o=jsonpath='{.status.clusterId}'
   register: check
   ignore_errors: true
 
-- name: KubeSphere | Creating KubeSphere clusterId
+- name: d3os | Creating d3os clusterId
   shell: >
     echo $(cat /proc/sys/kernel/random/uuid)-$(date '+%s')
   register: cluster
@@ -85,7 +85,7 @@
 
 - name: clusterId patch to cc of ks-installer
   shell: >
-     {{ bin_dir }}/kubectl patch cc ks-installer -n kubesphere-system --type merge -p '{"status": {"clusterId": "{{ cluster[ 'stdout' ] }}"}}'
+     {{ bin_dir }}/kubectl patch cc ks-installer -n d3os-system --type merge -p '{"status": {"clusterId": "{{ cluster[ 'stdout' ] }}"}}'
   when:
   - check.stdout is defined
   - (check.stdout | length) == 0 or (check.stdout | length) == 36
@@ -93,23 +93,23 @@
 
 - name: Get clusterId
   shell: >
-     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o=jsonpath='{.status.clusterId}'
+     {{ bin_dir }}/kubectl get cc ks-installer -n d3os-system -o=jsonpath='{.status.clusterId}'
   register: cluster
   ignore_errors: true
 
-- name: KubeSphere | KubeSphere clusterId
+- name: d3os | d3os clusterId
   set_fact:
     cluster_str: "{{ cluster.stdout}}"
 
 - name: Get multicluster status
   shell: >
-    cat /kubesphere/config/ks-config.json | grep clusterRole | awk '{print $2}'
+    cat /d3os/config/ks-config.json | grep clusterRole | awk '{print $2}'
   register: multi
   ignore_errors: true
 
 - name: Get essential information
   uri:
-    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&ha={{ ha[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}&K8st={{ kubetime[ 'stdout' ] }}&Kst={{ kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&mID={{ mID[ 'stdout' ] }}&clusterId={{ cluster_str }}&mod={{ mod[ 'stdout' ] }}&multi={{ multi[ 'stdout' ] }}"
+    url: "https://d3os.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&ha={{ ha[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}&K8st={{ kubetime[ 'stdout' ] }}&Kst={{ d3ostime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&mID={{ mID[ 'stdout' ] }}&clusterId={{ cluster_str }}&mod={{ mod[ 'stdout' ] }}&multi={{ multi[ 'stdout' ] }}"
     method: GET
     validate_certs: false
   ignore_errors: true

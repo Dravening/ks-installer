@@ -35,7 +35,7 @@ The following table lists the configurable parameters of the redis chart and the
 
 Parameter | Description | Default
 --- | --- | ---
-`operator.image.repository` | The image of kube-auditing operator | `kubespheredev/kube-auditing-operator`
+`operator.image.repository` | The image of kube-auditing operator | `d3osdev/kube-auditing-operator`
 `operator.image.tag` | The tag of the kube-auditing operator image | `latest`
 `operator.image.pullPolicy` | The pull policy of the kube-auditing operator image | `IfNotPresent`
 `operator.image.pullSecrets` | The secret of the kube-auditing operator image | []
@@ -45,7 +45,7 @@ Parameter | Description | Default
 `operator.affinity` | The affinity of the kube-auditing operator | {}
 `webhook.name` | The name of the kube-auditing webhook | kube-auditing-webhook
 `webhook.replicas` | The replicas of the kube-auditing webhook | 1
-`webhook.image.repository` | The image of kube-auditing webhook | `kubespheredev/kube-auditing-webhook`
+`webhook.image.repository` | The image of kube-auditing webhook | `d3osdev/kube-auditing-webhook`
 `webhook.image.tag` | The tag of the kube-auditing webhook image | `latest`
 `webhook.image.pullPolicy` | The pull policy of the kube-auditing webhook image | `IfNotPresent`
 `webhook.image.pullSecrets` | The secret of the kube-auditing webhook image | []

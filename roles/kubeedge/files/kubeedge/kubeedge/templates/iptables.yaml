@@ -1,8 +1,8 @@
-apiVersion: kubeedge.kubesphere.io/v1alpha1
+apiVersion: kubeedge.d3os.io/v1alpha1
 kind: IPTables
 metadata:
   finalizers:
-  - iptables.kubeedge.kubesphere.io
+  - iptables.kubeedge.d3os.io
   labels:
     app.kubernetes.io/name: iptables
   name: iptables

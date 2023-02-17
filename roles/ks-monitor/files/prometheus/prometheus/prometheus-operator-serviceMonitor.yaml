@@ -4,10 +4,10 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: prometheus-operator
-    app.kubernetes.io/vendor: kubesphere
+    app.kubernetes.io/vendor: d3os
     app.kubernetes.io/version: v0.42.1
   name: prometheus-operator
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   endpoints:
   - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

@@ -2,12 +2,12 @@
 - name: ks-logging | Getting logging installation files
   copy:
     src: "fluentbit-operator"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
 
 
 - name: ks-logging | Checking fluent-bit migrating
   shell: >
-    {{ bin_dir }}/kubectl get outputs.logging.kubesphere.io -n kubesphere-logging-system es -o jsonpath='{.metadata.name}'
+    {{ bin_dir }}/kubectl get outputs.logging.d3os.io -n d3os-logging-system es -o jsonpath='{.metadata.name}'
   register: migrating_completed
   failed_when: false
 
@@ -15,7 +15,7 @@
 - name: ks-logging | Creating manifests
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
+    dest: "{{ d3os_dir }}/fluentbit-operator/{{ item.file }}"
   with_items:
     - { name: custom-output-elasticsearch-logging, file: custom-output-elasticsearch-logging.yaml }
   when: migrating_completed.rc != 0 or migrating_completed.stdout.find("es") == -1
@@ -23,7 +23,7 @@
 
 - name: ks-logging | Apply fluent-bit operator custom resources
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator
+    {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/fluentbit-operator
 
 
 - import_tasks: logsidecar.yaml
@@ -35,7 +35,7 @@
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
     -p '{"status": {"logging": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
-    -n kubesphere-system
+    -n d3os-system
   register: cc_result
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
   until: cc_result is succeeded

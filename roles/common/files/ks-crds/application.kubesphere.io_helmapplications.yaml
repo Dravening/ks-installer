@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: helmapplications.application.kubesphere.io
+  name: helmapplications.application.d3os.io
 spec:
-  group: application.kubesphere.io
+  group: application.d3os.io
   names:
     kind: HelmApplication
     listKind: HelmApplicationList
@@ -22,7 +22,7 @@ spec:
     - jsonPath: .spec.name
       name: application name
       type: string
-    - jsonPath: .metadata.labels.kubesphere\.io/workspace
+    - jsonPath: .metadata.labels.d3os\.io/workspace
       name: workspace
       type: string
     - jsonPath: .status.state

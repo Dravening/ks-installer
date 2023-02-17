@@ -69,7 +69,7 @@ Master:
 
       def mailer = Jenkins.instance.getDescriptor("hudson.tasks.Mailer")
       mailer.setSmtpAuth(emailFromAddr, env.EMAIL_FROM_PASS)
-      mailer.setReplyToAddress("no-reply@k8s.kubesphere.io")
+      mailer.setReplyToAddress("no-reply@k8s.d3os.io")
       mailer.setSmtpHost(env.EMAIL_SMTP_HOST)
       mailer.setUseSsl(env.EMAIL_USE_SSL.toBoolean())
       mailer.setSmtpPort(env.EMAIL_SMTP_PORT)
@@ -101,7 +101,7 @@ Master:
       def env = System.getenv()
 
       // Roles
-      def globalRoleRead = "kubesphere-user"
+      def globalRoleRead = "d3os-user"
       def globalRoleAdmin = "admin"
       def ldapUserNameAdmin = "admin"
 
@@ -290,7 +290,7 @@ Master:
 #     ingress.kubernetes.io/ssl-redirect: "false"
 #     ingress.kubernetes.io/proxy-body-size: 50m
 #     ingress.kubernetes.io/proxy-request-buffering: "off"
-HostName: jenkins.k8s.kubesphere.io
+HostName: jenkins.k8s.d3os.io
 
 rbac:
   install: true

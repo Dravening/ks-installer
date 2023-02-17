@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
-  name: exporters.events.kubesphere.io
+  name: exporters.events.d3os.io
 spec:
-  group: events.kubesphere.io
+  group: events.d3os.io
   names:
     kind: Exporter
     listKind: ExporterList

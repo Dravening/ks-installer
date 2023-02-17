@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: prometheus-operator
     app.kubernetes.io/version: v0.42.1
   name: prometheus-operator
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   clusterIP: None
   ports:

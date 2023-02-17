@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: s2ibinaries.devops.kubesphere.io
+  name: s2ibinaries.devops.d3os.io
 spec:
-  group: devops.kubesphere.io
+  group: devops.d3os.io
   names:
     kind: S2iBinary
     listKind: S2iBinaryList
@@ -46,7 +46,7 @@ spec:
             description: S2iBinarySpec defines the desired state of S2iBinary
             properties:
               downloadURL:
-                description: DownloadURL in KubeSphere
+                description: DownloadURL in d3os
                 type: string
               fileName:
                 description: FileName is filename of binary

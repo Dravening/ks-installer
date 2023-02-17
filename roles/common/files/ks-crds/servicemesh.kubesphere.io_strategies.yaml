@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: strategies.servicemesh.kubesphere.io
+  name: strategies.servicemesh.d3os.io
 spec:
-  group: servicemesh.kubesphere.io
+  group: servicemesh.d3os.io
   names:
     kind: Strategy
     listKind: StrategyList

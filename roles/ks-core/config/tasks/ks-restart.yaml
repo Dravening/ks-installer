@@ -1,15 +1,15 @@
 - name: ks-upgrade | Restarting ks-apiserver
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-apiserver"
+  shell: "{{ bin_dir }}/kubectl -n d3os-system rollout restart deployment ks-apiserver"
   failed_when: false
 
 
 # - name: ks-upgrade | Restarting ks-console
-#   shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-console"
+#   shell: "{{ bin_dir }}/kubectl -n d3os-system rollout restart deployment ks-console"
 #   ignore_errors: True
 
 
 - name: ks-upgrade | Restarting ks-controller-manager
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-controller-manager"
+  shell: "{{ bin_dir }}/kubectl -n d3os-system rollout restart deployment ks-controller-manager"
   failed_when: false
 
 
@@ -18,20 +18,20 @@
     - name: OpenPitrix | Getting openpitrix jobs installation files
       copy:
         src: "{{ item }}"
-        dest: "{{ kubesphere_dir }}/"
+        dest: "{{ d3os_dir }}/"
       loop:
         - "openpitrix"
 
     - name: OpenPitrix | Creating openpitrix jobs manifests
       template:
         src: "{{ item.file }}.j2"
-        dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+        dest: "{{ d3os_dir }}/{{ item.path }}/{{ item.file }}"
       with_items:
         - { path: openpitrix, file: ks-openpitrix-upgrade.yaml }
 
     - name: OpenPitrix | Upgrade OpenPitrix
       shell: >
-        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/ks-openpitrix-upgrade.yaml
+        {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/openpitrix/ks-openpitrix-upgrade.yaml
       register: job
       failed_when: "job.stderr and 'Warning' not in job.stderr"
 
@@ -47,33 +47,33 @@
 
 - name: Alerting | Checking status v3.0.0
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-alerting-system 2>1 | grep "alerting" | wc -l
+    {{ bin_dir }}/kubectl get deploy -n d3os-alerting-system 2>1 | grep "alerting" | wc -l
   register: alerting_check
 
 - block:
     - name: Alerting | Getting migration files
       copy:
         src: "{{ item }}"
-        dest: "{{ kubesphere_dir }}/"
+        dest: "{{ d3os_dir }}/"
       loop:
         - "alerting-migration"
 
     - name: Alerting | Getting migration files
       template:
         src: "{{ item.file }}.j2"
-        dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+        dest: "{{ d3os_dir }}/{{ item.path }}/{{ item.file }}"
       with_items:
         - { path: alerting-migration, file: ks-alerting-migration.yaml}
 
     - name: Alerting | Creating migration job
       shell: >
-        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting-migration
+        {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/alerting-migration
       register: job
       failed_when: "job.stderr and 'Warning' not in job.stderr"
 
     - name: Alerting | Getting migration job status
       shell: >
-        {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-alerting-migration --no-headers | awk '{print $3}'
+        {{ bin_dir }}/kubectl get pod -n d3os-system -l job-name=ks-alerting-migration --no-headers | awk '{print $3}'
       register: job_status
       until: job_status.stdout.find('Completed') != -1
       retries: 90
@@ -81,7 +81,7 @@
 
     - name: Alerting | Getting migration job status
       shell: >
-        {{ bin_dir }}/kubectl delete ns kubesphere-alerting-system --force --grace-period=0
+        {{ bin_dir }}/kubectl delete ns d3os-alerting-system --force --grace-period=0
       failed_when: false
 
   when:

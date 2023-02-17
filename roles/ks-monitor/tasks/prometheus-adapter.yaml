@@ -1,4 +1,4 @@
 ---
 - name: Monitoring | Installing prometheus-adapter
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/prometheus-adapter
+    {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/prometheus/prometheus-adapter

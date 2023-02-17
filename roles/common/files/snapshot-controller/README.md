@@ -11,7 +11,7 @@ helm install test/snapshot-controller
 To install the chart with the release name `snapshot-controller`:
 
 ```console
-helm repo add test https://charts.kubesphere.io/test
+helm repo add test https://charts.d3os.io/test
 helm install test/snapshot-controller --name-template snapshot-controller --namespace kube-system
 ```
 

@@ -1,13 +1,13 @@
-- name: KubeSphere | Getting fluentbit installation files
+- name: d3os | Getting fluentbit installation files
   copy:
     src: "fluentbit-operator"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
 
 
-- name: KubeSphere | Creating custom manifests
+- name: d3os | Creating custom manifests
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.path }}/{{ item.file }}"
+    dest: "{{ d3os_dir }}/fluentbit-operator/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: fluentbit, file: custom-fluentbit-fluentBit.yaml }
     - { path: init, file: custom-fluentbit-operator-deployment.yaml }
@@ -15,29 +15,29 @@
 
 
 # Upgrade or install fluentbit operator
-- name: KubeSphere | Checking fluentbit-version
+- name: d3os | Checking fluentbit-version
   shell: >
-    {{ bin_dir }}/kubectl get crd fluentbits.logging.kubesphere.io -o jsonpath='{.spec.versions[0].name}'
+    {{ bin_dir }}/kubectl get crd fluentbits.logging.d3os.io -o jsonpath='{.spec.versions[0].name}'
   register: fluentbit_version
   failed_when: false
 
 
-- name: KubeSphere | Backuping old fluentbit crd
+- name: d3os | Backuping old fluentbit crd
   shell: >
-    {{ bin_dir }}/kubectl get fluentbits.logging.kubesphere.io -n kubesphere-logging-system fluent-bit -o yaml > {{ kubesphere_dir }}/fluentbit-crd.yaml.bak
+    {{ bin_dir }}/kubectl get fluentbits.logging.d3os.io -n d3os-logging-system fluent-bit -o yaml > {{ d3os_dir }}/fluentbit-crd.yaml.bak
   when:
     - fluentbit_version.rc == 0
     - fluentbit_version.stdout.find("v1alpha1") != -1
   failed_when: false
 
-- name: KubeSphere | Deleting old fluentbit operator
+- name: d3os | Deleting old fluentbit operator
   shell: >
-    {{ bin_dir }}/kubectl delete {{ item.type }} -n kubesphere-logging-system {{ item.name }}
+    {{ bin_dir }}/kubectl delete {{ item.type }} -n d3os-logging-system {{ item.name }}
   loop:
     - { type: deploy, name: logging-fluentbit-operator }
-    - { type: fluentbits.logging.kubesphere.io, name: fluent-bit }
+    - { type: fluentbits.logging.d3os.io, name: fluent-bit }
     - { type: ds, name: fluent-bit }
-    - { type: crd, name: fluentbits.logging.kubesphere.io }
+    - { type: crd, name: fluentbits.logging.d3os.io }
   register: result_check
   when:
     - fluentbit_version.rc == 0
@@ -45,22 +45,22 @@
   failed_when: false
 
 
-- name: KubeSphere | Preparing fluentbit operator setup
+- name: d3os | Preparing fluentbit operator setup
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator/init
+    {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/fluentbit-operator/init
 
 
-- name: KubeSphere | Migrating fluentbit operator old config
+- name: d3os | Migrating fluentbit operator old config
   shell: >
-    {{ bin_dir }}/kubectl apply -f  {{ kubesphere_dir }}/fluentbit-operator/migrator
+    {{ bin_dir }}/kubectl apply -f  {{ d3os_dir }}/fluentbit-operator/migrator
   when:
     - fluentbit_version.rc == 0
     - fluentbit_version.stdout.find("v1alpha1") != -1
 
 
-- name: KubeSphere | Deploying new fluentbit operator
+- name: d3os | Deploying new fluentbit operator
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator/fluentbit
+    {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/fluentbit-operator/fluentbit
   register: cc_result
   until: cc_result is succeeded
   retries: 5
@@ -68,12 +68,12 @@
 
 
 # Update clusterconfig (cc) status
-- name: KubeSphere | Importing fluentbit status
+- name: d3os | Importing fluentbit status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
     -p '{"status": {"fluentbit": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
-    -n kubesphere-system
+    -n d3os-system
   register: cc_result
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
   until: cc_result is succeeded

@@ -1,6 +1,6 @@
 # Upgrade Notes for Jenkins
 
-This document only for who enabled DevOps in Kubesphere. If this is the first time that 
+This document only for who enabled DevOps in d3os. If this is the first time that 
 you install Jenkins via enable DevOps, then you don't need this document.
 
 # Background
@@ -8,7 +8,7 @@ you install Jenkins via enable DevOps, then you don't need this document.
 Considering Jenkins just has the filesystem as its backend storage. There's not a official  
 upgrade guide about how to deal with the configuration files from the community. And users 
 might install other plugins by themselves, it's very hard to provide a automatic way to 
-upgrade [Kubesphere Jenkins](https://github.com/kubesphere/ks-jenkins).
+upgrade [d3os Jenkins](https://github.com/d3os/ks-jenkins).
 
 # Upgrade to v3.0.1
 
@@ -24,19 +24,19 @@ If you've installed other plugins by yourself, or you've upgraded some plugins. 
 
 Before you do that, please install and config the [Jenkins CLI](https://github.com/jenkins-zh/jenkins-cli).
 
-You can get the token of Jenkins via: `kubectl get cm kubesphere-config -n kubesphere-system -o jsonpath={.data.kubesphere\\.yaml} | grep devops -A 2 | grep password`.
+You can get the token of Jenkins via: `kubectl get cm d3os-config -n d3os-system -o jsonpath={.data.d3os\\.yaml} | grep devops -A 2 | grep password`.
 
-Then export the plugins list via: `jcli plugin formula > jenkins.yaml`. This file is similar to [formula.yaml](https://github.com/kubesphere/ks-jenkins/blob/master/formula.yaml) which comes from [ks-jenkins](https://github.com/kubesphere/ks-jenkins).
+Then export the plugins list via: `jcli plugin formula > jenkins.yaml`. This file is similar to [formula.yaml](https://github.com/d3os/ks-jenkins/blob/master/formula.yaml) which comes from [ks-jenkins](https://github.com/d3os/ks-jenkins).
 
 ## Upgrade
 
 ### Step1:
 
-Update the image from deploy to `kubespheredev/ks-jenkins:2.249.1`
+Update the image from deploy to `d3osdev/ks-jenkins:2.249.1`
 
 ```
-kubectl -n kubesphere-devops-system patch deploy ks-jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value": "kubespheredev/ks-jenkins:2.249.1"}]'
-kubectl -n kubesphere-devops-system patch deploy ks-jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/initContainers/0/image", "value": "kubespheredev/ks-jenkins:2.249.1"}]'
+kubectl -n d3os-devops-system patch deploy ks-jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value": "d3osdev/ks-jenkins:2.249.1"}]'
+kubectl -n d3os-devops-system patch deploy ks-jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/initContainers/0/image", "value": "d3osdev/ks-jenkins:2.249.1"}]'
 ```
 
 ### Step2:
@@ -44,11 +44,11 @@ kubectl -n kubesphere-devops-system patch deploy ks-jenkins --type='json' -p='[{
 `uc-jenkins-update-center` was removed from `v3.0.1`. So you can just remove it. Do it via the following command:
 
 ```
-kubectl -n kubesphere-devops-system delete deploy uc-jenkins-update-center
-kubectl -n kubesphere-devops-system delete service uc-jenkins-update-center
+kubectl -n d3os-devops-system delete deploy uc-jenkins-update-center
+kubectl -n d3os-devops-system delete service uc-jenkins-update-center
 
-kubectl -n kubesphere-devops-system patch configmap ks-jenkins --type='json' -p='[{"op": "remove", "path": "/data/plugins.txt"}]'
-kubectl -n kubesphere-devops-system patch configmap ks-jenkins --type='json' -p='[{"op": "replace", "path": "/data/apply_config.sh", "value":"mkdir -p /usr/share/jenkins/ref/secrets/;\n
+kubectl -n d3os-devops-system patch configmap ks-jenkins --type='json' -p='[{"op": "remove", "path": "/data/plugins.txt"}]'
+kubectl -n d3os-devops-system patch configmap ks-jenkins --type='json' -p='[{"op": "replace", "path": "/data/apply_config.sh", "value":"mkdir -p /usr/share/jenkins/ref/secrets/;\n
 echo false > /usr/share/jenkins/ref/secrets/slave-to-master-security-kill-switch;\n
 cp --no-clobber /var/jenkins_config/config.xml /var/jenkins_home;\n
 cp --no-clobber /var/jenkins_config/jenkins.CLI.xml /var/jenkins_home;\n
@@ -62,17 +62,17 @@ yes | cp -i /var/jenkins_config/*.groovy /var/jenkins_home/init.groovy.d/"}]'
 Restart `ks-installer`
 
 ```
-kubectl -n kubesphere-system scale deploy ks-installer --replicas=0
-kubectl -n kubesphere-system scale deploy ks-installer --replicas=1
+kubectl -n d3os-system scale deploy ks-installer --replicas=0
+kubectl -n d3os-system scale deploy ks-installer --replicas=1
 ```
 
-Then you can check the logs via: `kubectl -n kubesphere-system logs deploy/ks-installer --tail=50 -f`
+Then you can check the logs via: `kubectl -n d3os-system logs deploy/ks-installer --tail=50 -f`
 
 It's ready if you can see something like below from the logs output:
 
 ```
 #####################################################
-###              Welcome to KubeSphere!           ###
+###              Welcome to d3os!           ###
 #####################################################
 ```
 

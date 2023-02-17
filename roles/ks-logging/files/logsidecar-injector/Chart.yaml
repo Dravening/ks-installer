@@ -6,7 +6,7 @@ type: application
 version: 0.1.0
 appVersion: 0.1.0
 source:
-  - https://github.com/kubesphere/logsidecar-injector
+  - https://github.com/d3os/logsidecar-injector
 keywords:
   - log
   - sidecar

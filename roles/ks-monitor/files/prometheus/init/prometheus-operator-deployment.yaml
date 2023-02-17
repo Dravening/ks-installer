@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: prometheus-operator
     app.kubernetes.io/version: v0.42.1
   name: prometheus-operator
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   replicas: 1
   selector:
@@ -25,9 +25,9 @@ spec:
         - --kubelet-service=kube-system/kubelet
         - --logtostderr=true
         - --config-reloader-image=jimmidyson/configmap-reload:v0.3.0
-        - --prometheus-config-reloader=kubesphere/prometheus-config-reloader:v0.42.1
+        - --prometheus-config-reloader=d3os/prometheus-config-reloader:v0.42.1
         - --config-reloader-cpu=0
-        image: kubesphere/prometheus-operator:v0.42.1
+        image: d3os/prometheus-operator:v0.42.1
         name: prometheus-operator
         ports:
         - containerPort: 8080
@@ -46,7 +46,7 @@ spec:
         - --secure-listen-address=:8443
         - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
         - --upstream=http://127.0.0.1:8080/
-        image: kubesphere/kube-rbac-proxy:v0.8.0
+        image: d3os/kube-rbac-proxy:v0.8.0
         name: kube-rbac-proxy
         ports:
         - containerPort: 8443

@@ -3,19 +3,19 @@
 - name: ks-alerting | Getting ks-alerting installation files
   copy:
     src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
   loop:
     - alerting
 
-- name: ks-alerting | Getting kubesphere-secret
+- name: ks-alerting | Getting d3os-secret
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system get secret kubesphere-secret -o jsonpath='{.data.token}' | base64 -d
+    {{ bin_dir }}/kubectl -n d3os-system get secret d3os-secret -o jsonpath='{.data.token}' | base64 -d
   register: ks_token_str
 
 - name: ks-alerting | Creating manifests
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/alerting/{{ item.file }}"
+    dest: "{{ d3os_dir }}/alerting/{{ item.file }}"
   with_items:
     - { type: job, file: alerting-db-init-job.yaml }
     - { type: job, file: alerting-db-ctrl-job.yaml }
@@ -28,57 +28,57 @@
 - block:
     - name: ks-alerting | Checking db-ctrl-job
       shell: >
-        {{ bin_dir }}/kubectl get job -n kubesphere-alerting-system
+        {{ bin_dir }}/kubectl get job -n d3os-alerting-system
       register: result
 
 
     - name: ks-alerting | Deleting db-ctrl-job
       shell: >
-        {{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch alerting-db-ctrl-job
+        {{ bin_dir }}/kubectl -n d3os-alerting-system delete jobs.batch alerting-db-ctrl-job
       when: result.stdout.find("alerting-db-ctrl-job") != -1
 
 
     - name: ks-alerting | Deleting db-init-job
       shell: >
-        {{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch alerting-db-init-job
+        {{ bin_dir }}/kubectl -n d3os-alerting-system delete jobs.batch alerting-db-init-job
       when: result.stdout.find("alerting-db-init-job") != -1
 
 
     - name: ks-alerting | Creating ks-alerting rolebinding
       shell: >
-        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/0-defaultrolebinding.yaml
+        {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/alerting/0-defaultrolebinding.yaml
 
 
     - name: ks-alerting | Initing ks-alerting db
       shell: >
-        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/alerting-db-init-job.yaml
+        {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/alerting/alerting-db-init-job.yaml
 
 
     - name: ks-alerting | Creating ks-alerting mysql ctrl
       shell: >
-        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/alerting-db-ctrl-job.yaml
+        {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/alerting/alerting-db-ctrl-job.yaml
 
 
     - name: ks-alerting | Creating ks-alerting watcher
       shell: >
-        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/2-watcher.yaml
+        {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/alerting/2-watcher.yaml
 
 
     - name: ks-alerting | Creating ks-alerting manager
       shell: >
-        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/3-manager.yaml
+        {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/alerting/3-manager.yaml
 
 
     - name: ks-alerting | Creating ks-alerting apigateway
       shell: >
-        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/4-client.yaml
+        {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/alerting/4-client.yaml
   when:
     - "status.alerting is not defined or status.alerting.status is not defined or status.alerting.status != 'enabled'"
 
 
 - name: ks-alerting | Creating ks-alerting executor
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/1-executor.yaml
+    {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/alerting/1-executor.yaml
 
 
 - name: ks-alerting | Importing ks-alerting status
@@ -86,7 +86,7 @@
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
     -p '{"status": {"alerting": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
-    -n kubesphere-system
+    -n d3os-system
   register: cc_result
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
   until: cc_result is succeeded

@@ -4,7 +4,7 @@ metadata:
   labels:
     app: alerting-executor
   name: alerting-executor
-  namespace: kubesphere-alerting-system
+  namespace: d3os-alerting-system
 spec:
   replicas: 1
   selector:
@@ -32,7 +32,7 @@ spec:
         name: alerting-adapter
         env:
         - name: ADAPTER_APP_MONITORING_HOST
-          value: "http://ks-apiserver.kubesphere-system.svc/kapis/monitoring.kubesphere.io/v1alpha3"
+          value: "http://ks-apiserver.d3os-system.svc/kapis/monitoring.d3os.io/v1alpha3"
         - name: ADAPTER_KS_API_SERVER_TOKEN
           value: {{ ks_token_str.stdout }}
         resources:
@@ -55,13 +55,13 @@ spec:
         - name: ALERT_ETCD_ENDPOINTS
           value: "{{ etcdEndpoint }}"
         - name: ALERT_APP_MONITORING_HOST
-          value: "http://ks-apiserver.kubesphere-system.svc/kapis/monitoring.kubesphere.io/v1alpha3"
+          value: "http://ks-apiserver.d3os-system.svc/kapis/monitoring.d3os.io/v1alpha3"
         - name: ALERT_QUEUE_TYPE
           value: "redis"
         - name: ALERT_QUEUE_ADDR
           value: "redis://{{ redisEndpoint }}"
         - name: ALERT_APP_NOTIFICATION_HOST
-          value: "notification.kubesphere-alerting-system.svc:9201"
+          value: "notification.d3os-alerting-system.svc:9201"
         - name: ALERT_LOG_LEVEL
           value: "info"
         - name: ALERT_MYSQL_LOG_MODE

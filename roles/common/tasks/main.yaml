@@ -3,72 +3,72 @@
 - import_tasks: init-namespaces.yaml
 
 
-- name: KubeSphere | Getting Kubernetes master num
+- name: d3os | Getting Kubernetes master num
   shell: >
     {{ bin_dir }}/kubectl get node | awk '{if(NR>1){print $3}}' | grep master | wc -l
   register: masters
   failed_when: false
 
 
-- name: KubeSphere | Setting master num
+- name: d3os | Setting master num
   set_fact:
     enableHA: >-
       {% if masters is defined and masters.stdout is defined and masters.stdout != "0" and masters.stdout != "1" %}true{% else %}false{% endif %}
   when:
     - enableHA is not defined
 
-- name: KubeSphere | Getting common component installation files
+- name: d3os | Getting common component installation files
   copy:
     src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
   loop:
     - "common"
     - "ks-crds"
 
 
-- name: KubeSphere | Creating KubeSphere crds
+- name: d3os | Creating d3os crds
   shell: "{{ bin_dir }}/kubectl apply -R -f {{ item }}"
   register: cc_result
   with_fileglob:
-    - "{{ kubesphere_dir }}/ks-crds/*.yaml"
+    - "{{ d3os_dir }}/ks-crds/*.yaml"
   failed_when: "cc_result.stderr and 'Warning: kubectl apply' not in cc_result.stderr"
 
-- name: KubeSphere | Creating Storage ProvisionerCapability
-  shell: "{{ bin_dir }}/kubectl apply -R -f {{ kubesphere_dir }}/ks-crds/provisonercapability"
+- name: d3os | Creating Storage ProvisionerCapability
+  shell: "{{ bin_dir }}/kubectl apply -R -f {{ d3os_dir }}/ks-crds/provisonercapability"
   register: spc_result
   failed_when: "spc_result.stderr and 'Warning: kubectl apply' not in spc_result.stderr"
 
-- name: KubeSphere | Checking Kubernetes version
+- name: d3os | Checking Kubernetes version
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
 
-- name: KubeSphere | Deploying snapshot controller
+- name: d3os | Deploying snapshot controller
   block:
-    - name: KubeSphere | Getting common component installation files
+    - name: d3os | Getting common component installation files
       copy:
         src: "{{ item }}"
-        dest: "{{ kubesphere_dir }}/"
+        dest: "{{ d3os_dir }}/"
       loop:
         - "snapshot-controller"
 
-    - name: KubeSphere | Creating snapshot controller values
+    - name: d3os | Creating snapshot controller values
       template:
         src: "{{ item.file }}.j2"
-        dest: "{{ kubesphere_dir }}/{{ item.file }}"
+        dest: "{{ d3os_dir }}/{{ item.file }}"
       with_items:
         - { name: custom-values-snapshot-controller, file: custom-values-snapshot-controller.yaml }
 
-    - name: KubeSphere | Removing old snapshot crd
+    - name: d3os | Removing old snapshot crd
       command: >
-        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot.yaml --force
+        {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot.yaml --force
       failed_when: false
 
-    - name: KubeSphere | Deploying snapshot controller
+    - name: d3os | Deploying snapshot controller
       shell: >
         {{ bin_dir }}/helm upgrade --install snapshot-controller
-        {{ kubesphere_dir }}/snapshot-controller
-        -f {{ kubesphere_dir }}/custom-values-snapshot-controller.yaml
+        {{ d3os_dir }}/snapshot-controller
+        -f {{ d3os_dir }}/custom-values-snapshot-controller.yaml
         --namespace kube-system
       failed_when: false
 
@@ -76,7 +76,7 @@
     - kubernetes_version.stdout is version('v1.17.0', '>=')
 
 
-- name: KubeSphere | Checking openpitrix common component
+- name: d3os | Checking openpitrix common component
   shell: >
     {{ bin_dir }}/kubectl get pod -n openpitrix-system
   register: openpitrix_component_pod
@@ -91,16 +91,16 @@
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
 
 
-- name: KubeSphere | Getting PersistentVolumeName (mysql/etcd/minio)
+- name: d3os | Getting PersistentVolumeName (mysql/etcd/minio)
   block:
 
     - name: Getting PersistentVolumeName (mysql)
       shell: >
-        kubectl get pv | grep "kubesphere-system/mysql-pvc" | awk '{print $1}'
+        kubectl get pv | grep "d3os-system/mysql-pvc" | awk '{print $1}'
       register: pvName
     - name: Getting PersistentVolumeSize (mysql)
       shell: >
-        kubectl get pv | grep "kubesphere-system/mysql-pvc" | awk '{print $2}'
+        kubectl get pv | grep "d3os-system/mysql-pvc" | awk '{print $2}'
       register: pvSize
 
     - name: Setting PersistentVolumeName (mysql)
@@ -114,11 +114,11 @@
 
     - name: Getting PersistentVolumeName (etcd)
       shell: >
-        kubectl get pv | grep "kubesphere-system/etcd-pvc" | awk '{print $1}'
+        kubectl get pv | grep "d3os-system/etcd-pvc" | awk '{print $1}'
       register: pvName
     - name: Getting PersistentVolumeSize (etcd)
       shell: >
-        kubectl get pv | grep "kubesphere-system/etcd-pvc" | awk '{print $2}'
+        kubectl get pv | grep "d3os-system/etcd-pvc" | awk '{print $2}'
       register: pvSize
 
     - name: Setting PersistentVolumeName (etcd)
@@ -135,20 +135,20 @@
 
 - import_tasks: get_old_config.yaml
 
-- name: KubeSphere | Creating common component manifests
+- name: d3os | Creating common component manifests
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/common/{{ item.file }}"
+    dest: "{{ d3os_dir }}/common/{{ item.file }}"
   with_items:
 #    - { path: etcd, file: etcd.yaml }
 #    - { name: mysql, file: mysql.yaml }
     - { path: redis, file: redis.yaml }
 
-- name: KubeSphere | Deploying common component
+- name: d3os | Deploying common component
   block:
-    - name: KubeSphere | Deploying etcd and mysql
+    - name: d3os | Deploying etcd and mysql
       shell: >
-        {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
+        {{ bin_dir }}/kubectl -n d3os-system apply -f {{ d3os_dir }}/common/{{ item }}
       loop:
         - "etcd.yaml"
         - "mysql.yaml"
@@ -175,7 +175,7 @@
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") == -1
 
 
-- name: KubeSphere | Setting persistentVolumeReclaimPolicy (mysql/etcd/minio)
+- name: d3os | Setting persistentVolumeReclaimPolicy (mysql/etcd/minio)
   block:
 
     - name: Setting persistentVolumeReclaimPolicy (mysql)

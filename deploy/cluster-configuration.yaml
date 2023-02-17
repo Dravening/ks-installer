@@ -1,16 +1,16 @@
 ---
-apiVersion: installer.kubesphere.io/v1alpha1
+apiVersion: installer.d3os.io/v1alpha1
 kind: ClusterConfiguration
 metadata:
   name: ks-installer
-  namespace: kubesphere-system
+  namespace: d3os-system
   labels:
     version: v3.1.0
 spec:
   persistence:
     storageClass: ""        # If there is no default StorageClass in your cluster, you need to specify an existing StorageClass here.
   authentication:
-    jwtSecret: ""           # Keep the jwtSecret consistent with the Host Cluster. Retrieve the jwtSecret by executing "kubectl -n kubesphere-system get cm kubesphere-config -o yaml | grep -v "apiVersion" | grep jwtSecret" on the Host Cluster.
+    jwtSecret: ""           # Keep the jwtSecret consistent with the Host Cluster. Retrieve the jwtSecret by executing "kubectl -n d3os-system get cm d3os-config -o yaml | grep -v "apiVersion" | grep jwtSecret" on the Host Cluster.
   local_registry: "registry-edge.cosmoplat.com"        # Add your private registry address if it is needed.
   etcd:
     monitoring: false       # Enable or disable etcd monitoring dashboard installation. You have to create a Secret for etcd before you enable it.
@@ -27,7 +27,7 @@ spec:
     redisVolumSize: 2Gi # Redis PVC size.
     monitoring:
       # type: external   # Whether to specify the external prometheus stack, and need to modify the endpoint at the next line.
-      endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090 # Prometheus endpoint to get metrics data.
+      endpoint: http://prometheus-operated.d3os-monitoring-system.svc:9090 # Prometheus endpoint to get metrics data.
     es:   # Storage backend for logging, events and auditing.
       # elasticsearchMasterReplicas: 1   # The total number of master nodes. Even numbers are not allowed.
       # elasticsearchDataReplicas: 1     # The total number of data nodes.
@@ -45,14 +45,14 @@ spec:
     enableMultiLogin: true  # Enable or disable simultaneous logins. It allows different users to log in with the same account at the same time.
     port: 30880
   alerting:                # (CPU: 0.1 Core, Memory: 100 MiB) It enables users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
-    enabled: false         # Enable or disable the KubeSphere Alerting System.
+    enabled: false         # Enable or disable the d3os Alerting System.
     # thanosruler:
     #   replicas: 1
     #   resources: {}
   auditing:                # Provide a security-relevant chronological set of records，recording the sequence of activities happening on the platform, initiated by different tenants.
-    enabled: false         # Enable or disable the KubeSphere Auditing Log System. 
+    enabled: false         # Enable or disable the d3os Auditing Log System.
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Provide an out-of-the-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
-    enabled: false             # Enable or disable the KubeSphere DevOps System.
+    enabled: false             # Enable or disable the d3os DevOps System.
     jenkinsMemoryLim: 2Gi      # Jenkins memory limit.
     jenkinsMemoryReq: 1500Mi   # Jenkins memory request.
     jenkinsVolumeSize: 8Gi     # Jenkins volume size.
@@ -60,12 +60,12 @@ spec:
     jenkinsJavaOpts_Xmx: 512m
     jenkinsJavaOpts_MaxRAM: 2g
   events:                  # Provide a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
-    enabled: false         # Enable or disable the KubeSphere Events System.
+    enabled: false         # Enable or disable the d3os Events System.
     ruler:
       enabled: true
       replicas: 2
   logging:                 # (CPU: 57 m, Memory: 2.76 G) Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
-    enabled: false         # Enable or disable the KubeSphere Logging System.
+    enabled: false         # Enable or disable the d3os Logging System.
     logsidecar:
       enabled: true
       replicas: 2
@@ -89,9 +89,9 @@ spec:
       type: none # Specify "weave-scope" for this field to enable Service Topology. "none" means that Service Topology is disabled.
   openpitrix: # An App Store that is accessible to all platform tenants. You can use it to manage apps across their entire lifecycle.
     store:
-      enabled: false # Enable or disable the KubeSphere App Store.
+      enabled: false # Enable or disable the d3os App Store.
   servicemesh:         # (0.3 Core, 300 MiB) Provide fine-grained traffic management, observability and tracing, and visualized traffic topology.
-    enabled: false     # Base component (pilot). Enable or disable KubeSphere Service Mesh (Istio-based).
+    enabled: false     # Base component (pilot). Enable or disable d3os Service Mesh (Istio-based).
   kubeedge:          # Add edge nodes to your cluster and deploy workloads on edge nodes.
     enabled: false   # Enable or disable KubeEdge.
     cloudCore:

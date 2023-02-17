@@ -1,12 +1,12 @@
-FROM kubespheredev/shell-operator:v1.0.0-beta.5-alpine3.13
+FROM d3osdev/shell-operator:v1.0.0-beta.5-alpine3.13
 
-ENV  ANSIBLE_ROLES_PATH /kubesphere/installer/roles
-WORKDIR /kubesphere
-ADD controller/* /hooks/kubesphere/
+ENV  ANSIBLE_ROLES_PATH /d3os/installer/roles
+WORKDIR /d3os
+ADD controller/* /hooks/d3os/
 
-ADD roles /kubesphere/installer/roles
-ADD env /kubesphere/results/env
-ADD playbooks /kubesphere/playbooks
+ADD roles /d3os/installer/roles
+ADD env /d3os/results/env
+ADD playbooks /d3os/playbooks
 
-#RUN chown kubesphere:kubesphere -R /kubesphere /hooks/kubesphere
-USER kubesphere
+#RUN chown d3os:d3os -R /d3os /hooks/d3os
+USER d3os

@@ -1,7 +1,7 @@
-# Configurable Parameters in KubeSphere
+# Configurable Parameters in d3os
 
 
-installer configuration, used when install a KubeSphere
+installer configuration, used when install a d3os
 ```yaml
 persistence:
   storageClass: ""
@@ -17,7 +17,7 @@ common:
   openldapVolumeSize: 2Gi
   redisVolumSize: 2Gi
   monitoring:
-    endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
+    endpoint: http://prometheus-operated.d3os-monitoring-system.svc:9090
 console:
   enableMultiLogin: false  # enable/disable multi login
   port: 30880
@@ -52,7 +52,7 @@ monitoring:
   prometheusVolumeSize: 20Gi
   alertmanagerReplicas: 1
 multicluster:
-  # host: means installer will install current cluster as a Host Cluster. There should be only one HOST CLUSTER in KubeSphere multicluster.
+  # host: means installer will install current cluster as a Host Cluster. There should be only one HOST CLUSTER in d3os multicluster.
   # member: means installer will install current cluster as a Member Cluster
   # none: means install current cluster as a standalone cluster
   clusterRole: none  # host | member | none

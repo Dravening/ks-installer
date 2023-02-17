@@ -3,10 +3,10 @@ kind: ServiceMonitor
 metadata:
   labels:
     app.kubernetes.io/name: node-exporter
-    app.kubernetes.io/vendor: kubesphere
+    app.kubernetes.io/vendor: d3os
     app.kubernetes.io/version: v0.18.1
   name: node-exporter
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   endpoints:
   - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

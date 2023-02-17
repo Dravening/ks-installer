@@ -1,57 +1,57 @@
-- name: KubeSphere | Checking ha-redis
+- name: d3os | Checking ha-redis
   shell: >
-    {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-redis"
+    {{ bin_dir }}/helm list -n d3os-system | grep "ks-redis"
   register: redis_check
   failed_when: false
 
 
-- name: KubeSphere | Deploying ha redis
+- name: d3os | Deploying ha redis
   block:
 
-    - name: KubeSphere | Getting redis installation files
+    - name: d3os | Getting redis installation files
       copy:
         src: "{{ item }}"
-        dest: "{{ kubesphere_dir }}/"
+        dest: "{{ d3os_dir }}/"
       loop:
         - "redis-ha"
 
 
-    - name: KubeSphere | Creating manifests
+    - name: d3os | Creating manifests
       template:
         src: "{{ item.file }}.j2"
-        dest: "{{ kubesphere_dir }}/{{ item.file }}"
+        dest: "{{ d3os_dir }}/{{ item.file }}"
       with_items:
         - { name: custom-values-redis, file: custom-values-redis.yaml }
 
 
-    - name: KubeSphere | Checking old redis status
+    - name: d3os | Checking old redis status
       shell: >
-        {{ bin_dir }}/kubectl get pod -n kubesphere-system  -l app=redis,tier=database,version=redis-4.0 | wc -l
+        {{ bin_dir }}/kubectl get pod -n d3os-system  -l app=redis,tier=database,version=redis-4.0 | wc -l
       register: old_redis_exist
 
 
-    - name: KubeSphere | Deleting and backup old redis svc
+    - name: d3os | Deleting and backup old redis svc
       shell: >
-        {{ bin_dir }}/kubectl get svc -n kubesphere-system redis -o yaml > {{ kubesphere_dir }}/redis-svc-backup.yaml
+        {{ bin_dir }}/kubectl get svc -n d3os-system redis -o yaml > {{ d3os_dir }}/redis-svc-backup.yaml
         &&
-        {{ bin_dir }}/kubectl delete svc -n kubesphere-system redis
+        {{ bin_dir }}/kubectl delete svc -n d3os-system redis
       when:
         - old_redis_exist.stdout != "0"
 
 
-    - name: KubeSphere | Deploying redis
+    - name: d3os | Deploying redis
       shell: >
         {{ bin_dir }}/helm upgrade --install ks-redis
-        {{ kubesphere_dir }}/redis-ha
-        -f {{ kubesphere_dir }}/custom-values-redis.yaml
+        {{ d3os_dir }}/redis-ha
+        -f {{ d3os_dir }}/custom-values-redis.yaml
         --set fullnameOverride=redis-ha
-        --namespace kubesphere-system
+        --namespace d3os-system
 
 
-#    - name: KubeSphere | Getting redis PodIp
+#    - name: d3os | Getting redis PodIp
 #      shell: >
 #        {{ bin_dir }}/kubectl get pod
-#        -n kubesphere-system
+#        -n d3os-system
 #        -l  app=redis,tier=database,version=redis-4.0
 #        -ojsonpath='{.items[0].status.podIP}'
 #      register: redis_podIp
@@ -68,9 +68,9 @@
     - (redis_check.stdout.find("deployed") == -1) or (redis_check.stdout.find("5.0.5") == -1)
 
 
-- name: KubeSphere | Deploying redis
+- name: d3os | Deploying redis
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
+    {{ bin_dir }}/kubectl -n d3os-system apply -f {{ d3os_dir }}/common/{{ item }}
   loop:
     - "redis.yaml"
   register: redis_result
@@ -81,12 +81,12 @@
     - (enableHA is defined and not enableHA) or (enableHA is not defined)
 
 
-- name: KubeSphere | Importing redis status
+- name: d3os | Importing redis status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
     -p '{"status": {"redis": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
-    -n kubesphere-system
+    -n d3os-system
   register: cc_result
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
   until: cc_result is succeeded

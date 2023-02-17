@@ -1,6 +1,6 @@
 ---
 - name: Monitoring | Installing Prometheus
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
+  shell: "{{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/prometheus/{{ item }}"
   loop:
     - "prometheus"
     - "prometheus"

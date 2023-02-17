@@ -1,70 +1,70 @@
 ---
-- name: KubeSphere | Creating KubeSphere directory
+- name: d3os | Creating d3os directory
   file:
-    path: "{{ kubesphere_dir }}"
+    path: "{{ d3os_dir }}"
     state: directory
     mode: 0755
 
 
-- name: KubeSphere | Getting installation init files
+- name: d3os | Getting installation init files
   copy:
     src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
   loop:
     - "jwt-script"
 
 
 # https://tools.ietf.org/html/rfc7518#section-3.2
 # A key of the same size as the hash output (for instance, 256 bits for"HS256") or larger MUST be used with this algorithm.
-- name: KubeSphere | Creating KubeSphere Secret
+- name: d3os | Creating d3os Secret
   shell: >
     dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | tr -d '\n' | dd bs=32 count=1 2>/dev/null
   register: ks_secret
 
 
-- name: KubeSphere | Creating KubeSphere Secret
+- name: d3os | Creating d3os Secret
   set_fact:
     ks_secret_str: "{{ ks_secret.stdout }}"
   when:
     - (authentication is not defined and authentication.jwtSecret is not defined) or authentication.jwtSecret == ""
 
 
-- name: KubeSphere | Creating KubeSphere Secret
+- name: d3os | Creating d3os Secret
   set_fact:
     ks_secret_str: "{{ authentication.jwtSecret }}"
   when:
     - authentication is defined and authentication.jwtSecret is defined and authentication.jwtSecret != ""
 
 
-- name: KubeSphere | Enabling Token Script
+- name: d3os | Enabling Token Script
   file:
-    path: "{{ kubesphere_dir }}/jwt-script/jwt.sh"
+    path: "{{ d3os_dir }}/jwt-script/jwt.sh"
     mode: 0755
 
 
-- name: KubeSphere | Getting KubeSphere Token
+- name: d3os | Getting d3os Token
   shell: >
-    /bin/bash {{ kubesphere_dir }}/jwt-script/jwt.sh  {{ ks_secret_str }} '{"email": "admin@kubesphere.io","username": "admin","token_type": "static_token"}'
+    /bin/bash {{ d3os_dir }}/jwt-script/jwt.sh  {{ ks_secret_str }} '{"email": "admin@d3os.io","username": "admin","token_type": "static_token"}'
   register: ks_token
 
 
-- name: KubeSphere | Checking KubeSphere secrets
+- name: d3os | Checking d3os secrets
   shell: >
-    {{ bin_dir }}/kubectl get secrets -n kubesphere-system
-  register: kubesphere_secrets
+    {{ bin_dir }}/kubectl get secrets -n d3os-system
+  register: d3os_secrets
 
-- name: KubeSphere | Deleting KubeSphere secret
+- name: d3os | Deleting d3os secret
   shell: >
-    {{ bin_dir }}/kubectl delete secrets -n kubesphere-system kubesphere-secret
+    {{ bin_dir }}/kubectl delete secrets -n d3os-system d3os-secret
   when:
-    - kubesphere_secrets.stdout.find("kubesphere-secret") != -1
+    - d3os_secrets.stdout.find("d3os-secret") != -1
     - authentication is defined and authentication.jwtSecret is defined and authentication.jwtSecret != ""
 
-- name: KubeSphere | Creating components token
+- name: d3os | Creating components token
   shell: >
-    {{ bin_dir }}/kubectl create secret generic kubesphere-secret
+    {{ bin_dir }}/kubectl create secret generic d3os-secret
     --from-literal=token={{ ks_token.stdout }}
     --from-literal=secret={{ ks_secret_str }}
-    -n kubesphere-system
+    -n d3os-system
   register: secret_status
   failed_when: "secret_status.stderr and 'AlreadyExists' not in secret_status.stderr"

@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: workspacerolebindings.iam.kubesphere.io
+  name: workspacerolebindings.iam.d3os.io
 spec:
-  group: iam.kubesphere.io
+  group: iam.d3os.io
   names:
     categories:
     - iam
@@ -19,7 +19,7 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .metadata.labels.kubesphere\.io/workspace
+    - jsonPath: .metadata.labels.d3os\.io/workspace
       name: Workspace
       type: string
     name: v1alpha2

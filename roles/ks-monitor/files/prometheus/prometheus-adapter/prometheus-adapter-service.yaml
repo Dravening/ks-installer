@@ -4,7 +4,7 @@ metadata:
   labels:
     name: prometheus-adapter
   name: prometheus-adapter
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   ports:
   - name: https

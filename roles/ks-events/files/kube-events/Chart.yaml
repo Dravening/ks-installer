@@ -6,7 +6,7 @@ type: application
 version: 0.1.0
 appVersion: 0.1.0
 source:
-  - https://github.com/kubesphere/kube-events
+  - https://github.com/d3os/kube-events
 keywords:
   - event
   - operator

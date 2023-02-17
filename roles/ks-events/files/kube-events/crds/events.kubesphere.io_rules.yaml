@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
-  name: rules.events.kubesphere.io
+  name: rules.events.d3os.io
 spec:
-  group: events.kubesphere.io
+  group: events.d3os.io
   names:
     kind: Rule
     listKind: RuleList
@@ -50,7 +50,7 @@ spec:
                       type: object
                     condition:
                       description: 'Condition is a string similar with the where part
-                        of sql. See supported grammar details on https://github.com/kubesphere/event-rule-engine#supported-grammer
+                        of sql. See supported grammar details on https://github.com/d3os/event-rule-engine#supported-grammer
                         . For example: `type="Warning" and involvedObject.kind="Pod"
                         and reason="FailedMount"`'
                       type: string

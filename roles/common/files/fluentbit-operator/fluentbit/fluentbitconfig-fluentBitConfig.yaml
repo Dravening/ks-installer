@@ -1,8 +1,8 @@
-apiVersion: logging.kubesphere.io/v1alpha2
+apiVersion: logging.d3os.io/v1alpha2
 kind: FluentBitConfig
 metadata:
   name: fluent-bit-config
-  namespace: kubesphere-logging-system
+  namespace: d3os-logging-system
   labels:
     app.kubernetes.io/name: fluent-bit
 spec:
@@ -10,10 +10,10 @@ spec:
     parsersFile: parsers.conf
   inputSelector:
     matchLabels:
-      logging.kubesphere.io/enabled: "true"
+      logging.d3os.io/enabled: "true"
   filterSelector:
     matchLabels:
-      logging.kubesphere.io/enabled: "true"
+      logging.d3os.io/enabled: "true"
   outputSelector:
     matchLabels:
-      logging.kubesphere.io/enabled: "true"
+      logging.d3os.io/enabled: "true"

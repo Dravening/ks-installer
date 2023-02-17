@@ -3,9 +3,9 @@ kind: ServiceMonitor
 metadata:
   labels:
     k8s-app: kubelet
-    app.kubernetes.io/vendor: kubesphere
+    app.kubernetes.io/vendor: d3os
   name: kubelet
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   endpoints:
   - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

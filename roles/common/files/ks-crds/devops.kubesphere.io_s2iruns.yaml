@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: s2iruns.devops.kubesphere.io
+  name: s2iruns.devops.d3os.io
 spec:
-  group: devops.kubesphere.io
+  group: devops.d3os.io
   names:
     kind: S2iRun
     listKind: S2iRunList

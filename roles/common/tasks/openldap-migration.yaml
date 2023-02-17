@@ -1,15 +1,15 @@
 ---
 
-- name: KubeSphere | Loading old openldap data
+- name: d3os | Loading old openldap data
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system exec -it
-    $(kubectl get pod -n kubesphere-system -l app=openldap,tier=database,version=openldap-2.4 -ojsonpath='{.items[0].metadata.name}')
-    /usr/sbin/slapcat > {{ kubesphere_dir }}/ldapdbak.ldif
+    {{ bin_dir }}/kubectl -n d3os-system exec -it
+    $(kubectl get pod -n d3os-system -l app=openldap,tier=database,version=openldap-2.4 -ojsonpath='{.items[0].metadata.name}')
+    /usr/sbin/slapcat > {{ d3os_dir }}/ldapdbak.ldif
 
 
-- name: KubeSphere | Checking openldap-ha status
+- name: d3os | Checking openldap-ha status
   shell: >
-    {{ bin_dir }}/kubectl get pod -n kubesphere-system
+    {{ bin_dir }}/kubectl get pod -n d3os-system
     -l app.kubernetes.io/name=openldap-ha | awk '{if(NR>1){print}}' | grep -v '1/1' | wc -l
   register: ldap_status
   until: ldap_status.stdout == "0"
@@ -17,37 +17,37 @@
   delay: 30
 
 
-- name: KubeSphere | Getting openldap-ha pod list
+- name: d3os | Getting openldap-ha pod list
   shell: >
-    {{ bin_dir }}/kubectl get pod -n kubesphere-system
+    {{ bin_dir }}/kubectl get pod -n d3os-system
     -l app.kubernetes.io/name=openldap-ha | awk '{if(NR>1){print $1}}'
   register: podList
 
 
-- name: KubeSphere | Getting old openldap data
+- name: d3os | Getting old openldap data
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system cp
-    {{ kubesphere_dir }}/ldapdbak.ldif
+    {{ bin_dir }}/kubectl -n d3os-system cp
+    {{ d3os_dir }}/ldapdbak.ldif
     {{ item }}:/tmp/ldapdbak.ldif
   loop: "{{ podList.stdout_lines }}"
 
 
-- name: KubeSphere | Migrating openldap data
+- name: d3os | Migrating openldap data
   shell: >
-    kubectl -n kubesphere-system exec -it {{ item }} -- sh -c
+    kubectl -n d3os-system exec -it {{ item }} -- sh -c
     'rm -rf /var/lib/ldap/* && /usr/sbin/slapadd -l /tmp/ldapdbak.ldif && chown -R openldap:openldap /var/lib/ldap/*'
   loop: "{{ podList.stdout_lines }}"
 
 
-- name: KubeSphere | Disabling old openldap
+- name: d3os | Disabling old openldap
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment openldap --replicas=0
+    {{ bin_dir }}/kubectl -n d3os-system scale deployment openldap --replicas=0
 
 
-#- name: KubeSphere | Restarting openldap
+#- name: d3os | Restarting openldap
 #  shell: >
-#    {{ bin_dir }}/kubectl -n kubesphere-system rollout restart sts/openldap
+#    {{ bin_dir }}/kubectl -n d3os-system rollout restart sts/openldap
 
-- name: KubeSphere | Restarting openldap
+- name: d3os | Restarting openldap
   shell: >
-    {{ bin_dir }}/kubectl delete pod -n kubesphere-system -l app.kubernetes.io/instance=ks-openldap
+    {{ bin_dir }}/kubectl delete pod -n d3os-system -l app.kubernetes.io/instance=ks-openldap

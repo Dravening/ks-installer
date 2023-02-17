@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
-  name: dashboards.monitoring.kubesphere.io
+  name: dashboards.monitoring.d3os.io
 spec:
-  group: monitoring.kubesphere.io
+  group: monitoring.d3os.io
   names:
     kind: Dashboard
     listKind: DashboardList

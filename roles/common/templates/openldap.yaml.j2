@@ -6,7 +6,7 @@ metadata:
     app: openldap
     tier: database
   name: openldap
-  namespace: kubesphere-system
+  namespace: d3os-system
 spec:
   replicas: 1
   selector:
@@ -22,9 +22,9 @@ spec:
       containers:
       - env:
         - name: LDAP_ORGANISATION
-          value: kubesphere
+          value: d3os
         - name: LDAP_DOMAIN
-          value: kubesphere.io
+          value: d3os.io
         - name: LDAP_ADMIN_PASSWORD
           value: admin
         - name: LDAP_NOFILE
@@ -79,7 +79,7 @@ metadata:
     app: openldap
     tier: database
   name: openldap
-  namespace: kubesphere-system
+  namespace: d3os-system
 spec:
   ports:
   - name: ldap
@@ -98,7 +98,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: openldap-pvc
-  namespace: kubesphere-system
+  namespace: d3os-system
 spec:
   accessModes:
   - ReadWriteOnce

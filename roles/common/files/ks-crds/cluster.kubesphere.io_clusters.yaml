@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: clusters.cluster.kubesphere.io
+  name: clusters.cluster.d3os.io
 spec:
-  group: cluster.kubesphere.io
+  group: cluster.d3os.io
   names:
     kind: Cluster
     listKind: ClusterList
@@ -57,17 +57,17 @@ spec:
                   kubernetesAPIServerPort:
                     description: KubeAPIServerPort is the port which listens for forwarding kube-apiserver traffic Only applicable when connection type is proxy.
                     type: integer
-                  kubesphereAPIEndpoint:
-                    description: 'KubeSphere API Server endpoint. Example: http://10.10.0.11:8080 Should provide this field explicitly if connection type is direct. Will be populated by ks-apiserver if connection type is proxy.'
+                  d3osAPIEndpoint:
+                    description: 'd3os API Server endpoint. Example: http://10.10.0.11:8080 Should provide this field explicitly if connection type is direct. Will be populated by ks-apiserver if connection type is proxy.'
                     type: string
-                  kubesphereAPIServerPort:
-                    description: KubeSphereAPIServerPort is the port which listens for forwarding kubesphere apigateway traffic Only applicable when connection type is proxy.
+                  d3osAPIServerPort:
+                    description: d3osAPIServerPort is the port which listens for forwarding d3os apigateway traffic Only applicable when connection type is proxy.
                     type: integer
                   token:
                     description: Token used by agents of member cluster to connect to host cluster proxy. This field is populated by apiserver only if connection type is proxy.
                     type: string
                   type:
-                    description: type defines how host cluster will connect to host cluster ConnectionTypeDirect means direct connection, this requires   kubeconfig and kubesphere apiserver endpoint provided ConnectionTypeProxy means using kubesphere proxy, no kubeconfig   or kubesphere apiserver endpoint required
+                    description: type defines how host cluster will connect to host cluster ConnectionTypeDirect means direct connection, this requires   kubeconfig and d3os apiserver endpoint provided ConnectionTypeProxy means using d3os proxy, no kubeconfig   or d3os apiserver endpoint required
                     type: string
                 type: object
               enable:
@@ -116,7 +116,7 @@ spec:
                   type: boolean
                 description: Configz is status of components enabled in the member cluster. This is synchronized with member cluster every amount of time, like 5 minutes.
                 type: object
-              kubeSphereVersion:
+              d3osVersion:
                 description: GitVersion of the /kapis/version api response, this field is populated by cluster controller
                 type: string
               kubernetesVersion:

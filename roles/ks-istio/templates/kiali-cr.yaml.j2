@@ -17,7 +17,7 @@ spec:
     service_type: "ClusterIP"
   external_services:
     prometheus:
-      url: http://prometheus-k8s.kubesphere-monitoring-system:9090
+      url: http://prometheus-k8s.d3os-monitoring-system:9090
     tracing:
       enabled: true
       url: http://jaeger-query.istio-system.svc:16686
@@ -25,6 +25,6 @@ spec:
     namespaces:
       exclude:
         - "kube-.*"
-        - "kubesphere-.*system"
+        - "d3os-.*system"
         - "istio-system"
         - "openpitrix-system"

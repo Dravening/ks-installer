@@ -1,4 +1,4 @@
-apiVersion: auditing.kubesphere.io/v1alpha1
+apiVersion: auditing.d3os.io/v1alpha1
 kind: Webhook
 metadata:
   name: kube-auditing-webhook

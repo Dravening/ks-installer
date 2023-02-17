@@ -3,8 +3,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    kubesphere.io/creator: system
-    iam.kubesphere.io/aggregation-roles: '["role-template-manage-alerting-messages","role-template-manage-alerting-policies","role-template-manage-app-workloads","role-template-manage-cluster-settings","role-template-manage-components","role-template-manage-crds","role-template-manage-members","role-template-manage-network-policies","role-template-manage-nodes","role-template-manage-projects","role-template-manage-roles","role-template-manage-storageclasses","role-template-manage-volumes","role-template-view-alerting-messages","role-template-view-alerting-policies","role-template-view-app-workloads","role-template-view-cluster-monitoring","role-template-view-members","role-template-view-network-policies","role-template-view-nodes","role-template-view-projects","role-template-view-roles","role-template-view-storageclasses","role-template-view-volume-snapshots","role-template-view-volumes"]'
+    d3os.io/creator: system
+    iam.d3os.io/aggregation-roles: '["role-template-manage-alerting-messages","role-template-manage-alerting-policies","role-template-manage-app-workloads","role-template-manage-cluster-settings","role-template-manage-components","role-template-manage-crds","role-template-manage-members","role-template-manage-network-policies","role-template-manage-nodes","role-template-manage-projects","role-template-manage-roles","role-template-manage-storageclasses","role-template-manage-volumes","role-template-view-alerting-messages","role-template-view-alerting-policies","role-template-view-app-workloads","role-template-view-cluster-monitoring","role-template-view-members","role-template-view-network-policies","role-template-view-nodes","role-template-view-projects","role-template-view-roles","role-template-view-storageclasses","role-template-view-volume-snapshots","role-template-view-volumes"]'
   name: cluster-admin
 rules:
   - apiGroups:
@@ -23,8 +23,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    kubesphere.io/creator: system
-    iam.kubesphere.io/aggregation-roles: '["role-template-view-alerting-messages","role-template-view-alerting-policies","role-template-view-app-workloads","role-template-view-cluster-monitoring","role-template-view-members","role-template-view-network-policies","role-template-view-nodes","role-template-view-projects","role-template-view-roles","role-template-view-storageclasses","role-template-view-volume-snapshots","role-template-view-volumes"]'
+    d3os.io/creator: system
+    iam.d3os.io/aggregation-roles: '["role-template-view-alerting-messages","role-template-view-alerting-policies","role-template-view-app-workloads","role-template-view-cluster-monitoring","role-template-view-members","role-template-view-network-policies","role-template-view-nodes","role-template-view-projects","role-template-view-roles","role-template-view-storageclasses","role-template-view-volume-snapshots","role-template-view-volumes"]'
   name: cluster-viewer
 rules:
   - apiGroups:
@@ -41,7 +41,7 @@ rules:
       - 'GET'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   name: anonymous
@@ -57,20 +57,20 @@ rules:
       - get
       - list
   - apiGroups:
-      - config.kubesphere.io
+      - config.d3os.io
     resources:
       - configs
     verbs:
       - get
       - list
   - apiGroups:
-      - devops.kubesphere.io
+      - devops.d3os.io
     resources:
       - s2ibinaries/file
     verbs:
       - get
   - apiGroups:
-      - devops.kubesphere.io
+      - devops.d3os.io
     resources:
       - webhook
     verbs:
@@ -79,13 +79,13 @@ rules:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   name: pre-registration
 rules:
 - apiGroups:
-  - iam.kubesphere.io
+  - iam.d3os.io
   resources:
   - users
   verbs:
@@ -93,11 +93,11 @@ rules:
   - list
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/rego-override: |-
+    iam.d3os.io/rego-override: |-
       package authz
       default allow = false
       allow = true {
@@ -117,7 +117,7 @@ metadata:
         input.Verb == "GET"
       }
       allow = true {
-        input.APIGroup == "tenant.kubesphere.io"
+        input.APIGroup == "tenant.d3os.io"
         input.KubernetesRequest == false
         allowedVerbs := ["get","list","watch"]
         allowedVerbs[_] == input.Verb
@@ -131,20 +131,20 @@ rules:
     verbs:
       - '*'
   - apiGroups:
-      - config.kubesphere.io
+      - config.d3os.io
     resources:
       - configs
     verbs:
       - get
       - list
   - apiGroups:
-      - iam.kubesphere.io
+      - iam.d3os.io
     resources:
       - users
     verbs:
       - list
   - apiGroups:
-      - resources.kubesphere.io
+      - resources.d3os.io
     resources:
       - registry
       - git
@@ -152,7 +152,7 @@ rules:
       - get
       - create
   - apiGroups:
-      - resources.kubesphere.io
+      - resources.d3os.io
     resources:
       - clusters
     verbs:
@@ -186,15 +186,15 @@ rules:
     verbs:
       - '*'
   - apiGroups:
-      - monitoring.kubesphere.io
-      - metering.kubesphere.io
+      - monitoring.d3os.io
+      - metering.d3os.io
       - monitoring.coreos.com
     resources:
       - cluster
     verbs:
       - list
   - apiGroups:
-      - devops.kubesphere.io
+      - devops.d3os.io
     resources:
       - s2ibuildertemplates
       - search
@@ -202,14 +202,14 @@ rules:
     verbs:
       - list
   - apiGroups:
-      - resources.kubesphere.io
+      - resources.d3os.io
     resources:
       - namespaces
       - services
     verbs:
       - list
   - apiGroups:
-      - devops.kubesphere.io
+      - devops.d3os.io
     resources:
       - tojenkinsfile
       - tojson
@@ -222,7 +222,7 @@ rules:
       - list
       - get
   - apiGroups:
-      - alerting.kubesphere.io
+      - alerting.d3os.io
     resources:
       - comment
       - metric
@@ -230,8 +230,8 @@ rules:
     verbs:
       - list
   - apiGroups:
-      - notification.kubesphere.io
-      - alerting.kubesphere.io
+      - notification.d3os.io
+      - alerting.d3os.io
     resources:
       - addresses
       - addresslists
@@ -241,12 +241,12 @@ rules:
       - create
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/aggregation-roles: '["role-template-manage-clusters","role-template-view-clusters","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-view-workspaces","role-template-manage-workspaces","role-template-manage-users","role-template-view-roles","role-template-view-users","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-platform-settings"]'
-    kubesphere.io/creator: admin
+    iam.d3os.io/aggregation-roles: '["role-template-manage-clusters","role-template-view-clusters","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-view-workspaces","role-template-manage-workspaces","role-template-manage-users","role-template-view-roles","role-template-view-users","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-platform-settings"]'
+    d3os.io/creator: admin
   name: platform-admin
 rules:
   - apiGroups:
@@ -261,33 +261,33 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/aggregation-roles: '["role-template-view-app-templates"]'
-    kubesphere.io/creator: admin
+    iam.d3os.io/aggregation-roles: '["role-template-view-app-templates"]'
+    d3os.io/creator: admin
   name: platform-regular
 rules: []
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+    iam.d3os.io/role-template-rules: '{"basic": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-basic
 rules: []
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-manage-users","role-template-view-roles","role-template-manage-roles"]'
-    kubesphere.io/creator: admin
+    iam.d3os.io/aggregation-roles: '["role-template-view-users","role-template-manage-users","role-template-view-roles","role-template-manage-roles"]'
+    d3os.io/creator: admin
   name: users-manager
 rules:
   - apiGroups:
@@ -301,12 +301,12 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/aggregation-roles: '["role-template-view-workspaces","role-template-manage-workspaces","role-template-view-users"]'
-    kubesphere.io/creator: admin
+    iam.d3os.io/aggregation-roles: '["role-template-view-workspaces","role-template-manage-workspaces","role-template-view-users"]'
+    d3os.io/creator: admin
   name: workspaces-manager
 rules:
   - apiGroups:
@@ -425,15 +425,15 @@ rules:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Clusters Management
-    iam.kubesphere.io/role-template-rules: '{"clusters": "view"}'
-    kubesphere.io/alias-name: Clusters View
+    iam.d3os.io/module: Clusters Management
+    iam.d3os.io/role-template-rules: '{"clusters": "view"}'
+    d3os.io/alias-name: Clusters View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-clusters
 rules:
   - apiGroups:
@@ -444,34 +444,34 @@ rules:
       - autoscaling
       - batch
       - config.istio.io
-      - devops.kubesphere.io
-      - devops.kubesphere.io
+      - devops.d3os.io
+      - devops.d3os.io
       - events.k8s.io
-      - events.kubesphere.io
+      - events.d3os.io
       - extensions
-      - istio.kubesphere.io
+      - istio.d3os.io
       - jaegertracing.io
-      - logging.kubesphere.io
+      - logging.d3os.io
       - metrics.k8s.io
       - monitoring.coreos.com
-      - monitoring.kubesphere.io
-      - metering.kubesphere.io
-      - network.kubesphere.io
+      - monitoring.d3os.io
+      - metering.d3os.io
+      - network.d3os.io
       - networking.istio.io
       - networking.k8s.io
       - node.k8s.io
       - rbac.istio.io
       - scheduling.k8s.io
       - security.istio.io
-      - servicemesh.kubesphere.io
+      - servicemesh.d3os.io
       - snapshot.storage.k8s.io
       - storage.k8s.io
       - storage.k8s.io
-      - storage.kubesphere.io
-      - resources.kubesphere.io
-      - notification.kubesphere.io
-      - alerting.kubesphere.io
-      - cluster.kubesphere.io
+      - storage.d3os.io
+      - resources.d3os.io
+      - notification.d3os.io
+      - alerting.d3os.io
+      - cluster.d3os.io
       - types.kubefed.io
     resources:
       - '*'
@@ -480,7 +480,7 @@ rules:
       - list
       - watch
   - apiGroups:
-      - tenant.kubesphere.io
+      - tenant.d3os.io
     resources:
       - workspaces
       - workspacetemplates
@@ -494,16 +494,16 @@ rules:
       - 'GET'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-clusters"]'
-    iam.kubesphere.io/module: Clusters Management
-    iam.kubesphere.io/role-template-rules: '{"clusters": "manage"}'
-    kubesphere.io/alias-name: Clusters Management
+    iam.d3os.io/dependencies: '["role-template-view-clusters"]'
+    iam.d3os.io/module: Clusters Management
+    iam.d3os.io/role-template-rules: '{"clusters": "manage"}'
+    d3os.io/alias-name: Clusters Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-clusters
 rules:
   - apiGroups:
@@ -514,41 +514,41 @@ rules:
       - autoscaling
       - batch
       - config.istio.io
-      - devops.kubesphere.io
-      - devops.kubesphere.io
+      - devops.d3os.io
+      - devops.d3os.io
       - events.k8s.io
-      - events.kubesphere.io
+      - events.d3os.io
       - extensions
-      - istio.kubesphere.io
+      - istio.d3os.io
       - jaegertracing.io
-      - logging.kubesphere.io
+      - logging.d3os.io
       - metrics.k8s.io
       - monitoring.coreos.com
-      - monitoring.kubesphere.io
-      - metering.kubesphere.io
-      - network.kubesphere.io
+      - monitoring.d3os.io
+      - metering.d3os.io
+      - network.d3os.io
       - networking.istio.io
       - networking.k8s.io
       - node.k8s.io
       - rbac.istio.io
       - scheduling.k8s.io
       - security.istio.io
-      - servicemesh.kubesphere.io
+      - servicemesh.d3os.io
       - snapshot.storage.k8s.io
       - storage.k8s.io
       - storage.k8s.io
-      - storage.kubesphere.io
-      - resources.kubesphere.io
-      - notification.kubesphere.io
-      - alerting.kubesphere.io
-      - cluster.kubesphere.io
+      - storage.d3os.io
+      - resources.d3os.io
+      - notification.d3os.io
+      - alerting.d3os.io
+      - cluster.d3os.io
       - types.kubefed.io
     resources:
       - '*'
     verbs:
       - '*'
   - apiGroups:
-      - tenant.kubesphere.io
+      - tenant.d3os.io
     resources:
       - workspaces
       - workspacetemplates
@@ -561,15 +561,15 @@ rules:
       - 'GET'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"workspaces": "view"}'
-    kubesphere.io/alias-name: Workspaces View
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"workspaces": "view"}'
+    d3os.io/alias-name: Workspaces View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
     kubefed.io/managed: "true"
   name: role-template-view-workspaces
 rules:
@@ -671,9 +671,9 @@ rules:
       - list
       - watch
   - apiGroups:
-      - monitoring.kubesphere.io
+      - monitoring.d3os.io
       - monitoring.coreos.com
-      - metering.kubesphere.io
+      - metering.d3os.io
     resources:
       - '*'
     verbs:
@@ -688,16 +688,16 @@ rules:
       - list
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-workspaces"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"workspaces": "manage"}'
-    kubesphere.io/alias-name: Workspaces Management
+    iam.d3os.io/dependencies: '["role-template-view-workspaces"]'
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"workspaces": "manage"}'
+    d3os.io/alias-name: Workspaces Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-workspaces
 rules:
   - apiGroups:
@@ -803,15 +803,15 @@ rules:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"users": "view"}'
-    kubesphere.io/alias-name: Users View
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"users": "view"}'
+    d3os.io/alias-name: Users View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-users
 rules:
   - apiGroups:
@@ -825,16 +825,16 @@ rules:
       - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-users","role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"users": "manage"}'
-    kubesphere.io/alias-name: Users Management
+    iam.d3os.io/dependencies: '["role-template-view-users","role-template-view-roles"]'
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"users": "manage"}'
+    d3os.io/alias-name: Users Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-users
 rules:
   - apiGroups:
@@ -847,20 +847,20 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-users"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
-    kubesphere.io/alias-name: Roles View
+    iam.d3os.io/dependencies: '["role-template-view-users"]'
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"roles": "view"}'
+    d3os.io/alias-name: Roles View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-roles
 rules:
   - apiGroups:
-      - iam.kubesphere.io
+      - iam.d3os.io
     resources:
       - globalroles
     verbs:
@@ -869,16 +869,16 @@ rules:
       - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
-    kubesphere.io/alias-name: Roles Management
+    iam.d3os.io/dependencies: '["role-template-view-roles"]'
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"roles": "manage"}'
+    d3os.io/alias-name: Roles Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-roles
 rules:
   - apiGroups:
@@ -889,15 +889,15 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-templates": "view"}'
-    kubesphere.io/alias-name: App Templates View
+    iam.d3os.io/module: Apps Management
+    iam.d3os.io/role-template-rules: '{"app-templates": "view"}'
+    d3os.io/alias-name: App Templates View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-app-templates
 rules:
   - apiGroups:
@@ -911,16 +911,16 @@ rules:
       - list
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-templates"]'
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
-    kubesphere.io/alias-name: App Templates Management
+    iam.d3os.io/dependencies: '["role-template-view-app-templates"]'
+    iam.d3os.io/module: Apps Management
+    iam.d3os.io/role-template-rules: '{"app-templates": "manage"}'
+    d3os.io/alias-name: App Templates Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-app-templates
 rules:
   - apiGroups:
@@ -931,81 +931,81 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Platform Settings
-    iam.kubesphere.io/role-template-rules: '{"platform-settings": "manage"}'
-    kubesphere.io/alias-name: Platform Settings Management
+    iam.d3os.io/module: Platform Settings
+    iam.d3os.io/role-template-rules: '{"platform-settings": "manage"}'
+    d3os.io/alias-name: Platform Settings Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-platform-settings
 rules:
   - apiGroups:
-      - logging.kubesphere.io
+      - logging.d3os.io
     resources:
       - '*'
     verbs:
       - '*'
   - apiGroups:
-      - notification.kubesphere.io
+      - notification.d3os.io
     resources:
       - '*'
     verbs:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRoleBinding
 metadata:
   name: admin
 roleRef:
-  apiGroup: iam.kubesphere.io/v1alpha2
+  apiGroup: iam.d3os.io/v1alpha2
   kind: GlobalRole
   name: platform-admin
 subjects:
-  - apiGroup: iam.kubesphere.io/v1alpha2
+  - apiGroup: iam.d3os.io/v1alpha2
     kind: User
     name: admin
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRoleBinding
 metadata:
   name: anonymous
 roleRef:
-  apiGroup: iam.kubesphere.io/v1alpha2
+  apiGroup: iam.d3os.io/v1alpha2
   kind: GlobalRole
   name: anonymous
 subjects:
-  - apiGroup: iam.kubesphere.io/v1alpha2
+  - apiGroup: iam.d3os.io/v1alpha2
     kind: Group
     name: system:unauthenticated
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: GlobalRoleBinding
 metadata:
   name: authenticated
 roleRef:
-  apiGroup: iam.kubesphere.io/v1alpha2
+  apiGroup: iam.d3os.io/v1alpha2
   kind: GlobalRole
   name: authenticated
 subjects:
-  - apiGroup: iam.kubesphere.io/v1alpha2
+  - apiGroup: iam.d3os.io/v1alpha2
     kind: Group
     name: system:authenticated
 
 ---
-apiVersion: tenant.kubesphere.io/v1alpha2
+apiVersion: tenant.d3os.io/v1alpha2
 kind: WorkspaceTemplate
 metadata:
   labels:
     kubefed.io/managed: "false"
   annotations:
-    kubesphere.io/creator: admin
-    kubesphere.io/description: "system-workspace is a built-in workspace automatically created by KubeSphere. It contains all system components to run KubeSphere."
+    d3os.io/creator: admin
+    d3os.io/description: "system-workspace is a built-in workspace automatically created by d3os. It contains all system components to run d3os."
   name: system-workspace
 spec:
   placement:
@@ -1015,27 +1015,27 @@ spec:
       manager: admin
       networkIsolation: false
 ---
-apiVersion: tenant.kubesphere.io/v1alpha1
+apiVersion: tenant.d3os.io/v1alpha1
 kind: Workspace
 metadata:
   labels:
     kubefed.io/managed: "false"
   annotations:
-    kubesphere.io/creator: admin
+    d3os.io/creator: admin
   name: system-workspace
 spec:
   manager: admin
   networkIsolation: false
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Projects Management
-    iam.kubesphere.io/role-template-rules: '{"projects": "view"}'
-    kubesphere.io/alias-name: Projects View
+    iam.d3os.io/module: Projects Management
+    iam.d3os.io/role-template-rules: '{"projects": "view"}'
+    d3os.io/alias-name: Projects View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-projects
 rules:
   - apiGroups:
@@ -1107,18 +1107,18 @@ rules:
       - list
       - watch
   - apiGroups:
-      - metering.kubesphere.io
+      - metering.d3os.io
       - apps
       - extensions
       - batch
-      - logging.kubesphere.io
-      - monitoring.kubesphere.io
+      - logging.d3os.io
+      - monitoring.d3os.io
       - monitoring.coreos.com
       - autoscaling
       - app.k8s.io
-      - servicemesh.kubesphere.io
-      - operations.kubesphere.io
-      - resources.kubesphere.io
+      - servicemesh.d3os.io
+      - operations.d3os.io
+      - resources.d3os.io
     resources:
       - '*'
     verbs:
@@ -1127,15 +1127,15 @@ rules:
       - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Projects Management
-    iam.kubesphere.io/role-template-rules: '{"projects": "create"}'
-    kubesphere.io/alias-name: Projects Create
+    iam.d3os.io/module: Projects Management
+    iam.d3os.io/role-template-rules: '{"projects": "create"}'
+    d3os.io/alias-name: Projects Create
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-create-projects
 rules:
   - apiGroups:
@@ -1160,31 +1160,31 @@ rules:
       - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects","role-template-view-members","role-template-create-projects"]'
-    iam.kubesphere.io/module: Projects Management
-    iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
-    kubesphere.io/alias-name: Projects Management
+    iam.d3os.io/dependencies: '["role-template-view-projects","role-template-view-members","role-template-create-projects"]'
+    iam.d3os.io/module: Projects Management
+    iam.d3os.io/role-template-rules: '{"projects": "manage"}'
+    d3os.io/alias-name: Projects Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-projects
 rules:
   - apiGroups:
       - apps
       - extensions
       - batch
-      - logging.kubesphere.io
-      - monitoring.kubesphere.io
-      - metering.kubesphere.io
+      - logging.d3os.io
+      - monitoring.d3os.io
+      - metering.d3os.io
       - monitoring.coreos.com
       - autoscaling
       - app.k8s.io
-      - servicemesh.kubesphere.io
-      - operations.kubesphere.io
-      - resources.kubesphere.io
+      - servicemesh.d3os.io
+      - operations.d3os.io
+      - resources.d3os.io
     resources:
       - "*"
     verbs:
@@ -1258,15 +1258,15 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: DevOps Management
-    iam.kubesphere.io/role-template-rules: '{"devops": "view"}'
-    kubesphere.io/alias-name: DevOps View
+    iam.d3os.io/module: DevOps Management
+    iam.d3os.io/role-template-rules: '{"devops": "view"}'
+    d3os.io/alias-name: DevOps View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-devops
 rules:
   - apiGroups:
@@ -1292,15 +1292,15 @@ rules:
       - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: DevOps Management
-    iam.kubesphere.io/role-template-rules: '{"devops": "create"}'
-    kubesphere.io/alias-name: DevOps Create
+    iam.d3os.io/module: DevOps Management
+    iam.d3os.io/role-template-rules: '{"devops": "create"}'
+    d3os.io/alias-name: DevOps Create
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-create-devops
 rules:
   - apiGroups:
@@ -1313,16 +1313,16 @@ rules:
       - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-devops","role-template-view-members","role-template-create-devops"]'
-    iam.kubesphere.io/module: DevOps Management
-    iam.kubesphere.io/role-template-rules: '{"devops": "manage"}'
-    kubesphere.io/alias-name: DevOps Management
+    iam.d3os.io/dependencies: '["role-template-view-devops","role-template-view-members","role-template-create-devops"]'
+    iam.d3os.io/module: DevOps Management
+    iam.d3os.io/role-template-rules: '{"devops": "manage"}'
+    d3os.io/alias-name: DevOps Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-devops
 rules:
   - apiGroups:
@@ -1346,15 +1346,15 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-repos": "view"}'
-    kubesphere.io/alias-name: Workspace App Repos View
+    iam.d3os.io/module: Apps Management
+    iam.d3os.io/role-template-rules: '{"app-repos": "view"}'
+    d3os.io/alias-name: Workspace App Repos View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-app-repos
 rules:
   - apiGroups:
@@ -1368,16 +1368,16 @@ rules:
       - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-repos"]'
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-repos": "manage"}'
-    kubesphere.io/alias-name: Workspace App Repos Management
+    iam.d3os.io/dependencies: '["role-template-view-app-repos"]'
+    iam.d3os.io/module: Apps Management
+    iam.d3os.io/role-template-rules: '{"app-repos": "manage"}'
+    d3os.io/alias-name: Workspace App Repos Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-app-repos
 rules:
   - apiGroups:
@@ -1392,15 +1392,15 @@ rules:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-templates": "view"}'
-    kubesphere.io/alias-name: Workspace App Templates View
+    iam.d3os.io/module: Apps Management
+    iam.d3os.io/role-template-rules: '{"app-templates": "view"}'
+    d3os.io/alias-name: Workspace App Templates View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-app-templates
 rules:
   - apiGroups:
@@ -1413,16 +1413,16 @@ rules:
       - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-templates"]'
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
-    kubesphere.io/alias-name: Workspace App Templates Management
+    iam.d3os.io/dependencies: '["role-template-view-app-templates"]'
+    iam.d3os.io/module: Apps Management
+    iam.d3os.io/role-template-rules: '{"app-templates": "manage"}'
+    d3os.io/alias-name: Workspace App Templates Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-app-templates
 rules:
   - apiGroups:
@@ -1433,16 +1433,16 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-members"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
-    kubesphere.io/alias-name: Workspace Roles View
+    iam.d3os.io/dependencies: '["role-template-view-members"]'
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"roles": "view"}'
+    d3os.io/alias-name: Workspace Roles View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-roles
 rules:
   - apiGroups:
@@ -1456,16 +1456,16 @@ rules:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
-    kubesphere.io/alias-name: Workspace Roles Management
+    iam.d3os.io/dependencies: '["role-template-view-roles"]'
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"roles": "manage"}'
+    d3os.io/alias-name: Workspace Roles Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-roles
 rules:
   - apiGroups:
@@ -1476,15 +1476,15 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"members": "view"}'
-    kubesphere.io/alias-name: Workspace Members View
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"members": "view"}'
+    d3os.io/alias-name: Workspace Members View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-members
 rules:
   - apiGroups:
@@ -1498,16 +1498,16 @@ rules:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
-    kubesphere.io/alias-name: Workspace Members Management
+    iam.d3os.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"members": "manage"}'
+    d3os.io/alias-name: Workspace Members Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-members
 rules:
   - apiGroups:
@@ -1526,13 +1526,13 @@ rules:
       - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+    iam.d3os.io/role-template-rules: '{"basic": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-basic
 rules:
   - apiGroups:
@@ -1542,8 +1542,8 @@ rules:
     verbs:
       - get
   - apiGroups:
-      - monitoring.kubesphere.io
-      - metering.kubesphere.io
+      - monitoring.d3os.io
+      - metering.d3os.io
       - monitoring.coreos.com
     resources:
       - namespaces
@@ -1558,22 +1558,22 @@ rules:
     verbs:
       - watch
   - apiGroups:
-      - iam.kubesphere.io
+      - iam.d3os.io
     resources:
       - workspacemembers
     verbs:
       - list
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Workspace Settings
-    iam.kubesphere.io/role-template-rules: '{"workspace-settings": "manage"}'
-    kubesphere.io/alias-name: Workspace Settings Management
+    iam.d3os.io/module: Workspace Settings
+    iam.d3os.io/role-template-rules: '{"workspace-settings": "manage"}'
+    d3os.io/alias-name: Workspace Settings Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-workspace-settings
 rules:
   - apiGroups:
@@ -1584,15 +1584,15 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Workspace Settings
-    iam.kubesphere.io/role-template-rules: '{"workspace-settings": "view"}'
-    kubesphere.io/alias-name: Workspace Settings View
+    iam.d3os.io/module: Workspace Settings
+    iam.d3os.io/role-template-rules: '{"workspace-settings": "view"}'
+    d3os.io/alias-name: Workspace Settings View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-workspace-settings
 rules:
   - apiGroups:
@@ -1605,16 +1605,16 @@ rules:
       - 'watch'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-groups","role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"groups": "manage"}'
-    kubesphere.io/alias-name: Workspace Groups Management
+    iam.d3os.io/dependencies: '["role-template-view-groups","role-template-view-roles"]'
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"groups": "manage"}'
+    d3os.io/alias-name: Workspace Groups Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-groups
 rules:
   - apiGroups:
@@ -1628,16 +1628,16 @@ rules:
       - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"groups": "view"}'
-    kubesphere.io/alias-name: Workspace Groups View
+    iam.d3os.io/dependencies: '["role-template-view-roles"]'
+    iam.d3os.io/module: Access Control
+    iam.d3os.io/role-template-rules: '{"groups": "view"}'
+    d3os.io/alias-name: Workspace Groups View
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-groups
 rules:
   - apiGroups:
@@ -1659,11 +1659,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Cluster Resources Management
-    kubesphere.io/alias-name: CRD Management
-    iam.kubesphere.io/role-template-rules: '{"customresources": "manage"}'
+    iam.d3os.io/module: Cluster Resources Management
+    d3os.io/alias-name: CRD Management
+    iam.d3os.io/role-template-rules: '{"customresources": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-crds
 rules: []
 
@@ -1672,12 +1672,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '[role-template-view-alerting-messages"]'
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Alerting Messages Management
-    iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
+    iam.d3os.io/dependencies: '[role-template-view-alerting-messages"]'
+    iam.d3os.io/module: Monitoring & Alerting
+    d3os.io/alias-name: Alerting Messages Management
+    iam.d3os.io/role-template-rules: '{"alerts": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-alerting-messages
 rules: []
 
@@ -1686,12 +1686,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies", "role-template-view-alerting-messages"]'
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Alerting Policies Management
-    iam.kubesphere.io/role-template-rules: '{"alert-rules": "manage"}'
+    iam.d3os.io/dependencies: '["role-template-view-alerting-policies", "role-template-view-alerting-messages"]'
+    iam.d3os.io/module: Monitoring & Alerting
+    d3os.io/alias-name: Alerting Policies Management
+    iam.d3os.io/role-template-rules: '{"alert-rules": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-alerting-policies
 rules: []
 
@@ -1700,12 +1700,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-workloads", "role-template-view-projects"]'
-    iam.kubesphere.io/module: Project Resources Management
-    kubesphere.io/alias-name: Application Workloads Management
-    iam.kubesphere.io/role-template-rules: '{"deployments": "manage", "statefulsets": "manage", "daemonsets": "manage", "jobs": "manage", "cronjobs": "manage", "pods": "manage", "services": "manage", "ingresses": "manage"}'
+    iam.d3os.io/dependencies: '["role-template-view-app-workloads", "role-template-view-projects"]'
+    iam.d3os.io/module: Project Resources Management
+    d3os.io/alias-name: Application Workloads Management
+    iam.d3os.io/role-template-rules: '{"deployments": "manage", "statefulsets": "manage", "daemonsets": "manage", "jobs": "manage", "cronjobs": "manage", "pods": "manage", "services": "manage", "ingresses": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-app-workloads
 rules: []
 
@@ -1714,11 +1714,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Cluster Settings
-    kubesphere.io/alias-name: Cluster Settings
-    iam.kubesphere.io/role-template-rules: '{"cluster-settings": "manage"}'
+    iam.d3os.io/module: Cluster Settings
+    d3os.io/alias-name: Cluster Settings
+    iam.d3os.io/role-template-rules: '{"cluster-settings": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-cluster-settings
 rules: []
 
@@ -1727,11 +1727,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Cluster Resources Management
-    kubesphere.io/alias-name: Components Management
-    iam.kubesphere.io/role-template-rules: '{"components": "manage"}'
+    iam.d3os.io/module: Cluster Resources Management
+    d3os.io/alias-name: Components Management
+    iam.d3os.io/role-template-rules: '{"components": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-components
 rules: []
 
@@ -1740,12 +1740,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles", "role-template-view-members"]'
-    iam.kubesphere.io/module: Access Control
-    kubesphere.io/alias-name: Cluster Members Management
-    iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
+    iam.d3os.io/dependencies: '["role-template-view-roles", "role-template-view-members"]'
+    iam.d3os.io/module: Access Control
+    d3os.io/alias-name: Cluster Members Management
+    iam.d3os.io/role-template-rules: '{"members": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-members
 rules: []
 
@@ -1754,12 +1754,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-network-policies"]'
-    iam.kubesphere.io/module: Network Management
-    kubesphere.io/alias-name: Network Policies Management
-    iam.kubesphere.io/role-template-rules: '{"networkpolicies": "manage"}'
+    iam.d3os.io/dependencies: '["role-template-view-network-policies"]'
+    iam.d3os.io/module: Network Management
+    d3os.io/alias-name: Network Policies Management
+    iam.d3os.io/role-template-rules: '{"networkpolicies": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-network-policies
 rules: []
 
@@ -1768,12 +1768,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-nodes"]'
-    iam.kubesphere.io/module: Cluster Resources Management
-    kubesphere.io/alias-name: Nodes Management
-    iam.kubesphere.io/role-template-rules: '{"nodes": "manage"}'
+    iam.d3os.io/dependencies: '["role-template-view-nodes"]'
+    iam.d3os.io/module: Cluster Resources Management
+    d3os.io/alias-name: Nodes Management
+    iam.d3os.io/role-template-rules: '{"nodes": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-nodes
 rules: []
 
@@ -1782,12 +1782,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
-    iam.kubesphere.io/module: Project Resources Management
-    kubesphere.io/alias-name: Projects Management
-    iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
+    iam.d3os.io/dependencies: '["role-template-view-projects"]'
+    iam.d3os.io/module: Project Resources Management
+    d3os.io/alias-name: Projects Management
+    iam.d3os.io/role-template-rules: '{"projects": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-projects
 rules: []
 
@@ -1796,12 +1796,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
-    kubesphere.io/alias-name: Cluster Roles Management
-    iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+    iam.d3os.io/dependencies: '["role-template-view-roles"]'
+    iam.d3os.io/module: Access Control
+    d3os.io/alias-name: Cluster Roles Management
+    iam.d3os.io/role-template-rules: '{"roles": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-roles
 rules: []
 
@@ -1810,12 +1810,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: StorageClasses Management
-    iam.kubesphere.io/role-template-rules: '{"storageclasses": "manage"}'
+    iam.d3os.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
+    iam.d3os.io/module: Storage Management
+    d3os.io/alias-name: StorageClasses Management
+    iam.d3os.io/role-template-rules: '{"storageclasses": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-storageclasses
 rules: []
 
@@ -1824,12 +1824,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: Volumes Management
-    iam.kubesphere.io/role-template-rules: '{"volumes": "manage"}'
+    iam.d3os.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
+    iam.d3os.io/module: Storage Management
+    d3os.io/alias-name: Volumes Management
+    iam.d3os.io/role-template-rules: '{"volumes": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-manage-volumes
 rules: []
 
@@ -1838,11 +1838,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Alerting Messages View
-    iam.kubesphere.io/role-template-rules: '{"alerts": "view"}'
+    iam.d3os.io/module: Monitoring & Alerting
+    d3os.io/alias-name: Alerting Messages View
+    iam.d3os.io/role-template-rules: '{"alerts": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-alerting-messages
 rules: []
 
@@ -1851,12 +1851,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Alerting Policies View
-    iam.kubesphere.io/role-template-rules: '{"alert-rules": "view"}'
+    iam.d3os.io/dependencies: '["role-template-view-alerting-messages"]'
+    iam.d3os.io/module: Monitoring & Alerting
+    d3os.io/alias-name: Alerting Policies View
+    iam.d3os.io/role-template-rules: '{"alert-rules": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-alerting-policies
 rules: []
 
@@ -1865,12 +1865,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
-    iam.kubesphere.io/module: Project Resources Management
-    kubesphere.io/alias-name: Application Workloads View
-    iam.kubesphere.io/role-template-rules: '{"deployments": "view", "statefulsets": "view", "daemonsets": "view", "jobs": "view", "cronjobs": "view", "pods": "view", "services": "view", "ingresses": "view"}'
+    iam.d3os.io/dependencies: '["role-template-view-projects"]'
+    iam.d3os.io/module: Project Resources Management
+    d3os.io/alias-name: Application Workloads View
+    iam.d3os.io/role-template-rules: '{"deployments": "view", "statefulsets": "view", "daemonsets": "view", "jobs": "view", "cronjobs": "view", "pods": "view", "services": "view", "ingresses": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-app-workloads
 rules: []
 
@@ -1879,11 +1879,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Cluster Monitoring View
-    iam.kubesphere.io/role-template-rules: '{"monitoring": "view"}'
+    iam.d3os.io/module: Monitoring & Alerting
+    d3os.io/alias-name: Cluster Monitoring View
+    iam.d3os.io/role-template-rules: '{"monitoring": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-cluster-monitoring
 rules: []
 
@@ -1892,11 +1892,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Access Control
-    kubesphere.io/alias-name: Cluster Members View
-    iam.kubesphere.io/role-template-rules: '{"members": "view"}'
+    iam.d3os.io/module: Access Control
+    d3os.io/alias-name: Cluster Members View
+    iam.d3os.io/role-template-rules: '{"members": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-members
 rules: []
 
@@ -1905,11 +1905,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Network Management
-    kubesphere.io/alias-name: Network Policies View
-    iam.kubesphere.io/role-template-rules: '{"networkpolicies": "view"}'
+    iam.d3os.io/module: Network Management
+    d3os.io/alias-name: Network Policies View
+    iam.d3os.io/role-template-rules: '{"networkpolicies": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-network-policies
 rules: []
 
@@ -1918,11 +1918,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Cluster Resources Management
-    kubesphere.io/alias-name: Nodes View
-    iam.kubesphere.io/role-template-rules: '{"nodes": "view"}'
+    iam.d3os.io/module: Cluster Resources Management
+    d3os.io/alias-name: Nodes View
+    iam.d3os.io/role-template-rules: '{"nodes": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-nodes
 rules: []
 
@@ -1931,11 +1931,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Project Resources Management
-    kubesphere.io/alias-name: Projects View
-    iam.kubesphere.io/role-template-rules: '{"projects": "view"}'
+    iam.d3os.io/module: Project Resources Management
+    d3os.io/alias-name: Projects View
+    iam.d3os.io/role-template-rules: '{"projects": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-projects
 rules: []
 
@@ -1944,12 +1944,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-members"]'
-    iam.kubesphere.io/module: Access Control
-    kubesphere.io/alias-name: Cluster Roles View
-    iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
+    iam.d3os.io/dependencies: '["role-template-view-members"]'
+    iam.d3os.io/module: Access Control
+    d3os.io/alias-name: Cluster Roles View
+    iam.d3os.io/role-template-rules: '{"roles": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-roles
 rules: []
 
@@ -1958,12 +1958,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: StorageClasses View
-    iam.kubesphere.io/role-template-rules: '{"storageclasses": "view"}'
+    iam.d3os.io/dependencies: '["role-template-view-volumes"]'
+    iam.d3os.io/module: Storage Management
+    d3os.io/alias-name: StorageClasses View
+    iam.d3os.io/role-template-rules: '{"storageclasses": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-storageclasses
 rules: []
 
@@ -1972,12 +1972,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: Volume Snapshots View
-    iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "view"}'
+    iam.d3os.io/dependencies: '["role-template-view-volumes"]'
+    iam.d3os.io/module: Storage Management
+    d3os.io/alias-name: Volume Snapshots View
+    iam.d3os.io/role-template-rules: '{"volume-snapshots": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-volume-snapshots
 rules: []
 
@@ -1986,26 +1986,26 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: Volumes View
-    iam.kubesphere.io/role-template-rules: '{"volumes": "view"}'
+    iam.d3os.io/module: Storage Management
+    d3os.io/alias-name: Volumes View
+    iam.d3os.io/role-template-rules: '{"volumes": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.d3os.io/role-template: "true"
   name: role-template-view-volumes
 rules: []
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: workspace-admin
 role:
-  apiVersion: iam.kubesphere.io/v1alpha2
+  apiVersion: iam.d3os.io/v1alpha2
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-manage-workspace-settings","role-template-view-workspace-settings","role-template-manage-projects","role-template-view-projects","role-template-create-projects","role-template-create-devops","role-template-view-devops","role-template-manage-devops","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-app-repos","role-template-view-app-repos","role-template-view-members","role-template-manage-members","role-template-manage-roles","role-template-view-roles","role-template-manage-groups","role-template-view-groups"]'
-      kubesphere.io/creator: system
+      iam.d3os.io/aggregation-roles: '["role-template-manage-workspace-settings","role-template-view-workspace-settings","role-template-manage-projects","role-template-view-projects","role-template-create-projects","role-template-create-devops","role-template-view-devops","role-template-manage-devops","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-app-repos","role-template-view-app-repos","role-template-view-members","role-template-manage-members","role-template-manage-roles","role-template-view-roles","role-template-manage-groups","role-template-view-groups"]'
+      d3os.io/creator: system
     name: admin
   rules:
     - apiGroups:
@@ -2016,17 +2016,17 @@ role:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: workspace-viewer
 role:
-  apiVersion: iam.kubesphere.io/v1alpha2
+  apiVersion: iam.d3os.io/v1alpha2
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-projects","role-template-view-devops","role-template-view-app-templates","role-template-view-app-repos","role-template-view-members","role-template-view-roles","role-template-view-groups","role-template-view-workspace-settings"]'
-      kubesphere.io/creator: system
+      iam.d3os.io/aggregation-roles: '["role-template-view-projects","role-template-view-devops","role-template-view-app-templates","role-template-view-app-repos","role-template-view-members","role-template-view-roles","role-template-view-groups","role-template-view-workspace-settings"]'
+      d3os.io/creator: system
     name: viewer
   rules:
     - apiGroups:
@@ -2039,17 +2039,17 @@ role:
         - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: workspace-regular
 role:
-  apiVersion: iam.kubesphere.io/v1alpha2
+  apiVersion: iam.d3os.io/v1alpha2
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-workspace-settings"]'
-      kubesphere.io/creator: system
+      iam.d3os.io/aggregation-roles: '["role-template-view-workspace-settings"]'
+      d3os.io/creator: system
     name: regular
   rules:
     - apiGroups:
@@ -2062,8 +2062,8 @@ role:
         - list
         - watch
     - apiGroups:
-        - monitoring.kubesphere.io
-        - metering.kubesphere.io
+        - monitoring.d3os.io
+        - metering.d3os.io
         - monitoring.coreos.com
       resources:
         - namespaces
@@ -2071,17 +2071,17 @@ role:
         - list
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: workspace-self-provisioner
 role:
-  apiVersion: iam.kubesphere.io/v1alpha2
+  apiVersion: iam.d3os.io/v1alpha2
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-create-projects","role-template-create-devops","role-template-view-app-templates","role-template-manage-app-templates","role-template-view-workspace-settings"]'
-      kubesphere.io/creator: system
+      iam.d3os.io/aggregation-roles: '["role-template-create-projects","role-template-create-devops","role-template-view-app-templates","role-template-manage-app-templates","role-template-view-workspace-settings"]'
+      d3os.io/creator: system
     name: self-provisioner
   rules:
     - apiGroups:
@@ -2107,8 +2107,8 @@ role:
         - create
         - watch
     - apiGroups:
-        - monitoring.kubesphere.io
-        - metering.kubesphere.io
+        - monitoring.d3os.io
+        - metering.d3os.io
         - monitoring.coreos.com
       resources:
         - namespaces
@@ -2124,19 +2124,19 @@ role:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: project-admin
   labels:
-    scope.kubesphere.io/namespace: ""
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/namespace: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members",
+      iam.d3os.io/aggregation-roles: '["role-template-view-members","role-template-manage-members",
         "role-template-view-roles","role-template-manage-roles",
         "role-template-view-app-workloads","role-template-manage-app-workloads",
         "role-template-view-volumes","role-template-manage-volumes",
@@ -2150,7 +2150,7 @@ role:
         "role-template-view-pipelines","role-template-manage-pipelines",
         "role-template-view-credentials","role-template-manage-credentials",
         "role-template-manage-project-settings","role-template-manage-devops-settings"]'
-      kubesphere.io/creator: system
+      d3os.io/creator: system
     name: admin
   rules:
     - apiGroups:
@@ -2161,19 +2161,19 @@ role:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: project-operator
   labels:
-    scope.kubesphere.io/namespace: ""
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/namespace: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-roles",
+      iam.d3os.io/aggregation-roles: '["role-template-view-members","role-template-view-roles",
         "role-template-view-app-workloads","role-template-manage-app-workloads",
         "role-template-view-volumes","role-template-manage-volumes",
         "role-template-view-snapshots","role-template-manage-snapshots",
@@ -2185,7 +2185,7 @@ role:
         "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
         "role-template-view-pipelines","role-template-manage-pipelines",
         "role-template-view-credentials","role-template-manage-credentials"]'
-      kubesphere.io/creator: system
+      d3os.io/creator: system
     name: operator
   rules:
     - apiGroups:
@@ -2201,22 +2201,22 @@ role:
         - apps
         - extensions
         - batch
-        - logging.kubesphere.io
-        - monitoring.kubesphere.io
+        - logging.d3os.io
+        - monitoring.d3os.io
         - monitoring.coreos.com
-        - metering.kubesphere.io
-        - notification.kubesphere.io
+        - metering.d3os.io
+        - notification.d3os.io
         - autoscaling
-        - alerting.kubesphere.io
+        - alerting.d3os.io
         - openpitrix.io
         - app.k8s.io
-        - servicemesh.kubesphere.io
-        - operations.kubesphere.io
-        - devops.kubesphere.io
-        - resources.kubesphere.io
+        - servicemesh.d3os.io
+        - operations.d3os.io
+        - devops.d3os.io
+        - resources.d3os.io
         - config.istio.io
         - events.k8s.io
-        - events.kubesphere.io
+        - events.d3os.io
         - snapshot.storage.k8s.io
         - monitoring.coreos.com
       resources:
@@ -2225,25 +2225,25 @@ role:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: project-viewer
   labels:
-    scope.kubesphere.io/namespace: ""
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/namespace: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-roles",
+      iam.d3os.io/aggregation-roles: '["role-template-view-members","role-template-view-roles",
         "role-template-view-app-workloads","role-template-view-custom-monitoring",
         "role-template-view-volumes","role-template-view-snapshots",
         "role-template-view-secrets","role-template-view-configmaps","role-template-view-serviceaccount",
         "role-template-view-alerting-policies","role-template-view-alerting-messages",
         "role-template-view-pipelines","role-template-view-credentials"]'
-      kubesphere.io/creator: system
+      d3os.io/creator: system
     name: viewer
   rules:
     - apiGroups:
@@ -2257,26 +2257,26 @@ role:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-alerting-messages
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alerts": "view"}'
-      kubesphere.io/alias-name: Alerting Messages View
+      iam.d3os.io/module: Monitoring & Alerting
+      iam.d3os.io/role-template-rules: '{"alerts": "view"}'
+      d3os.io/alias-name: Alerting Messages View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-alerting-messages
   rules:
     - apiGroups:
-        - 'alerting.kubesphere.io'
+        - 'alerting.d3os.io'
       resources:
         - '*'
       verbs:
@@ -2285,53 +2285,53 @@ role:
         - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-alerting-messages
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
-      kubesphere.io/alias-name: Alerting Messages Management
+      iam.d3os.io/dependencies: '["role-template-view-alerting-messages"]'
+      iam.d3os.io/module: Monitoring & Alerting
+      iam.d3os.io/role-template-rules: '{"alerts": "manage"}'
+      d3os.io/alias-name: Alerting Messages Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-alerting-messages
   rules:
     - apiGroups:
-        - 'alerting.kubesphere.io'
+        - 'alerting.d3os.io'
       resources:
         - '*'
       verbs:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-alerting-policies
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alert-rules": "view"}'
-      kubesphere.io/alias-name: Alerting Policies View
+      iam.d3os.io/module: Monitoring & Alerting
+      iam.d3os.io/role-template-rules: '{"alert-rules": "view"}'
+      d3os.io/alias-name: Alerting Policies View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-alerting-policies
   rules:
     - apiGroups:
-        - 'alerting.kubesphere.io'
+        - 'alerting.d3os.io'
       resources:
         - '*'
       verbs:
@@ -2339,61 +2339,61 @@ role:
         - list
         - watch
     - apiGroups:
-        - 'resources.kubesphere.io'
+        - 'resources.d3os.io'
       resources:
         - '*'
       verbs:
         - list
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-alerting-policies
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies"]'
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alert-rules": "manage"}'
-      kubesphere.io/alias-name: Alerting Policies Management
+      iam.d3os.io/dependencies: '["role-template-view-alerting-policies"]'
+      iam.d3os.io/module: Monitoring & Alerting
+      iam.d3os.io/role-template-rules: '{"alert-rules": "manage"}'
+      d3os.io/alias-name: Alerting Policies Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-alerting-policies
   rules:
     - apiGroups:
-        - 'alerting.kubesphere.io'
+        - 'alerting.d3os.io'
       resources:
         - '*'
       verbs:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-custom-monitoring
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"custom-monitoring": "view"}'
-      kubesphere.io/alias-name: Custom Monitoring View
+      iam.d3os.io/module: Monitoring & Alerting
+      iam.d3os.io/role-template-rules: '{"custom-monitoring": "view"}'
+      d3os.io/alias-name: Custom Monitoring View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-custom-monitoring
   rules:
     - apiGroups:
-        - 'monitoring.kubesphere.io'
-        - 'metering.kubesphere.io'
+        - 'monitoring.d3os.io'
+        - 'metering.d3os.io'
         - 'monitoring.coreos.com'
       resources:
         - '*'
@@ -2403,28 +2403,28 @@ role:
         - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-custom-monitoring
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-custom-monitoring"]'
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"custom-monitoring": "manage"}'
-      kubesphere.io/alias-name: Custom Monitoring Management
+      iam.d3os.io/dependencies: '["role-template-view-custom-monitoring"]'
+      iam.d3os.io/module: Monitoring & Alerting
+      iam.d3os.io/role-template-rules: '{"custom-monitoring": "manage"}'
+      d3os.io/alias-name: Custom Monitoring Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-custom-monitoring
   rules:
     - apiGroups:
-        - 'monitoring.kubesphere.io'
-        - 'metering.kubesphere.io'
+        - 'monitoring.d3os.io'
+        - 'metering.d3os.io'
         - 'monitoring.coreos.com'
       resources:
         - '*'
@@ -2432,23 +2432,23 @@ role:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-members
   labels:
-    scope.kubesphere.io/namespace: ""
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/namespace: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Access Control
-      iam.kubesphere.io/role-template-rules: '{"members": "view"}'
-      kubesphere.io/alias-name: Project Members View
+      iam.d3os.io/module: Access Control
+      iam.d3os.io/role-template-rules: '{"members": "view"}'
+      d3os.io/alias-name: Project Members View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-members
   rules:
     - apiGroups:
@@ -2462,24 +2462,24 @@ role:
         - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-members
   labels:
-    scope.kubesphere.io/namespace: ""
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/namespace: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
-      iam.kubesphere.io/module: Access Control
-      iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
-      kubesphere.io/alias-name: Project Members Management
+      iam.d3os.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
+      iam.d3os.io/module: Access Control
+      iam.d3os.io/role-template-rules: '{"members": "manage"}'
+      d3os.io/alias-name: Project Members Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-members
   rules:
     - apiGroups:
@@ -2492,20 +2492,20 @@ role:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-namespace-basic
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+      iam.d3os.io/role-template-rules: '{"basic": "view"}'
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-basic
   rules:
     - apiGroups:
@@ -2523,20 +2523,20 @@ role:
         - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-devops-basic
   labels:
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+      iam.d3os.io/role-template-rules: '{"basic": "view"}'
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-basic
   rules:
     - apiGroups:
@@ -2550,22 +2550,22 @@ role:
         - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-project-settings
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Project Settings
-      iam.kubesphere.io/role-template-rules: '{"project-settings": "manage"}'
-      kubesphere.io/alias-name: Project Settings
+      iam.d3os.io/module: Project Settings
+      iam.d3os.io/role-template-rules: '{"project-settings": "manage"}'
+      d3os.io/alias-name: Project Settings
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-project-settings
   rules:
     - apiGroups:
@@ -2576,24 +2576,24 @@ role:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-roles
   labels:
-    scope.kubesphere.io/namespace: ""
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/namespace: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-members"]'
-      iam.kubesphere.io/module: Access Control
-      iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
-      kubesphere.io/alias-name: Project Roles View
+      iam.d3os.io/dependencies: '["role-template-view-members"]'
+      iam.d3os.io/module: Access Control
+      iam.d3os.io/role-template-rules: '{"roles": "view"}'
+      d3os.io/alias-name: Project Roles View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-roles
   rules:
     - apiGroups:
@@ -2606,24 +2606,24 @@ role:
         - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-roles
   labels:
-    scope.kubesphere.io/namespace: ""
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/namespace: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-      iam.kubesphere.io/module: Access Control
-      iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
-      kubesphere.io/alias-name: Project Roles Management
+      iam.d3os.io/dependencies: '["role-template-view-roles"]'
+      iam.d3os.io/module: Access Control
+      iam.d3os.io/role-template-rules: '{"roles": "manage"}'
+      d3os.io/alias-name: Project Roles Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-roles
   rules:
     - apiGroups:
@@ -2634,31 +2634,31 @@ role:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-app-workloads
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-view-secrets","role-template-view-configmaps"]'
-      iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"applications":"view","deployments":"view","statefulsets":"view",
+      iam.d3os.io/dependencies: '["role-template-view-volumes","role-template-view-secrets","role-template-view-configmaps"]'
+      iam.d3os.io/module: Application Workloads
+      iam.d3os.io/role-template-rules: '{"applications":"view","deployments":"view","statefulsets":"view",
         "daemonsets":"view","jobs":"view","cronjobs":"view","pods":"view","services":"view","ingresses":"view"}'
-      kubesphere.io/alias-name: Application Workloads View
+      d3os.io/alias-name: Application Workloads View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-app-workloads
   rules:
     - apiGroups:
-        - 'monitoring.kubesphere.io'
-        - 'metering.kubesphere.io'
+        - 'monitoring.d3os.io'
+        - 'metering.d3os.io'
         - 'monitoring.coreos.com'
-        - 'servicemesh.kubesphere.io'
+        - 'servicemesh.d3os.io'
       resources:
         - '*'
       verbs:
@@ -2695,25 +2695,25 @@ role:
         - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-app-workloads
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-app-workloads"]'
-      iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"applications":"manage","deployments":"manage","statefulsets":"manage",
+      iam.d3os.io/dependencies: '["role-template-view-app-workloads"]'
+      iam.d3os.io/module: Application Workloads
+      iam.d3os.io/role-template-rules: '{"applications":"manage","deployments":"manage","statefulsets":"manage",
         "daemonsets":"manage","jobs":"manage","cronjobs":"manage","pods":"manage","services":"manage","ingresses":"manage",
         "s2ibuilders":"manage","grayscale-release": "manage"}'
-      kubesphere.io/alias-name: Application Workloads Management
+      d3os.io/alias-name: Application Workloads Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-app-workloads
   rules:
     - apiGroups:
@@ -2751,29 +2751,29 @@ role:
       verbs:
         - list
     - apiGroups:
-        - 'servicemesh.kubesphere.io'
+        - 'servicemesh.d3os.io'
       resources:
         - '*'
       verbs:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-configmaps
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"configmaps": "view"}'
-      kubesphere.io/alias-name: ConfigMaps View
+      iam.d3os.io/module: Configuration Center
+      iam.d3os.io/role-template-rules: '{"configmaps": "view"}'
+      d3os.io/alias-name: ConfigMaps View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-configmaps
   rules:
     - apiGroups:
@@ -2787,23 +2787,23 @@ role:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-configmaps
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-configmaps"]'
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"configmaps": "manage"}'
-      kubesphere.io/alias-name: ConfigMaps Management
+      iam.d3os.io/dependencies: '["role-template-view-configmaps"]'
+      iam.d3os.io/module: Configuration Center
+      iam.d3os.io/role-template-rules: '{"configmaps": "manage"}'
+      d3os.io/alias-name: ConfigMaps Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-configmaps
   rules:
     - apiGroups:
@@ -2814,22 +2814,22 @@ role:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-secrets
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"secrets": "view"}'
-      kubesphere.io/alias-name: Secrets View
+      iam.d3os.io/module: Configuration Center
+      iam.d3os.io/role-template-rules: '{"secrets": "view"}'
+      d3os.io/alias-name: Secrets View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-secrets
   rules:
     - apiGroups:
@@ -2843,23 +2843,23 @@ role:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-secrets
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-secrets"]'
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"secrets": "manage"}'
-      kubesphere.io/alias-name: Secrets Management
+      iam.d3os.io/dependencies: '["role-template-view-secrets"]'
+      iam.d3os.io/module: Configuration Center
+      iam.d3os.io/role-template-rules: '{"secrets": "manage"}'
+      d3os.io/alias-name: Secrets Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-secrets
   rules:
     - apiGroups:
@@ -2869,23 +2869,23 @@ role:
       verbs:
         - '*'
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-serviceaccount
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-roles","role-template-view-secrets"]'
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "view"}'
-      kubesphere.io/alias-name: ServiceAccount View
+      iam.d3os.io/dependencies: '["role-template-view-roles","role-template-view-secrets"]'
+      iam.d3os.io/module: Configuration Center
+      iam.d3os.io/role-template-rules: '{"serviceaccounts": "view"}'
+      d3os.io/alias-name: ServiceAccount View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-serviceaccount
   rules:
     - apiGroups:
@@ -2898,23 +2898,23 @@ role:
         - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-serviceaccount
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-serviceaccount"]'
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "manage"}'
-      kubesphere.io/alias-name: ServiceAccount Management
+      iam.d3os.io/dependencies: '["role-template-view-serviceaccount"]'
+      iam.d3os.io/module: Configuration Center
+      iam.d3os.io/role-template-rules: '{"serviceaccounts": "manage"}'
+      d3os.io/alias-name: ServiceAccount Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-serviceaccount
   rules:
     - apiGroups:
@@ -2924,23 +2924,23 @@ role:
       verbs:
         - '*'
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-volumes
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
-      iam.kubesphere.io/module: Storage Management
-      iam.kubesphere.io/role-template-rules: '{"volumes": "view"}'
-      kubesphere.io/alias-name: Volumes View
+      iam.d3os.io/dependencies: '["role-template-view-snapshots"]'
+      iam.d3os.io/module: Storage Management
+      iam.d3os.io/role-template-rules: '{"volumes": "view"}'
+      d3os.io/alias-name: Volumes View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-volumes
   rules:
     - apiGroups:
@@ -2959,23 +2959,23 @@ role:
         - 'list'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-volumes
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-manage-snapshots"]'
-      iam.kubesphere.io/module: Storage Management
-      iam.kubesphere.io/role-template-rules: '{"volumes": "manage"}'
-      kubesphere.io/alias-name: Volumes Management
+      iam.d3os.io/dependencies: '["role-template-view-volumes","role-template-manage-snapshots"]'
+      iam.d3os.io/module: Storage Management
+      iam.d3os.io/role-template-rules: '{"volumes": "manage"}'
+      d3os.io/alias-name: Volumes Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-volumes
   rules:
     - apiGroups:
@@ -2992,22 +2992,22 @@ role:
         - 'list'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-snapshots
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Storage Management
-      iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "view"}'
-      kubesphere.io/alias-name: Volume Snapshots View
+      iam.d3os.io/module: Storage Management
+      iam.d3os.io/role-template-rules: '{"volume-snapshots": "view"}'
+      d3os.io/alias-name: Volume Snapshots View
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-snapshots
   rules:
     - apiGroups:
@@ -3020,23 +3020,23 @@ role:
         - watch
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-snapshots
   labels:
-    scope.kubesphere.io/namespace: ""
+    scope.d3os.io/namespace: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
-      iam.kubesphere.io/module: Storage Management
-      iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "manage"}'
-      kubesphere.io/alias-name: Volume Snapshots Management
+      iam.d3os.io/dependencies: '["role-template-view-snapshots"]'
+      iam.d3os.io/module: Storage Management
+      iam.d3os.io/role-template-rules: '{"volume-snapshots": "manage"}'
+      d3os.io/alias-name: Volume Snapshots Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-snapshots
   rules:
     - apiGroups:
@@ -3047,23 +3047,23 @@ role:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-credentials
   labels:
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-credentials"]'
-      iam.kubesphere.io/module: Credentials Management
-      kubesphere.io/alias-name: Credentials Management
-      iam.kubesphere.io/role-template-rules: '{"credentials": "manage"}'
+      iam.d3os.io/dependencies: '["role-template-view-credentials"]'
+      iam.d3os.io/module: Credentials Management
+      d3os.io/alias-name: Credentials Management
+      iam.d3os.io/role-template-rules: '{"credentials": "manage"}'
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-credentials
   rules:
     - apiGroups:
@@ -3075,23 +3075,23 @@ role:
         - '*'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-pipelines
   labels:
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-view-credentials"]'
-      iam.kubesphere.io/module: Pipelines Management
-      kubesphere.io/alias-name: Pipelines Management
-      iam.kubesphere.io/role-template-rules: '{"pipelines": "manage"}'
+      iam.d3os.io/dependencies: '["role-template-view-pipelines", "role-template-view-credentials"]'
+      iam.d3os.io/module: Pipelines Management
+      d3os.io/alias-name: Pipelines Management
+      iam.d3os.io/role-template-rules: '{"pipelines": "manage"}'
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-pipelines
   rules:
     - apiGroups:
@@ -3109,22 +3109,22 @@ role:
 
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-credentials
   labels:
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Credentials Management
-      kubesphere.io/alias-name: Credentials View
-      iam.kubesphere.io/role-template-rules: '{"credentials": "view"}'
+      iam.d3os.io/module: Credentials Management
+      d3os.io/alias-name: Credentials View
+      iam.d3os.io/role-template-rules: '{"credentials": "view"}'
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-credentials
   rules:
     - apiGroups:
@@ -3138,22 +3138,22 @@ role:
         - 'watch'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-view-pipelines
   labels:
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Pipelines Management
-      kubesphere.io/alias-name: Pipelines View
-      iam.kubesphere.io/role-template-rules: '{"pipelines": "view"}'
+      iam.d3os.io/module: Pipelines Management
+      d3os.io/alias-name: Pipelines View
+      iam.d3os.io/role-template-rules: '{"pipelines": "view"}'
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-view-pipelines
   rules:
     - apiGroups:
@@ -3172,22 +3172,22 @@ role:
         - 'watch'
 
 ---
-apiVersion: iam.kubesphere.io/v1alpha2
+apiVersion: iam.d3os.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-devops-settings
   labels:
-    scope.kubesphere.io/devops: ""
+    scope.d3os.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: DevOps Settings
-      kubesphere.io/alias-name: DevOps Settings
-      iam.kubesphere.io/role-template-rules: '{"devops-settings": "manage"}'
+      iam.d3os.io/module: DevOps Settings
+      d3os.io/alias-name: DevOps Settings
+      iam.d3os.io/role-template-rules: '{"devops-settings": "manage"}'
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.d3os.io/role-template: "true"
     name: role-template-manage-devops-settings
   rules:
     - apiGroups:

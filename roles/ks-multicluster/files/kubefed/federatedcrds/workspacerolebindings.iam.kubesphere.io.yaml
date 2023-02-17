@@ -1,7 +1,7 @@
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
-  name: workspacerolebindings.iam.kubesphere.io
+  name: workspacerolebindings.iam.d3os.io
 spec:
   federatedType:
     group: types.kubefed.io
@@ -11,7 +11,7 @@ spec:
     version: v1beta1
   propagation: Enabled
   targetType:
-    group: iam.kubesphere.io
+    group: iam.d3os.io
     kind: WorkspaceRoleBinding
     pluralName: workspacerolebindings
     scope: Cluster

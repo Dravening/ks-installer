@@ -56,7 +56,7 @@ rules:
       - update
 
   - apiGroups:
-      - auditing.kubesphere.io
+      - auditing.d3os.io
     resources:
       - webhooks
       - rules

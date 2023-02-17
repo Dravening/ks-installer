@@ -5,7 +5,7 @@ metadata:
     app.kubernetes.io/name: node-exporter
     app.kubernetes.io/version: v0.18.1
   name: node-exporter
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
 spec:
   selector:
     matchLabels:
@@ -61,7 +61,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: kubesphere/kube-rbac-proxy:v0.8.0
+        image: d3os/kube-rbac-proxy:v0.8.0
         name: kube-rbac-proxy
         ports:
         - containerPort: 9100

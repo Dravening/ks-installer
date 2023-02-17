@@ -1,1 +1,1 @@
--e @/kubesphere/config/ks-config.json -e @/kubesphere/config/ks-status.json
+-e @/d3os/config/ks-config.json -e @/d3os/config/ks-status.json

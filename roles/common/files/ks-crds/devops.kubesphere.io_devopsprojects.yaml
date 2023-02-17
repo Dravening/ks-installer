@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: devopsprojects.devops.kubesphere.io
+  name: devopsprojects.devops.d3os.io
 spec:
-  group: devops.kubesphere.io
+  group: devops.d3os.io
   names:
     categories:
     - devops

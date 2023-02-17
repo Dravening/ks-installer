@@ -1,15 +1,15 @@
-# Install KubeSphere on Existing Kubernetes Cluster
+# Install d3os on Existing Kubernetes Cluster
 
 > English | [中文](README_zh.md)
 
-In addition to supporting deploying on VM and BM, KubeSphere also supports installing on cloud-hosted and on-premises existing Kubernetes clusters.
+In addition to supporting deploying on VM and BM, d3os also supports installing on cloud-hosted and on-premises existing Kubernetes clusters.
 
 ## Prerequisites
 
 > - Kubernetes Version: 1.17.x, 1.18.x, 1.19.x, 1.20.x;
 > - CPU > 1 Core, Memory > 2 G;
 > - An existing default Storage Class in your Kubernetes clusters.
-> - The CSR signing feature is activated in kube-apiserver when it is started with the `--cluster-signing-cert-file` and `--cluster-signing-key-file` parameters, see [RKE installation issue](https://github.com/kubesphere/kubesphere/issues/1925#issuecomment-591698309).
+> - The CSR signing feature is activated in kube-apiserver when it is started with the `--cluster-signing-cert-file` and `--cluster-signing-key-file` parameters, see [RKE installation issue](https://github.com/d3os/d3os/issues/1925#issuecomment-591698309).
 
 1. Make sure your Kubernetes version is compatible by running `kubectl version` in your cluster node. The output looks as the following:
 
@@ -30,7 +30,7 @@ Mem:              16          4          10           0           3           2
 Swap:             0           0           0
 ```
 
-3. Check if there is a default Storage Class in your cluster. An existing Storage Class is the prerequisite for KubeSphere installation.
+3. Check if there is a default Storage Class in your cluster. An existing Storage Class is the prerequisite for d3os installation.
 
 ```bash
 $ kubectl get sc
@@ -38,32 +38,32 @@ NAME                      PROVISIONER               AGE
 glusterfs (default)               kubernetes.io/glusterfs   3d4h
 ```
 
-If your Kubernetes cluster environment meets all requirements mentioned above, then you can start to install KubeSphere.
+If your Kubernetes cluster environment meets all requirements mentioned above, then you can start to install d3os.
 
-## To Start Deploying KubeSphere
+## To Start Deploying d3os
 
 ### Minimal Installation
 
 ```bash
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.0/kubesphere-installer.yaml
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.0/cluster-configuration.yaml
+kubectl apply -f https://github.com/d3os/ks-installer/releases/download/v3.1.0/d3os-installer.yaml
+kubectl apply -f https://github.com/d3os/ks-installer/releases/download/v3.1.0/cluster-configuration.yaml
 ```
 
 Then inspect the logs of installation.
 
 ```bash
-kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+kubectl logs -n d3os-system $(kubectl get pod -n d3os-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-When all Pods of KubeSphere are running, it means the installation is successful. Check the port (30880 by default) of the console service by the following command. Then you can use `http://IP:30880` to access the console with the default account `admin/P@88w0rd`.
+When all Pods of d3os are running, it means the installation is successful. Check the port (30880 by default) of the console service by the following command. Then you can use `http://IP:30880` to access the console with the default account `admin/P@88w0rd`.
 
 ```bash
-kubectl get svc/ks-console -n kubesphere-system
+kubectl get svc/ks-console -n d3os-system
 ```
 ### Enable Pluggable Components
 
 > Attention:
-> - KubeSphere supports enable the pluggable components before or after the installation, you can refer to the [cluster-configuration.yaml](deploy/cluster-configuration.yaml) for more details.
+> - d3os supports enable the pluggable components before or after the installation, you can refer to the [cluster-configuration.yaml](deploy/cluster-configuration.yaml) for more details.
 > - Make sure there is enough CPU and memory available in your cluster.
 
 1. [Optional] Create the secret of certificate for Etcd in your Kubernetes cluster. This step is only needed when you want to enable Etcd monitoring.
@@ -73,7 +73,7 @@ kubectl get svc/ks-console -n kubesphere-system
 - If the Etcd has been configured with certificates, refer to the following step (The following command is an example that is only used for the cluster created by `kubeadm`):
 
 ```bash
-$ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
+$ kubectl -n d3os-monitoring-system create secret generic kube-etcd-client-certs  \
 --from-file=etcd-client-ca.crt=/etc/kubernetes/pki/etcd/ca.crt  \
 --from-file=etcd-client.crt=/etc/kubernetes/pki/etcd/healthcheck-client.crt  \
 --from-file=etcd-client.key=/etc/kubernetes/pki/etcd/healthcheck-client.key
@@ -82,17 +82,17 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 - If the Etcd has not been configured with certificates.
 
 ```bash
-kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
+kubectl -n d3os-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
-2. If you already have a minimal KubeSphere setup, you still can enable the pluggable components by editing the ClusterConfiguration of ks-installer using the following command.
+2. If you already have a minimal d3os setup, you still can enable the pluggable components by editing the ClusterConfiguration of ks-installer using the following command.
 
 > Note: Please make sure there is enough CPU and memory available in your cluster.
 
 ```bash
-kubectl edit cc ks-installer -n kubesphere-system
+kubectl edit cc ks-installer -n d3os-system
 ```
-> Note: When you're enabling KubeEdge, please set advertiseAddress as below and expose corresponding ports correctly before you run or restart ks-installer. Please refer to [KubeEdge Guide](https://kubesphere.io/docs/pluggable-components/kubeedge/) for more details.
+> Note: When you're enabling KubeEdge, please set advertiseAddress as below and expose corresponding ports correctly before you run or restart ks-installer. Please refer to [KubeEdge Guide](https://d3os.io/docs/pluggable-components/kubeedge/) for more details.
 ```yaml
 kubeedge:
     cloudCore:
@@ -104,7 +104,7 @@ kubeedge:
 3. Inspect the logs of installation.
 
 ```bash
-kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+kubectl logs -n d3os-system $(kubectl get pod -n d3os-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
 ## Upgrade
@@ -113,7 +113,7 @@ Deploy the new version of ks-installer:
 ```bash
 # Notice: ks-installer will automatically migrate the configuration. Do not modify the cluster configuration by yourself.
 
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.0/kubesphere-installer.yaml
+kubectl apply -f https://github.com/d3os/ks-installer/releases/download/v3.1.0/d3os-installer.yaml
 ```
 
-> Note: If your KubeSphere version is v2.1.1 or eariler, please upgrade to v3.0.0 first.
+> Note: If your d3os version is v2.1.1 or eariler, please upgrade to v3.0.0 first.

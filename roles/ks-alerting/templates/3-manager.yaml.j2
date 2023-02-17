@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: alerting-manager-server
-  namespace: kubesphere-alerting-system
+  namespace: d3os-alerting-system
 spec:
   selector:
     app: alerting-manager
@@ -22,7 +22,7 @@ metadata:
   labels:
     app: alerting-manager
   name: alerting-manager
-  namespace: kubesphere-alerting-system
+  namespace: d3os-alerting-system
 spec:
   replicas: 1
   selector:
@@ -60,7 +60,7 @@ spec:
         - name: ALERT_QUEUE_ADDR
           value: "redis://{{ redisEndpoint }}"
         - name: ALERT_APP_NOTIFICATION_HOST
-          value: "notification.kubesphere-alerting-system.svc:9201"
+          value: "notification.d3os-alerting-system.svc:9201"
         - name: ALERT_LOG_LEVEL
           value: "info"
         - name: ALERT_MYSQL_LOG_MODE

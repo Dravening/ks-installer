@@ -3,14 +3,14 @@
 - name: Kubefed | Getting kubefed installation files
   copy:
     src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
   loop:
     - "kubefed"
 
 - name: Kubefed | Creating manifests
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+    dest: "{{ d3os_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: kubefed, file: custom-values-kubefed.yaml }
     - { path: kubefed, file: tower.yaml }
@@ -24,14 +24,14 @@
 - block:
     - name: Tower | Installing tower
       shell: >
-        {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/kubefed/tower.yaml
+        {{ bin_dir }}/kubectl -n d3os-system apply -f {{ d3os_dir }}/kubefed/tower.yaml
       register: tower_result
       failed_when: false
 
     - name: Kubefed | Initing kube-federation-system
       shell: >
-        {{ bin_dir }}/helm upgrade --install kubefed {{ kubesphere_dir }}/kubefed/kubefed
-        -f {{ kubesphere_dir }}/kubefed/custom-values-kubefed.yaml
+        {{ bin_dir }}/helm upgrade --install kubefed {{ d3os_dir }}/kubefed/kubefed
+        -f {{ d3os_dir }}/kubefed/custom-values-kubefed.yaml
         --namespace kube-federation-system --wait --timeout 1800s
       register: kubefed_result
       until: kubefed_result is succeeded
@@ -40,10 +40,10 @@
 
     - name: Kubfed | Labeling kube-federation-system namespace
       shell: >
-        {{ bin_dir }}/kubectl label namespace kube-federation-system kubesphere.io/workspace=system-workspace --overwrite
+        {{ bin_dir }}/kubectl label namespace kube-federation-system d3os.io/workspace=system-workspace --overwrite
 
 
-- name: KubeSphere | Checking kubefed-admission-webhook status
+- name: d3os | Checking kubefed-admission-webhook status
   wait_for:
     host: "kubefed-admission-webhook.kube-federation-system.svc"
     port: 443
@@ -59,7 +59,7 @@
   retries: 5
   delay: 5
   with_fileglob:
-    - "{{ kubesphere_dir }}/kubefed/federatedcrds/*"
+    - "{{ d3os_dir }}/kubefed/federatedcrds/*"
 
 
 - name: Kubefed | Importing multicluster status
@@ -67,7 +67,7 @@
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
     -p '{"status": {"multicluster": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
-    -n kubesphere-system
+    -n d3os-system
   register: cc_result
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
   until: cc_result is succeeded

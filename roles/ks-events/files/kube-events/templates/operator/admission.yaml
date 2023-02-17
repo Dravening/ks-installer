@@ -29,12 +29,12 @@ webhooks:
       service:
         name: {{ template "kube-events.admission.fullname" . }}
         namespace: {{ .Release.Namespace }}
-        path: /mutate-events-kubesphere-io-v1alpha1-rule
+        path: /mutate-events-d3os-io-v1alpha1-rule
     failurePolicy: Fail
     name: mrule.kb.io
     rules:
       - apiGroups:
-          - events.kubesphere.io
+          - events.d3os.io
         apiVersions:
           - v1alpha1
         operations:
@@ -55,12 +55,12 @@ webhooks:
       service:
         name: {{ template "kube-events.admission.fullname" . }}
         namespace: {{ .Release.Namespace }}
-        path: /validate-events-kubesphere-io-v1alpha1-rule
+        path: /validate-events-d3os-io-v1alpha1-rule
     failurePolicy: Fail
     name: vrule.kb.io
     rules:
       - apiGroups:
-          - events.kubesphere.io
+          - events.d3os.io
         apiVersions:
           - v1alpha1
         operations:

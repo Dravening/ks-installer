@@ -1,39 +1,39 @@
 ---
-- name: KubeSphere | Checking core components (1)
+- name: d3os | Checking core components (1)
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-account
+    {{ bin_dir }}/kubectl get deploy -n d3os-system ks-account
   register: check_account
   failed_when: "check_account.stderr and 'NotFound' not in check_account.stderr"
 
-- name: KubeSphere | Checking core components (2)
+- name: d3os | Checking core components (2)
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-apigateway
+    {{ bin_dir }}/kubectl get deploy -n d3os-system ks-apigateway
   register: check_apigateway
   failed_when: "check_apigateway.stderr and 'NotFound' not in check_apigateway.stderr"
 
-- name: KubeSphere | Checking core components (3)
+- name: d3os | Checking core components (3)
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-account -o jsonpath='{.spec.replicas}'
+    {{ bin_dir }}/kubectl get deploy -n d3os-system ks-account -o jsonpath='{.spec.replicas}'
   register: check_account_replicas
   failed_when: "check_account_replicas.stderr and 'NotFound' not in check_account_replicas.stderr"
   when:
     - check_account.rc == 0
 
-- name: KubeSphere | Checking core components (4)
+- name: d3os | Checking core components (4)
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-apigateway -o jsonpath='{.spec.replicas}'
+    {{ bin_dir }}/kubectl get deploy -n d3os-system ks-apigateway -o jsonpath='{.spec.replicas}'
   register: check_apigateway_replicas
   failed_when: "check_apigateway_replicas.stderr and 'NotFound' not in check_apigateway_replicas.stderr"
   when:
     - check_apigateway.rc == 0
 
 - block:
-  - name: KubeSphere | Updating ks-core status
+  - name: d3os | Updating ks-core status
     shell: >
       {{ bin_dir }}/kubectl patch cc ks-installer
       --type merge
       -p '{"status": {"core": {"migration": true}}}'
-      -n kubesphere-system
+      -n d3os-system
     register: cc_result
     failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
     until: cc_result is succeeded
@@ -52,17 +52,17 @@
     - "'NotFound' not in check_apigateway_replicas.stderr"
 
 
-- name: KubeSphere | Creating KubeSphere directory
+- name: d3os | Creating d3os directory
   file:
-    path: "{{ kubesphere_dir }}"
+    path: "{{ d3os_dir }}"
     state: directory
     mode: 0755
 
 
-- name: KubeSphere | Getting installation init files
+- name: d3os | Getting installation init files
   copy:
     src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
   loop:
     - "ks-init"
 
@@ -70,34 +70,34 @@
   when: ks_upgrade is not defined or (ks_upgrade != True)
 
 
-- name: KubeSphere | Initing KubeSphere
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/{{ item }}"
+- name: d3os | Initing d3os
+  shell: "{{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/ks-init/{{ item }}"
   loop:
     - "role-templates.yaml"
     - "webhook-secret.yaml"
-    - "network.kubesphere.io.yaml"
-    - "iam.kubesphere.io.yaml"
-    - "quota.kubesphere.io.yaml"
+    - "network.d3os.io.yaml"
+    - "iam.d3os.io.yaml"
+    - "quota.d3os.io.yaml"
   register: init_result
   failed_when: "init_result.stderr and 'AlreadyExists' not in init_result.stderr and 'Warning' not in init_result.stderr"
 
 
-- name: KubeSphere | Getting controls-system file
+- name: d3os | Getting controls-system file
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.file }}"
+    dest: "{{ d3os_dir }}/{{ item.file }}"
   with_items:
-    - { name: kubesphere-controls-system, file: kubesphere-controls-system.yaml }
+    - { name: d3os-controls-system, file: d3os-controls-system.yaml }
 
 
-- name: KubeSphere | Installing controls-system
-  command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/kubesphere-controls-system.yaml  -n kubesphere-controls-system"
+- name: d3os | Installing controls-system
+  command: "{{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/d3os-controls-system.yaml  -n d3os-controls-system"
   register: install_result
   failed_when: "install_result.stderr and 'AlreadyExists' not in install_result.stderr"
 
 
-# - name: KubeSphere | Creating KubeSphere vpa
-#   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-vpa.yaml"
+# - name: d3os | Creating d3os vpa
+#   shell: "{{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/ks-init/ks-vpa.yaml"
 #   register: result
 #   until: result is succeeded
 #   retries: 5
@@ -105,23 +105,23 @@
 #   when:
 #     - vertical_pod_autoscaler_enable == true
 
-- name: KubeSphere | Generating kubeconfig-admin
+- name: d3os | Generating kubeconfig-admin
   shell: >
-    /bin/bash {{ kubesphere_dir }}/ks-init/generate-kubeconfig.sh
+    /bin/bash {{ d3os_dir }}/ks-init/generate-kubeconfig.sh
   when:
     - openpitrix.enabled is defined and openpitrix.enabled
 
-# - name: KubeSphere | Checking kubesphere component
+# - name: d3os | Checking d3os component
 #   shell: >
-#     {{ bin_dir }}/kubectl get deploy -n kubesphere-system
-#   register: kubesphere_component_pod
+#     {{ bin_dir }}/kubectl get deploy -n d3os-system
+#   register: d3os_component_pod
 
-# - name: KubeSphere | Getting kubesphere component version
+# - name: d3os | Getting d3os component version
 #   shell: >
-#     {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-console -o jsonpath='{.metadata.labels.version}'
+#     {{ bin_dir }}/kubectl get deploy -n  d3os-system ks-console -o jsonpath='{.metadata.labels.version}'
 #   register: console_version
 #   when:
-#     - kubesphere_component_pod.stdout.find("ks-console") != -1
+#     - d3os_component_pod.stdout.find("ks-console") != -1
 
 # - import_tasks: ks-stop.yaml
 #   when:

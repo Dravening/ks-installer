@@ -4,9 +4,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.3.0
   creationTimestamp: null
-  name: iptables.kubeedge.kubesphere.io
+  name: iptables.kubeedge.d3os.io
 spec:
-  group: kubeedge.kubesphere.io
+  group: kubeedge.d3os.io
   names:
     kind: IPTables
     listKind: IPTablesList

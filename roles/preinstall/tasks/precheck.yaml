@@ -1,24 +1,24 @@
 ---
-- name: KubeSphere | Checking Kubernetes version
+- name: d3os | Checking Kubernetes version
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
 
-- name: KubeSphere | Initing Kubernetes version
+- name: d3os | Initing Kubernetes version
   set_fact: >
      k8s_version: {{ kubernetes_version.stdout }}
 
-- name: KubeSphere | Stopping if Kubernetes version is nonsupport
+- name: d3os | Stopping if Kubernetes version is nonsupport
   assert:
     that: kubernetes_version.stdout is version('v1.15.0', '>=')
     msg: "The current Kubernetes version is not supported !"
 
-- name: KubeSphere | Checking StorageClass
+- name: d3os | Checking StorageClass
   shell: >
     {{ bin_dir }}/kubectl get sc | awk '{if(NR>1){print $1}}'
   register: storage_class_check
 
-- name: KubeSphere | Stopping if StorageClass was not found
+- name: d3os | Stopping if StorageClass was not found
   assert:
     that: persistence.storageClass in storage_class_check.stdout_lines
     msg: "StorageClass {{ persistence.storageClass }} was not found !"
@@ -26,12 +26,12 @@
     - persistence.storageClass is defined
     - persistence.storageClass != ""
 
-- name: KubeSphere | Checking default StorageClass
+- name: d3os | Checking default StorageClass
   shell: >
     {{ bin_dir }}/kubectl get sc
   register: default_storage_class_check
 
-- name: KubeSphere | Stopping if default StorageClass was not found
+- name: d3os | Stopping if default StorageClass was not found
   assert:
     that: '"(default)" in default_storage_class_check.stdout'
     msg: "Default StorageClass was not found !"

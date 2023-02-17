@@ -26,7 +26,7 @@ spec:
       protocol: TCP
       targetPort: 8443
   selector:
-    logging.kubesphere.io/logsidecar-injector: {{ template "logsidecar-injector.deploy.fullname" . }}
+    logging.d3os.io/logsidecar-injector: {{ template "logsidecar-injector.deploy.fullname" . }}
 {{ include "logsidecar-injector.labels" . | indent 4 }}
 ---
 apiVersion: admissionregistration.k8s.io/v1beta1
@@ -36,7 +36,7 @@ metadata:
   labels:
 {{ include "logsidecar-injector.labels" . | indent 4 }}
 webhooks:
-  - name: logsidecar-injector.logging.kubesphere.io
+  - name: logsidecar-injector.logging.d3os.io
     failurePolicy: Fail
     rules:
       - apiGroups:
@@ -54,11 +54,11 @@ webhooks:
       caBundle: {{ b64enc $ca.Cert }}
     namespaceSelector:
       matchExpressions:
-      - key: logging.kubesphere.io/logsidecar-injection
+      - key: logging.d3os.io/logsidecar-injection
         operator: In
         values:
         - enabled
     objectSelector:
       matchExpressions:
-      - key: logging.kubesphere.io/logsidecar-injector
+      - key: logging.d3os.io/logsidecar-injector
         operator: DoesNotExist

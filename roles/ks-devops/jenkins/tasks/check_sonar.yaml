@@ -1,5 +1,5 @@
 - name: ks-devops | Waiting for ks-account
-  shell: "{{ bin_dir }}/kubectl get pod -n kubesphere-system -o wide | grep ks-account | awk '{print $3}'"
+  shell: "{{ bin_dir }}/kubectl get pod -n d3os-system -o wide | grep ks-account | awk '{print $3}'"
   register: result
   until: result.stdout.find("Running") != -1
   retries: 60
@@ -20,7 +20,7 @@
     - devops.sonarqube.externalSonarToken is not defined
 
 - name: ks-devops | Getting ks-sonarqube NodePort
-  shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.ports[0].nodePort}'"
+  shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n d3os-devops-system -o=jsonpath='{.spec.ports[0].nodePort}'"
   register: ks_sonarqube_nodePort
   when:
     - devops.sonarqube.enabled is defined
@@ -29,7 +29,7 @@
     - devops.sonarqube.externalSonarToken is not defined
 
 - name: ks-devops | Getting ks-sonarqube ClusterIP
-  shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.clusterIP}'"
+  shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n d3os-devops-system -o=jsonpath='{.spec.clusterIP}'"
   register: ks_sonarqube_clusterIP
   when:
     - devops.sonarqube.enabled is defined

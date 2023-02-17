@@ -1,32 +1,32 @@
 ---
 
 
-- name: KubeSphere | Getting Kubernetes version
+- name: d3os | Getting Kubernetes version
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
   failed_when: false
 
 
-- name: KubeSphere | Setting Kubernetes version
+- name: d3os | Setting Kubernetes version
   set_fact:
     kube_version: "{{ kubernetes_version.stdout }}"
   failed_when: false
 
 
-- name: KubeSphere | Getting Kubernetes master num
+- name: d3os | Getting Kubernetes master num
   shell: >
     {{ bin_dir }}/kubectl get node | awk '{if(NR>1){print $3}}' | grep master |wc -l
   register: masters
   failed_when: false
 
 
-- name: KubeSphere | Setting master num
+- name: d3os | Setting master num
   set_fact:
     master_num: "{{ masters.stdout }}"
   failed_when: false
 
-- name: KubeSphere | Override master num
+- name: d3os | Override master num
   set_fact:
     master_num: "3"
   failed_when: false
@@ -35,11 +35,11 @@
     - enableHA is defined and enableHA
 
 - name: ks-console | Checking ks-console svc
-  shell: "{{ bin_dir }}/kubectl get svc -n kubesphere-system"
+  shell: "{{ bin_dir }}/kubectl get svc -n d3os-system"
   register: result
 
 - name: ks-console | Getting ks-console svc port
-  shell: "{{ bin_dir }}/kubectl get svc ks-console -n kubesphere-system -o=jsonpath='{.spec.ports[0].nodePort}'"
+  shell: "{{ bin_dir }}/kubectl get svc ks-console -n d3os-system -o=jsonpath='{.spec.ports[0].nodePort}'"
   register: ks_console_svc_port
   when: result.stdout.find("ks-console") != -1
 
@@ -50,10 +50,10 @@
   when: result.stdout.find("ks-console") != -1
 
 
-- name: KubeSphere | Getting Ingress installation files
+- name: d3os | Getting Ingress installation files
   copy:
     src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ d3os_dir }}/"
   loop:
     - "ingress"
     - "ks-apiserver"
@@ -61,10 +61,10 @@
     - "ks-controller-manager"
 
 
-- name: KubeSphere | Creating manifests
+- name: d3os | Creating manifests
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+    dest: "{{ d3os_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: ingress, file: ingress-controller.yaml, type: config }
     - { path: ks-apiserver, file: ks-apiserver.yml, type: deploy }
@@ -75,32 +75,32 @@
     - { path: ks-console, file: sample-bookinfo-configmap.yaml, type: config }
 
 
-- name: KubeSphere | Deleting Ingress-controller configmap
+- name: d3os | Deleting Ingress-controller configmap
   shell: >
-    {{ bin_dir }}/kubectl delete cm -n kubesphere-system ks-router-config
+    {{ bin_dir }}/kubectl delete cm -n d3os-system ks-router-config
   failed_when: false
 
-- name: KubeSphere | Creating Ingress-controller configmap
+- name: d3os | Creating Ingress-controller configmap
   command: >
     {{ bin_dir }}/kubectl create configmap ks-router-config
-    --from-file=ingress-controller.yaml={{ kubesphere_dir }}/ingress/ingress-controller.yaml
-    --from-file=ingress-controller-svc.yaml={{ kubesphere_dir }}/ingress/ingress-controller-svc.yaml
-    -n kubesphere-system
+    --from-file=ingress-controller.yaml={{ d3os_dir }}/ingress/ingress-controller.yaml
+    --from-file=ingress-controller-svc.yaml={{ d3os_dir }}/ingress/ingress-controller-svc.yaml
+    -n d3os-system
   register: cm_state
   failed_when: "cm_state.stderr and 'AlreadyExists' not in cm_state.stderr"
 
-# - name: KubeSphere | Updating kubectl image
+# - name: d3os | Updating kubectl image
 #   shell: >
-#     for deploy in $(kubectl -n kubesphere-controls-system get deploy  | grep kubectl  | awk '{print $1}');
-#     do kubectl -n kubesphere-controls-system set image deployment/$deploy kubectl={{ ks_kubectl_repo }}:{{ ks_kubectl_tag }};
+#     for deploy in $(kubectl -n d3os-controls-system get deploy  | grep kubectl  | awk '{print $1}');
+#     do kubectl -n d3os-controls-system set image deployment/$deploy kubectl={{ ks_kubectl_repo }}:{{ ks_kubectl_tag }};
 #     done
 #   when:
 #     - account_version.stdout and account_version.stdout != 'v2.1.1'
 #   ignore_errors: True
 
-- name: KubeSphere | Creating ks-core
+- name: d3os | Creating ks-core
   command: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item.path }}/{{ item.file }} --force
+    {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/{{ item.path }}/{{ item.file }} --force
   register: source_state
   failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
   loop:
@@ -110,14 +110,14 @@
     - { path: ks-console, file: sample-bookinfo-configmap.yaml }
     - { path: ks-console, file: ks-console-deployment.yml }
 
-- name: KubeSphere | Checking ks-console svc
+- name: d3os | Checking ks-console svc
   command: >
-    {{ bin_dir }}/kubectl get svc -n kubesphere-system
+    {{ bin_dir }}/kubectl get svc -n d3os-system
   register: ks_svc
 
-- name: KubeSphere | Creating ks-console svc
+- name: d3os | Creating ks-console svc
   command: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item.path }}/{{ item.file }} --force
+    {{ bin_dir }}/kubectl apply -f {{ d3os_dir }}/{{ item.path }}/{{ item.file }} --force
   register: source_state
   failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
   loop:
@@ -125,19 +125,19 @@
   when:
     - ks_svc.stdout.find("ks-console") == -1
 
-- name: KubeSphere | Patching ks-console svc
+- name: d3os | Patching ks-console svc
   command: >
-    {{ bin_dir }}/kubectl patch -n kubesphere-system svc ks-console -p
+    {{ bin_dir }}/kubectl patch -n d3os-system svc ks-console -p
     '{"metadata": {"labels": {"app": "ks-console", "tier": "frontend", "version": "{{ ks_version }}"}}, "spec": {"selector": {"app": "ks-console", "tier": "frontend", "version": "{{ ks_version }}"}}}'
   when:
     - ks_svc.stdout.find("ks-console") != -1
 
-- name: KubeSphere | Importing ks-core status
+- name: d3os | Importing ks-core status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
     -p '{"status": {"core": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
-    -n kubesphere-system
+    -n d3os-system
   register: cc_result
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
   until: cc_result is succeeded

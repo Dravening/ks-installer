@@ -1,8 +1,8 @@
 # Contributing
 
-Welcome to kubesphere/ks-installer! To learn more about contributing to the [ks-installer code repo](README.md), check out the [Developer Guide](https://github.com/kubesphere/community/tree/master/developer-guide/development).
+Welcome to d3os/ks-installer! To learn more about contributing to the [ks-installer code repo](README.md), check out the [Developer Guide](https://github.com/d3os/community/tree/master/developer-guide/development).
 
-The [KubeSphere community repo](https://github.com/kubesphere/community) contains information about how to get started, how the community organizes, and more.
+The [d3os community repo](https://github.com/d3os/community) contains information about how to get started, how the community organizes, and more.
 
 # Manual Test
 
@@ -12,8 +12,8 @@ If you want to test against a component with `ks-installer`. Please follow these
 * Change the Docker image tags of your desired component in file [main.yml](roles/download/defaults/main.yml)
 * Build the Docker image of `ks-installer`
     * Please provide a accessible image path, e.g. `make all -e REPO=surenpi/ks-installer`
-* Create a Kubernetes cluster without KubeSphere
+* Create a Kubernetes cluster without d3os
     * Install a [k3s](https://github.com/k3s-io/k3s/) might be easy solution for the test purpose
 * Install the ks-installer
-    * Switch the image to your desired one in file `deploy/kubesphere-installer.yaml`
+    * Switch the image to your desired one in file `deploy/d3os-installer.yaml`
     * Install it via: `kubectl apply -f deploy/`

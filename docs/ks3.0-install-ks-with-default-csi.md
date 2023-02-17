@@ -9,7 +9,7 @@ Install csi , such as csi-qingcloud:
 1. use helm to install
 
 ```bash
-helm repo add test https://charts.kubesphere.io/test
+helm repo add test https://charts.d3os.io/test
 # replace your key/secret and  zone(or region)
 helm install test/csi-qingcloud --name-template csi-qingcloud --namespace kube-system --set config.qy_access_key_id=xxx,config.qy_secret_access_key=xxx,config.zone=ap2a,sc.enable=true,sc.type=0,driver.tag=v1.2.0-rc.4
 ```
@@ -37,12 +37,12 @@ NAME                      PROVISIONER              RECLAIMPOLICY   VOLUMEBINDING
 csi-qingcloud (default)   disk.csi.qingcloud.com   Delete          Immediate           true
 ```
 
-3. install kubesphere using default sc
+3. install d3os using default sc
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/deploy/kubesphere-installer.yaml
+kubectl apply -f https://raw.githubusercontent.com/d3os/ks-installer/master/deploy/d3os-installer.yaml
 # If you use muti etcd nodes, you should down this yaml locally, and modify the etcd addresses.
 # Also you can switch plugins on
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/deploy/cluster-configuration.yaml
+kubectl apply -f https://raw.githubusercontent.com/d3os/ks-installer/master/deploy/cluster-configuration.yaml
 ```
 

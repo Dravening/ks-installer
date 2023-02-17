@@ -3,7 +3,7 @@
 - hosts: localhost
   gather_facts: false
   roles:
-    - kubesphere-defaults
+    - d3os-defaults
     - role: openpitrix
       when:
         - openpitrix is defined

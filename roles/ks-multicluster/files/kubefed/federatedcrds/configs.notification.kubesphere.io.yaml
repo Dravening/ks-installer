@@ -2,7 +2,7 @@
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
-  name: configs.notification.kubesphere.io
+  name: configs.notification.d3os.io
   namespace: kube-federation-system
 spec:
   federatedType:
@@ -13,7 +13,7 @@ spec:
     version: v1beta1
   propagation: Enabled
   targetType:
-    group: notification.kubesphere.io
+    group: notification.d3os.io
     kind: Config
     pluralName: configs
     scope: Cluster

@@ -4,4 +4,4 @@ data:
 kind: Secret
 metadata:
   name: additional-scrape-configs
-  namespace: kubesphere-monitoring-system
+  namespace: d3os-monitoring-system
