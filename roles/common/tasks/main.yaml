@@ -25,7 +25,8 @@
     - "common"
     - "ks-crds"
 
-
+# 这个操作kubectl apply -f storage.d3os.io_provisionercapabilities.yaml会出问题
+# 需要进容器手动引导 kubectl apply -f storage.d3os.io_provisionercapabilities.yaml
 - name: d3os | Creating d3os crds
   shell: "{{ bin_dir }}/kubectl apply -R -f {{ item }}"
   register: cc_result
@@ -33,10 +34,12 @@
     - "{{ d3os_dir }}/ks-crds/*.yaml"
   failed_when: "cc_result.stderr and 'Warning: kubectl apply' not in cc_result.stderr"
 
-- name: d3os | Creating Storage ProvisionerCapability
-  shell: "{{ bin_dir }}/kubectl apply -R -f {{ d3os_dir }}/ks-crds/provisonercapability"
-  register: spc_result
-  failed_when: "spc_result.stderr and 'Warning: kubectl apply' not in spc_result.stderr"
+# 这一步ProvisionerCapability总是出问题, 目前先给它砍掉。
+# kevendeng: "这个CRD是探测存储类的快照/克隆/扩容等能力，并在console中启用对应功能所需的，对你在CLI中以及console中使用其他功能不会有影响"
+#- name: d3os | Creating Storage ProvisionerCapability
+#  shell: "{{ bin_dir }}/kubectl apply -R -f {{ d3os_dir }}/ks-crds/provisonercapability"
+#  register: spc_result
+#  failed_when: "spc_result.stderr and 'Warning: kubectl apply' not in spc_result.stderr"
 
 - name: d3os | Checking Kubernetes version
   shell: >
