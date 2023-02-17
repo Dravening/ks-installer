@@ -6,20 +6,20 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kubesphere
+      app: d3os
       component: ks-router
       tier: backend
   template:
     metadata:
       labels:
-        app: kubesphere
+        app: d3os
         component: ks-router
         tier: backend
       annotations:
         prometheus.io/port: '10254'
         prometheus.io/scrape: 'true'
     spec:
-      serviceAccountName: kubesphere-router-serviceaccount
+      serviceAccountName: d3os-router-serviceaccount
       containers:
         - name: nginx-ingress-controller
           image: {{ nginx_ingress_controller_repo }}:{{ nginx_ingress_controller_tag }}

@@ -6,7 +6,7 @@ metadata:
     tier: backend
     version: {{ ks_version }}
   name: ks-apiserver
-  namespace: kubesphere-system
+  namespace: d3os-system
 spec:
   strategy:
     rollingUpdate:
@@ -49,10 +49,10 @@ spec:
         volumeMounts:
         - mountPath: /var/run/docker.sock
           name: docker-sock
-        - mountPath: /etc/kubesphere/ingress-controller
+        - mountPath: /etc/d3os/ingress-controller
           name: ks-router-config
-        - mountPath: /etc/kubesphere/
-          name: kubesphere-config
+        - mountPath: /etc/d3os/
+          name: d3os-config
         - mountPath: /etc/localtime
           name: host-time
         livenessProbe:
@@ -63,8 +63,8 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 15
           timeoutSeconds: 15
-      serviceAccount: kubesphere
-      serviceAccountName: kubesphere
+      serviceAccount: d3os
+      serviceAccountName: d3os
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
@@ -99,7 +99,7 @@ spec:
                 values:
                 - ks-apiserver
             namespaces:
-            - kubesphere-system
+            - d3os-system
 {% endif %}
       volumes:
       - hostPath:
@@ -112,8 +112,8 @@ spec:
         name: ks-router-config
       - configMap:
           defaultMode: 420
-          name: kubesphere-config
-        name: kubesphere-config
+          name: d3os-config
+        name: d3os-config
       - hostPath:
           path: /etc/localtime
           type: ""
@@ -125,13 +125,13 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kubernetes.io/created-by: kubesphere.io/ks-apiserver
+    kubernetes.io/created-by: d3os.io/ks-apiserver
   labels:
     app: ks-apiserver
     tier: backend
     version: {{ ks_version }}
   name: ks-apiserver
-  namespace: kubesphere-system
+  namespace: d3os-system
 spec:
   ports:
   - port: 80

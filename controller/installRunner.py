@@ -332,6 +332,7 @@ def preInstallTasks():
         os.path.join(playbookBasePath, 'common.yaml'),
         os.path.join(privateDataDir, 'common')
     ]
+    # ks-core里面会引导ks-controller-manager进行安装
     preInstallTasks['ks-core'] = [
         os.path.join(playbookBasePath, 'ks-core.yaml'),
         os.path.join(privateDataDir, 'ks-core')

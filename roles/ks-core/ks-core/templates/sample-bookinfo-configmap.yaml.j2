@@ -10,7 +10,7 @@ data:
         app.kubernetes.io/version: v1
         app.kubernetes.io/name: bookinfo
       annotations:
-        servicemesh.kubesphere.io/enabled: 'true'
+        servicemesh.d3os.io/enabled: 'true'
     spec:
       selector:
         matchLabels:
@@ -29,9 +29,9 @@ data:
           kind: StatefulSet
         - group: extensions
           kind: Ingress
-        - group: servicemesh.kubesphere.io
+        - group: servicemesh.d3os.io
           kind: Strategy
-        - group: servicemesh.kubesphere.io
+        - group: servicemesh.d3os.io
           kind: ServicePolicy
 
     ---
@@ -40,8 +40,8 @@ data:
     metadata:
       namespace: servicemesh
       annotations:
-        kubesphere.io/isElasticReplicas: 'false'
-        servicemesh.kubesphere.io/enabled: 'true'
+        d3os.io/isElasticReplicas: 'false'
+        servicemesh.d3os.io/enabled: 'true'
       labels:
         app: productpage
         version: v1
@@ -98,8 +98,8 @@ data:
         app.kubernetes.io/version: v1
         app.kubernetes.io/name: bookinfo
       annotations:
-        kubesphere.io/workloadType: Deployment
-        servicemesh.kubesphere.io/enabled: 'true'
+        d3os.io/workloadType: Deployment
+        servicemesh.d3os.io/enabled: 'true'
       name: productpage
     spec:
       type: ClusterIP
@@ -120,8 +120,8 @@ data:
     metadata:
       namespace: servicemesh
       annotations:
-        kubesphere.io/isElasticReplicas: 'false'
-        servicemesh.kubesphere.io/enabled: 'true'
+        d3os.io/isElasticReplicas: 'false'
+        servicemesh.d3os.io/enabled: 'true'
       labels:
         app: reviews
         version: v1
@@ -178,8 +178,8 @@ data:
         app.kubernetes.io/version: v1
         app.kubernetes.io/name: bookinfo
       annotations:
-        kubesphere.io/workloadType: Deployment
-        servicemesh.kubesphere.io/enabled: 'true'
+        d3os.io/workloadType: Deployment
+        servicemesh.d3os.io/enabled: 'true'
       name: reviews
     spec:
       type: ClusterIP
@@ -200,8 +200,8 @@ data:
     metadata:
       namespace: servicemesh
       annotations:
-        kubesphere.io/isElasticReplicas: 'false'
-        servicemesh.kubesphere.io/enabled: 'true'
+        d3os.io/isElasticReplicas: 'false'
+        servicemesh.d3os.io/enabled: 'true'
       labels:
         app: details
         version: v1
@@ -258,8 +258,8 @@ data:
         app.kubernetes.io/version: v1
         app.kubernetes.io/name: bookinfo
       annotations:
-        kubesphere.io/workloadType: Deployment
-        servicemesh.kubesphere.io/enabled: 'true'
+        d3os.io/workloadType: Deployment
+        servicemesh.d3os.io/enabled: 'true'
       name: details
     spec:
       type: ClusterIP
@@ -280,8 +280,8 @@ data:
     metadata:
       namespace: servicemesh
       annotations:
-        kubesphere.io/isElasticReplicas: 'false'
-        servicemesh.kubesphere.io/enabled: 'true'
+        d3os.io/isElasticReplicas: 'false'
+        servicemesh.d3os.io/enabled: 'true'
       labels:
         app: ratings
         version: v1
@@ -338,8 +338,8 @@ data:
         app.kubernetes.io/version: v1
         app.kubernetes.io/name: bookinfo
       annotations:
-        kubesphere.io/workloadType: Deployment
-        servicemesh.kubesphere.io/enabled: 'true'
+        d3os.io/workloadType: Deployment
+        servicemesh.d3os.io/enabled: 'true'
       name: ratings
     spec:
       type: ClusterIP
@@ -375,4 +375,4 @@ data:
 kind: ConfigMap
 metadata:
   name: sample-bookinfo
-  namespace: kubesphere-system
+  namespace: d3os-system
