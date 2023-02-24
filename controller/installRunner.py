@@ -5,6 +5,8 @@ import os
 import sys
 import shutil
 import json
+import time
+
 import ansible_runner
 import collections
 import logging
@@ -583,16 +585,28 @@ def main():
     else:
         # config可以读入集群信息, 读入后client就可以使用
         config.load_incluster_config()
+        time.sleep(1)
+
         # 构建api对象，此对象拥有调用apiserver接口的方法, ks-installer基本使用它来获取自定义资源的配置信息
         api = client.CustomObjectsApi()
+        time.sleep(1)
+
         # 如果旧的k8s配置与新的k8s配置相同, 则返回;如果不同, 则更新
         generate_new_cluster_configuration(api)
+        time.sleep(1)
+
         # 获取ClusterConfiguration对象, 并把它落盘在/d3os/config/ks-config.json文件中
         generateConfig(api)
+        time.sleep(1)
+
         # ansible遍历执行[preinstall.yaml, metrics_server.yaml, common.yaml, ks-core.yaml], 并生成执行日志
         preInstallTasks()
+        time.sleep(1)
+
         # 根据ks-config.json的配置, 确定并执行增加组件需求的指令动作, 并获取结果
         resultState = getResultInfo()
+        time.sleep(1)
+
         # 执行ks-config.yaml, result-info.yaml, ks-migration.yaml(初次), telemetry.yaml
         resultInfo(resultState, api)
 
