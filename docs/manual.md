@@ -1,11 +1,3 @@
-### 杂项记录
-
-容器registry-edge.cosmoplat.com/d3os/ks-installer:v3.1.1.2的环境变量
-
-SHELL_OPERATOR_WORKING_DIR=/hooks
-ANSIBLE_ROLES_PATH=/d3os/installer/roles
-HOME=/home/d3osbash-5.1
-
 ### 逻辑梳理
 
 ks-installer启动后,将会先引导ks-apiserver,再引导ks-controller-manager,最后引导ks-console
@@ -98,3 +90,105 @@ docker build -t registry-edge.cosmoplat.com/d3os/ks-installer:v3.1.1.3  .
 ```
 docker push registry-edge.cosmoplat.com/d3os/ks-installer:v3.1.1.3
 ```
+
+### 注意事项
+
+ks-installer 会注册webhook-secret到集群中, 影响ks-controller-manager的运行。要手动生成证书文件
+
+1.创建 CA 证书机构
+
+```
+cat > ca-config.json <<EOF
+{
+  "signing": {
+    "default": {
+      "expiry": "87600h"
+    },
+    "profiles": {
+      "server": {
+        "usages": ["signing", "key encipherment", "server auth", "client auth"],
+        "expiry": "87600h"
+      }
+    }
+  }
+}
+EOF
+```
+
+```
+cat > ca-csr.json <<EOF
+{
+    "CN": "kubernetes",
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "CN",
+            "L": "BeiJing",
+            "ST": "BeiJing",
+            "O": "k8s",
+            "OU": "System"
+        }
+    ]
+}
+EOF
+```
+
+生成 CA 证书和私钥
+
+```
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+2021/01/23 16:59:51 [INFO] generating a new CA key and certificate from CSR
+2021/01/23 16:59:51 [INFO] generate received request
+2021/01/23 16:59:51 [INFO] received CSR
+2021/01/23 16:59:51 [INFO] generating key: rsa-2048
+2021/01/23 16:59:51 [INFO] encoded CSR
+2021/01/23 16:59:51 [INFO] signed certificate with serial number 502715407096434913295607470541422244575186494509
+```
+
+```
+[root@k8s-master ssl]# ls
+ca-config.json  ca.csr  ca-csr.json  ca-key.pem  ca.pem
+```
+
+创建server端证书
+
+```
+cat > server-csr.json <<EOF
+{
+  "CN": "admission",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+        "C": "CN",
+        "L": "BeiJing",
+        "ST": "BeiJing",
+        "O": "k8s",
+        "OU": "System"
+    }
+  ]
+}
+EOF
+```
+
+```
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
+  -hostname=admission-registry.default.svc -profile=server server-csr.json | cfssljson -bare server
+2021/01/23 17:08:37 [INFO] generate received request
+2021/01/23 17:08:37 [INFO] received CSR
+2021/01/23 17:08:37 [INFO] generating key: rsa-2048
+2021/01/23 17:08:37 [INFO] encoded CSR
+2021/01/23 17:08:37 [INFO] signed certificate with serial number 701199816701013791180179639053450980282079712724
+```
+
+> 注意：这里写hostname，例如ks-controller-manager.d3os-system.svc
+
+~~使用生成的 server 证书和私钥创建一个 Secret 对象~~
+
+~~kubectl create secret tls admission-registry-tls --key=server-key.pem --cert=server.pem~~
+
