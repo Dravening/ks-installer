@@ -93,7 +93,7 @@ docker push registry-edge.cosmoplat.com/d3os/ks-installer:v3.1.1.3
 
 ### 注意事项
 
-ks-installer 会注册webhook-secret到集群中, 影响ks-controller-manager的运行。要手动生成证书文件
+ks-installer 会注册webhook-secret(roles/ks-core/prepare/files/ks-init/...)到集群中, 影响ks-controller-manager的运行。要手动生成证书文件
 
 1.创建 CA 证书机构
 
@@ -178,7 +178,7 @@ EOF
 
 ```
 cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
-  -hostname=admission-registry.default.svc -profile=server server-csr.json | cfssljson -bare server
+  -hostname=ks-controller-manager.d3os-system.svc -profile=server server-csr.json | cfssljson -bare server
 2021/01/23 17:08:37 [INFO] generate received request
 2021/01/23 17:08:37 [INFO] received CSR
 2021/01/23 17:08:37 [INFO] generating key: rsa-2048
