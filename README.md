@@ -55,7 +55,7 @@ Then inspect the logs of installation.
 kubectl logs -n d3os-system $(kubectl get pod -n d3os-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-When all Pods of d3os are running, it means the installation is successful. Check the port (30880 by default) of the console service by the following command. Then you can use `http://IP:30880` to access the console with the default account `admin/P@88w0rd`.
+When all Pods of d3os are running, it means the installation is successful. Check the port (30880 by default) of the console service by the following command. Then you can use `http://IP:30880` to access the console with the default account `admin/Cosmo@2022`.
 
 ```bash
 kubectl get svc/ks-console -n d3os-system

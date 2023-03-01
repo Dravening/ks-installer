@@ -7,7 +7,7 @@ metadata:
     iam.d3os.io/uninitialized: "true"
 spec:
   email: admin@d3os.io
-  password: $2a$10$zcHepmzfKPoxCVCYZr5K7ORPZZ/ySe9p/7IUb/8u./xHrnSX2LOCO
+  password: $2a$10$udDLQf9xYVuaOtkpDsePCupmX6Z49nBpA4wW531D1GlzOUsdMlA/G
 status:
   state: Active
 

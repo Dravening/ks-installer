@@ -52,7 +52,7 @@ kubectl apply -f https://github.com/d3os/ks-installer/releases/download/v3.1.0/c
  $ kubectl logs -n d3os-system $(kubectl get pod -n d3os-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-部署完成后可执行如下命令查看控制台的服务端口，使用 `IP:consolePort(default: 30880)` 访问 d3os UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
+部署完成后可执行如下命令查看控制台的服务端口，使用 `IP:consolePort(default: 30880)` 访问 d3os UI 界面，默认的集群管理员账号为 `admin/Cosmo@2022`。
 
 ```bash
 kubectl get svc/ks-console -n d3os-system
